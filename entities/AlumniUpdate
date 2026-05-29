@@ -1,0 +1,36 @@
+{
+  "name": "AlumniUpdate",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "content": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "newsletter",
+        "spotlight",
+        "announcement",
+        "event"
+      ]
+    },
+    "image": {
+      "type": "string"
+    },
+    "pdf_url": {
+      "type": "string"
+    },
+    "published": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "title",
+    "content",
+    "category"
+  ]
+}

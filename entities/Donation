@@ -1,0 +1,25 @@
+{
+  "name": "Donation",
+  "type": "object",
+  "properties": {
+    "donor_name": {
+      "type": "string"
+    },
+    "amount": {
+      "type": "number"
+    },
+    "event": {
+      "type": "string"
+    },
+    "message": {
+      "type": "string"
+    },
+    "anonymous": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "amount"
+  ]
+}

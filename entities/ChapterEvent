@@ -1,0 +1,55 @@
+{
+  "name": "ChapterEvent",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "date": {
+      "type": "string",
+      "format": "date"
+    },
+    "time": {
+      "type": "string"
+    },
+    "location": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "philanthropy",
+        "recruitment",
+        "brotherhood",
+        "alumni",
+        "community_service",
+        "general"
+      ]
+    },
+    "image": {
+      "type": "string"
+    },
+    "ticket_price": {
+      "type": "number"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "upcoming",
+        "ongoing",
+        "completed",
+        "cancelled"
+      ],
+      "default": "upcoming"
+    }
+  },
+  "required": [
+    "title",
+    "date",
+    "location",
+    "event_type"
+  ]
+}

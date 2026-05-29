@@ -1,0 +1,38 @@
+{
+  "name": "ContactInquiry",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "inquiry_type": {
+      "type": "string",
+      "enum": [
+        "general",
+        "sponsorship",
+        "alumni",
+        "recruitment"
+      ]
+    },
+    "message": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "new",
+        "responded",
+        "closed"
+      ],
+      "default": "new"
+    }
+  },
+  "required": [
+    "name",
+    "email",
+    "message"
+  ]
+}
