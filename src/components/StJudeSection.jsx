@@ -3,6 +3,8 @@ import { Button } from '@/components/ui/button';
 import { Heart, ExternalLink } from 'lucide-react';
 import { motion } from 'framer-motion';
 
+const ST_JUDE_URL = 'https://fundraising.stjude.org/site/TR?fr_id=162451&pg=entry';
+
 export default function StJudeSection() {
   return (
     <section className="py-20 sm:py-28 bg-[hsl(0,0%,7%)] text-white overflow-hidden">
@@ -18,20 +20,20 @@ export default function StJudeSection() {
             <div className="w-16 h-0.5 bg-accent mb-6" />
             <div className="space-y-4 text-white/80 leading-relaxed">
               <p>
-                Tau Kappa Epsilon has partnered with St. Jude Children's Research Hospital for decades, 
+                Tau Kappa Epsilon has partnered with St. Jude Children's Research Hospital for decades,
                 united by a shared mission to find cures and save children's lives.
               </p>
               <p>
-                Families never receive a bill from St. Jude for treatment, travel, housing, or food — 
+                Families never receive a bill from St. Jude for treatment, travel, housing, or food —
                 because all a family should worry about is helping their child live.
               </p>
               <p>
-                The Epsilon Alpha Chapter is committed to making a meaningful impact in the fight against 
+                The Epsilon Alpha Chapter is committed to making a meaningful impact in the fight against
                 childhood cancer through fundraising events, community engagement, and awareness campaigns.
               </p>
             </div>
             <div className="flex flex-wrap gap-3 mt-8">
-              <a href="https://www.stjude.org/donate" target="_blank" rel="noopener noreferrer">
+              <a href={ST_JUDE_URL} target="_blank" rel="noopener noreferrer">
                 <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold gap-2 h-12 px-8">
                   <Heart className="h-5 w-5" /> Donate Now
                 </Button>

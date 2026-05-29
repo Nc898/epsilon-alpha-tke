@@ -5,8 +5,10 @@ import EventCard from '../components/EventCard';
 import SponsorTierCard from '../components/SponsorTierCard';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
-import { Heart, Download, Mail, Building2 } from 'lucide-react';
+import { Heart, Download, Mail, Building2, ExternalLink } from 'lucide-react';
 import { Link } from 'react-router-dom';
+
+const ST_JUDE_URL = 'https://fundraising.stjude.org/site/TR?fr_id=162451&pg=entry';
 
 const TIERS = [
   { tier: 'title', price: 10000 },
@@ -28,12 +30,16 @@ export default function Philanthropy() {
     queryFn: () => base44.entities.Sponsor.filter({ active: true }),
   });
 
-  const { data: donations = [] } = useQuery({
-    queryKey: ['donations'],
-    queryFn: () => base44.entities.Donation.list(),
+  const { data: statsArr = [], isLoading: statsLoading } = useQuery({
+    queryKey: ['fundraising-stats'],
+    queryFn: () => base44.entities.FundraisingStats.list(),
+    staleTime: 1000 * 60 * 30,
   });
 
-  const totalRaised = donations.reduce((sum, d) => sum + (d.amount || 0), 0);
+  const fStats = statsArr[0];
+  const raised = fStats?.amount_raised ?? 12400;
+  const goal = fStats?.goal ?? 50000;
+  const lastUpdated = fStats?.last_updated ?? null;
 
   return (
     <div className="pt-20">
@@ -47,14 +53,21 @@ export default function Philanthropy() {
             TKE for St. Jude
           </h1>
           <p className="text-white/80 text-lg max-w-2xl mx-auto mb-8">
-            Join our fight against childhood cancer. Every dollar raised goes directly to 
+            Join our fight against childhood cancer. Every dollar raised goes directly to
             St. Jude Children's Research Hospital.
           </p>
-          <a href="https://www.stjude.org/donate" target="_blank" rel="noopener noreferrer">
-            <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold gap-2 h-14 px-10 text-base">
-              <Heart className="h-5 w-5" /> Donate to St. Jude
-            </Button>
-          </a>
+          <div className="flex flex-wrap justify-center gap-4">
+            <a href={ST_JUDE_URL} target="_blank" rel="noopener noreferrer">
+              <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold gap-2 h-14 px-10 text-base">
+                <Heart className="h-5 w-5" /> Donate to St. Jude
+              </Button>
+            </a>
+            <a href={ST_JUDE_URL} target="_blank" rel="noopener noreferrer">
+              <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 font-semibold gap-2 h-14 px-8 text-base">
+                <ExternalLink className="h-4 w-4" /> View Our Fundraising Page
+              </Button>
+            </a>
+          </div>
         </div>
       </section>
 
@@ -64,9 +77,17 @@ export default function Philanthropy() {
           <div className="text-center mb-12">
             <p className="text-accent font-semibold text-sm tracking-widest uppercase mb-3">Our Progress</p>
             <h2 className="font-heading text-3xl sm:text-4xl font-bold text-foreground">Fundraising Impact</h2>
+            <p className="text-muted-foreground mt-3 max-w-xl mx-auto">
+              Live totals pulled directly from our{' '}
+              <a href={ST_JUDE_URL} target="_blank" rel="noopener noreferrer"
+                className="text-primary underline underline-offset-2 hover:text-primary/80">
+                St. Jude fundraising page
+              </a>
+              , updated three times daily.
+            </p>
           </div>
           <div className="flex justify-center">
-            <FundraisingTracker raised={totalRaised || 34200} goal={50000} />
+            <FundraisingTracker raised={raised} goal={goal} isLoading={statsLoading} lastUpdated={lastUpdated} />
           </div>
         </div>
       </section>
@@ -103,7 +124,7 @@ export default function Philanthropy() {
             <p className="text-accent font-semibold text-sm tracking-widest uppercase mb-3">Partner With Us</p>
             <h2 className="font-heading text-3xl sm:text-4xl font-bold text-foreground mb-4">Sponsorship Opportunities</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Your sponsorship directly supports our mission to fight childhood cancer. 
+              Your sponsorship directly supports our mission to fight childhood cancer.
               Every partner helps us reach our fundraising goal.
             </p>
           </div>

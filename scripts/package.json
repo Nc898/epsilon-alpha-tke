@@ -1,0 +1,13 @@
+{
+  "name": "tke-fundraising-updater",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "update": "node update-fundraising.js",
+    "setup-cron": "bash setup-cron.sh"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "puppeteer": "^22.0.0"
+  }
+}

@@ -1,14 +1,28 @@
+import { useQuery } from '@tanstack/react-query';
+import { base44 } from '@/api/base44Client';
 import { motion } from 'framer-motion';
 import { DollarSign, Users, Calendar, TrendingUp } from 'lucide-react';
 
-const STATS = [
-  { icon: DollarSign, value: '$34,200', label: 'Raised This Year', accent: true },
-  { icon: Users, value: '180+', label: 'Active Donors' },
-  { icon: Calendar, value: '12', label: 'Events Hosted' },
-  { icon: TrendingUp, value: '68%', label: 'Goal Progress' },
-];
-
 export default function ImpactStats() {
+  const { data: statsArr = [] } = useQuery({
+    queryKey: ['fundraising-stats'],
+    queryFn: () => base44.entities.FundraisingStats.list(),
+    staleTime: 1000 * 60 * 30, // 30 min — synced with 3x daily update cadence
+  });
+
+  const stats = statsArr[0];
+  const raised = stats?.amount_raised ?? 12400;
+  const donors = stats?.donor_count ?? 42;
+  const goal = stats?.goal ?? 50000;
+  const pct = goal > 0 ? Math.round((raised / goal) * 100) : 0;
+
+  const STATS = [
+    { icon: DollarSign, value: raised > 0 ? `$${raised.toLocaleString()}` : '—', label: 'Raised for St. Jude', accent: true },
+    { icon: Users, value: donors > 0 ? `${donors.toLocaleString()}` : '—', label: 'Total Donors' },
+    { icon: Calendar, value: '12', label: 'Events Hosted' },
+    { icon: TrendingUp, value: pct > 0 ? `${pct}%` : '—', label: 'Goal Progress' },
+  ];
+
   return (
     <section className="py-16 bg-background border-y border-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

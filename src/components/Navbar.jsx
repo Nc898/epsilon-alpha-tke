@@ -47,7 +47,7 @@ export default function Navbar() {
                   location.pathname === l.to ? 'text-accent' : 'text-white/70 hover:text-white'
                 }`}>{l.label}</Link>
             ))}
-            <a href="https://www.stjude.org/donate" target="_blank" rel="noopener noreferrer">
+            <a href="https://fundraising.stjude.org/site/TR?fr_id=162451&pg=entry" target="_blank" rel="noopener noreferrer">
               <Button size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold gap-2">
                 <Heart className="h-4 w-4" /> Donate
               </Button>
@@ -70,7 +70,7 @@ export default function Navbar() {
                 {l.label}
               </Link>
             ))}
-            <a href="https://www.stjude.org/donate" target="_blank" rel="noopener noreferrer" className="block pt-3">
+            <a href="https://fundraising.stjude.org/site/TR?fr_id=162451&pg=entry" target="_blank" rel="noopener noreferrer" className="block pt-3">
               <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold gap-2">
                 <Heart className="h-4 w-4" /> Donate to St. Jude
               </Button>
