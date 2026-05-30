@@ -48,7 +48,7 @@ export default function Recruitment() {
   };
 
   return (
-    <div className="pt-20">
+    <div className="pt-24">
       {/* Hero */}
       <section className="relative py-20 sm:py-28 overflow-hidden">
         <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(https://static.wixstatic.com/media/12d367_4f26ccd17f8f4e3a8958306ea08c2332~mv2.png)` }} />

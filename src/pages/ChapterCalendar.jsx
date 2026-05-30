@@ -47,7 +47,7 @@ export default function ChapterCalendar() {
     filteredEvents.filter(e => e.date && isSameDay(new Date(e.date + 'T00:00:00'), day));
 
   return (
-    <div className="pt-20">
+    <div className="pt-24">
       {/* Header */}
       <section className="bg-[hsl(0,0%,7%)] py-16 sm:py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center text-white">

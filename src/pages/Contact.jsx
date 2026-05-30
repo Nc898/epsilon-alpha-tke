@@ -41,7 +41,7 @@ export default function Contact() {
   };
 
   return (
-    <div className="pt-20">
+    <div className="pt-24">
       <section className="bg-[hsl(0,0%,7%)] py-16 sm:py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center text-white">
           <p className="text-accent font-semibold text-sm tracking-widest uppercase mb-3">Reach Out</p>

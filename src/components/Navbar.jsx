@@ -2,15 +2,21 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { motion } from 'framer-motion';
 
-const NAV_LINKS = [
+const LEFT_LINKS = [
   { to: '/', label: 'Home' },
   { to: '/philanthropy', label: 'Philanthropy' },
   { to: '/alumni', label: 'Alumni' },
+];
+
+const RIGHT_LINKS = [
   { to: '/recruitment', label: 'Recruitment' },
   { to: '/calendar', label: 'Calendar' },
   { to: '/contact', label: 'Contact' },
 ];
+
+const DONATE_URL = 'https://fundraising.stjude.org/site/TR?fr_id=162451&pg=entry';
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -18,63 +24,114 @@ export default function Navbar() {
   const location = useLocation();
 
   useEffect(() => {
-    const h = () => setScrolled(window.scrollY > 40);
-    window.addEventListener('scroll', h);
+    const h = () => setScrolled(window.scrollY > 80);
+    window.addEventListener('scroll', h, { passive: true });
     return () => window.removeEventListener('scroll', h);
   }, []);
 
   useEffect(() => setOpen(false), [location.pathname]);
 
-  const isHome = location.pathname === '/';
-  const solid = scrolled || !isHome;
+  const linkClass = (to) =>
+    `text-[11px] font-semibold tracking-[0.18em] uppercase transition-colors duration-200 ${
+      location.pathname === to ? 'text-primary' : 'text-white/70 hover:text-white'
+    }`;
 
   return (
-    <nav className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${
-      solid ? 'bg-[hsl(0,0%,7%)]/95 backdrop-blur-md shadow-lg' : 'bg-transparent'
-    }`}>
+    <nav className="fixed top-0 inset-x-0 z-50 bg-black shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 lg:h-20">
-          <Link to="/" className="flex items-center gap-2">
-            <span className="font-heading text-xl lg:text-2xl font-bold text-white tracking-tight">
-              TKE <span className="text-accent">ΕΑ</span>
-            </span>
-          </Link>
+        <div
+          className={`flex items-center transition-all duration-500 ${
+            scrolled ? 'h-16' : 'h-24'
+          }`}
+        >
+          {/* ── Left links (desktop) / Hamburger (mobile) ── */}
+          <div className="flex items-center flex-1">
+            {/* Desktop */}
+            <div className="hidden lg:flex items-center gap-10">
+              {LEFT_LINKS.map((l) => (
+                <Link key={l.to} to={l.to} className={linkClass(l.to)}>
+                  {l.label}
+                </Link>
+              ))}
+            </div>
 
-          <div className="hidden lg:flex items-center gap-7">
-            {NAV_LINKS.map(l => (
-              <Link key={l.to} to={l.to}
-                className={`text-xs font-semibold tracking-widest uppercase transition-colors ${
-                  location.pathname === l.to ? 'text-accent' : 'text-white/70 hover:text-white'
-                }`}>{l.label}</Link>
-            ))}
-            <a href="https://fundraising.stjude.org/site/TR?fr_id=162451&pg=entry" target="_blank" rel="noopener noreferrer">
-              <Button size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold gap-2">
-                <Heart className="h-4 w-4" /> Donate
-              </Button>
-            </a>
-            <img src="https://media.base44.com/images/public/6a190a936fbf6af2a63c4d1d/fa6dfbb4f_images-8.png" alt="TKE Logo" className="h-10 w-10 object-contain" />
+            {/* Mobile hamburger */}
+            <button
+              onClick={() => setOpen(!open)}
+              className="lg:hidden p-2 text-white"
+              aria-label="Toggle menu"
+            >
+              {open ? <X size={22} /> : <Menu size={22} />}
+            </button>
           </div>
 
-          <button onClick={() => setOpen(!open)} className="lg:hidden p-2 text-white">
-            {open ? <X size={24} /> : <Menu size={24} />}
-          </button>
-        </div>
-      </div>
+          {/* ── Center logo — top-pinned so text protrudes below the bar ── */}
+          <div className="flex-shrink-0 flex justify-center self-start">
+            <Link to="/" aria-label="TKE Epsilon Alpha Home">
+              <motion.img
+                src="/assets/tke-logo.png"
+                alt="Tau Kappa Epsilon"
+                animate={{ height: scrolled ? 48 : 160 }}
+                transition={{ duration: 0.45, ease: [0.4, 0, 0.2, 1] }}
+                style={{
+                  width: 'auto',
+                  filter: 'invert(1) hue-rotate(180deg) saturate(1.7) brightness(0.67)',
+                  mixBlendMode: 'lighten',
+                }}
+                className="object-contain"
+              />
+            </Link>
+          </div>
 
-      {open && (
-        <div className="lg:hidden bg-[hsl(0,0%,7%)]/95 backdrop-blur-md border-t border-white/10 animate-in slide-in-from-top-2">
-          <div className="px-4 py-4 space-y-1">
-            {NAV_LINKS.map(l => (
-              <Link key={l.to} to={l.to}
-                className="block py-3 text-white/80 hover:text-accent font-medium uppercase text-sm tracking-wide">
+          {/* ── Right links + Donate (desktop) ── */}
+          <div className="hidden lg:flex items-center gap-10 flex-1 justify-end">
+            {RIGHT_LINKS.map((l) => (
+              <Link key={l.to} to={l.to} className={linkClass(l.to)}>
                 {l.label}
               </Link>
             ))}
-            <a href="https://fundraising.stjude.org/site/TR?fr_id=162451&pg=entry" target="_blank" rel="noopener noreferrer" className="block pt-3">
-              <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold gap-2">
-                <Heart className="h-4 w-4" /> Donate to St. Jude
+            <a href={DONATE_URL} target="_blank" rel="noopener noreferrer">
+              <Button
+                size="sm"
+                className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold gap-1.5 text-xs"
+              >
+                <Heart className="h-3.5 w-3.5" /> Donate
               </Button>
             </a>
+          </div>
+
+          {/* Mobile right spacer to keep logo centered */}
+          <div className="flex-1 lg:hidden" />
+        </div>
+      </div>
+
+      {/* ── Black accent bar ── */}
+      <div className="h-[3px] w-full bg-black" />
+
+      {/* ── Mobile slide-down menu ── */}
+      {open && (
+        <div className="lg:hidden bg-black border-t border-white/10 animate-in slide-in-from-top-2">
+          <div className="px-5 py-5 space-y-1">
+            {[...LEFT_LINKS, ...RIGHT_LINKS].map((l) => (
+              <Link
+                key={l.to}
+                to={l.to}
+                className={`block py-3 font-semibold uppercase text-sm tracking-widest border-b border-white/5 last:border-0 transition-colors ${
+                  location.pathname === l.to
+                    ? 'text-primary'
+                    : 'text-white/75 hover:text-white'
+                }`}
+              >
+                {l.label}
+              </Link>
+            ))}
+            <div className="pt-4">
+              <a href={DONATE_URL} target="_blank" rel="noopener noreferrer">
+                <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold gap-2">
+                  <Heart className="h-4 w-4" /> Donate to St. Jude
+                </Button>
+              </a>
+            </div>
           </div>
         </div>
       )}
