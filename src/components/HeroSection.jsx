@@ -32,14 +32,14 @@ export default function HeroSection() {
 
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center">
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9 }}>
-          <p className="text-accent font-heading text-base sm:text-lg tracking-[0.25em] uppercase mb-4">
+          <p className="text-white font-heading text-sm sm:text-base lg:text-lg tracking-[0.22em] uppercase font-bold mb-4 drop-shadow-md" style={{ textShadow: '0 1px 6px rgba(0,0,0,0.8)' }}>
             Tau Kappa Epsilon — Epsilon Alpha Chapter
           </p>
           <h1 className="font-heading text-4xl sm:text-5xl lg:text-7xl text-white font-bold leading-[1.1] mb-6">
-            Building Better Men
+            Better Men for a Better World
           </h1>
           <p className="text-white/80 text-base sm:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
-            Through Leadership, Service, Brotherhood, and Philanthropy at Saint Louis University.
+            Through Service-Oriented Leadership, Professional Competence, Brotherhood, and Philanthropy at Saint Louis University.
           </p>
 
           <div className="flex flex-wrap justify-center gap-3 sm:gap-4">

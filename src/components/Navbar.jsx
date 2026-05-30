@@ -71,14 +71,10 @@ export default function Navbar() {
               <motion.img
                 src="/assets/tke-logo.png"
                 alt="Tau Kappa Epsilon"
-                animate={{ height: scrolled ? 48 : 160 }}
+                animate={{ height: scrolled ? 68 : 220 }}
                 transition={{ duration: 0.45, ease: [0.4, 0, 0.2, 1] }}
-                style={{
-                  width: 'auto',
-                  filter: 'invert(1) hue-rotate(180deg) saturate(1.7) brightness(0.67)',
-                  mixBlendMode: 'lighten',
-                }}
-                className="object-contain"
+                style={{ width: 'auto' }}
+                className="object-contain drop-shadow-lg"
               />
             </Link>
           </div>
