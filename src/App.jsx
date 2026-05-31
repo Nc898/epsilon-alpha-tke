@@ -12,6 +12,7 @@ import Alumni from './pages/Alumni';
 import Recruitment from './pages/Recruitment';
 import ChapterCalendar from './pages/ChapterCalendar';
 import Contact from './pages/Contact';
+import MemberDirectory from './pages/MemberDirectory';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import ForgotPassword from './pages/ForgotPassword';
@@ -53,6 +54,7 @@ const AuthenticatedApp = () => {
         <Route path="/alumni" element={<Alumni />} />
         <Route path="/recruitment" element={<Recruitment />} />
         <Route path="/calendar" element={<ChapterCalendar />} />
+        <Route path="/members" element={<MemberDirectory />} />
         <Route path="/contact" element={<Contact />} />
       </Route>
       <Route path="*" element={<PageNotFound />} />

@@ -13,6 +13,7 @@ const LEFT_LINKS = [
 const RIGHT_LINKS = [
   { to: '/recruitment', label: 'Recruitment' },
   { to: '/calendar', label: 'Calendar' },
+  { to: '/members', label: 'Members' },
   { to: '/contact', label: 'Contact' },
 ];
 
