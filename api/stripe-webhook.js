@@ -7,8 +7,9 @@ import { confirmationEmail } from './_lib/emailTemplates.js';
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-export const config = { api: { bodyParser: false } };
-
+// Reads the raw request stream for Stripe signature verification.
+// IMPORTANT: the handler must never read req.body before verifying the
+// signature — any body parsing would consume/alter the raw payload.
 async function rawBody(req) {
   const chunks = [];
   for await (const chunk of req) chunks.push(chunk);
@@ -47,9 +48,19 @@ export default async function handler(req, res) {
             .insert({ registration_id: reg.id, email_type: 'confirmation' });
           if (!logErr) {
             const { subject, html, text } = confirmationEmail({ registration: reg, event: reg.events });
-            await resend.emails.send({
-              from: process.env.EMAIL_FROM, to: reg.email, subject, html, text,
-            });
+            try {
+              await resend.emails.send({
+                from: process.env.EMAIL_FROM, to: reg.email, subject, html, text,
+              });
+            } catch (sendErr) {
+              // Roll back the log row so a Stripe retry can re-attempt the send.
+              await supabaseAdmin
+                .from('email_log')
+                .delete()
+                .eq('registration_id', reg.id)
+                .eq('email_type', 'confirmation');
+              throw sendErr;
+            }
           }
         }
       }

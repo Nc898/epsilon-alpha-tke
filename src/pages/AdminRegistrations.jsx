@@ -113,7 +113,7 @@ export default function AdminRegistrations() {
     enabled: !!key,
     retry: false,
     queryFn: async () => {
-      const res = await fetch(`/api/registrations?key=${encodeURIComponent(key)}`);
+      const res = await fetch('/api/registrations', { headers: { 'x-admin-key': key } });
       if (res.status === 401) {
         sessionStorage.removeItem(KEY_STORAGE);
         setKey('');

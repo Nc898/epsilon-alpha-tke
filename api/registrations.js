@@ -16,7 +16,7 @@ export default async function handler(req, res) {
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
-    if (!keyMatches(req.query?.key, process.env.ADMIN_KEY)) {
+    if (!keyMatches(req.headers['x-admin-key'], process.env.ADMIN_KEY)) {
       return res.status(401).json({ error: 'Unauthorized' });
     }
 

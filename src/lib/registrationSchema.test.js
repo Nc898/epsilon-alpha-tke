@@ -32,6 +32,9 @@ describe('registrationSchema', () => {
   it('coerces string donation input from the form', () => {
     expect(registrationSchema.parse({ ...valid, donation_dollars: '25' }).donation_dollars).toBe(25);
   });
+  it('rounds decimal donations to the nearest dollar', () => {
+    expect(registrationSchema.parse({ ...valid, donation_dollars: 5.5 }).donation_dollars).toBe(6);
+  });
   it('requires phone to be omittable', () => {
     const { phone, ...rest } = valid;
     expect(() => registrationSchema.parse(rest)).not.toThrow();

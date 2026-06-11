@@ -8,5 +8,5 @@ export const registrationSchema = z.object({
   car_make: z.string().trim().min(1, 'Make required'),
   car_model: z.string().trim().min(1, 'Model required'),
   car_class: z.enum(['classic', 'exotic', 'performance', 'other']),
-  donation_dollars: z.coerce.number().int().min(0).max(10000).default(0),
+  donation_dollars: z.coerce.number().min(0).max(10000).transform(v => Math.round(v)).default(0),
 });
