@@ -66,13 +66,13 @@ export default function Navbar() {
             </button>
           </div>
 
-          {/* ── Center logo — top-pinned so text protrudes below the bar ── */}
-          <div className="flex-shrink-0 flex justify-center self-start">
+          {/* ── Center crest (triangle only — full lockup lives in footer/print) ── */}
+          <div className="flex-shrink-0 flex justify-center">
             <Link to="/" aria-label="TKE Epsilon Alpha Home">
               <motion.img
-                src="/assets/tke-logo.png"
+                src="/assets/tke-crest.png"
                 alt="Tau Kappa Epsilon"
-                animate={{ height: scrolled ? 68 : 220 }}
+                animate={{ height: scrolled ? 48 : 80 }}
                 transition={{ duration: 0.45, ease: [0.4, 0, 0.2, 1] }}
                 style={{ width: 'auto' }}
                 className="object-contain drop-shadow-lg"

@@ -42,19 +42,19 @@ export default function HeroSection() {
             Through Service-Oriented Leadership, Professional Competence, Brotherhood, and Philanthropy at Saint Louis University.
           </p>
 
-          <div className="flex flex-wrap justify-center gap-3 sm:gap-4">
-            <Link to="/philanthropy">
-              <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-6 sm:px-8 h-12 sm:h-14 text-sm sm:text-base gap-2">
+          <div className="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center justify-center gap-3 sm:gap-4 max-w-xs sm:max-w-none mx-auto">
+            <Link to="/philanthropy" className="contents">
+              <Button size="lg" className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-6 sm:px-8 h-12 sm:h-14 text-sm sm:text-base gap-2">
                 <Heart className="h-4 w-4 sm:h-5 sm:w-5" /> Support St. Jude
               </Button>
             </Link>
-            <Link to="/recruitment">
-              <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 font-semibold px-6 sm:px-8 h-12 sm:h-14 text-sm sm:text-base gap-2">
+            <Link to="/recruitment" className="contents">
+              <Button size="lg" variant="outline" className="w-full sm:w-auto border-white/30 text-white hover:bg-white/10 font-semibold px-6 sm:px-8 h-12 sm:h-14 text-sm sm:text-base gap-2">
                 <Users className="h-4 w-4 sm:h-5 sm:w-5" /> Join TKE
               </Button>
             </Link>
-            <Link to="/calendar">
-              <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 font-semibold px-6 sm:px-8 h-12 sm:h-14 text-sm sm:text-base gap-2">
+            <Link to="/calendar" className="contents">
+              <Button size="lg" variant="outline" className="w-full sm:w-auto border-white/30 text-white hover:bg-white/10 font-semibold px-6 sm:px-8 h-12 sm:h-14 text-sm sm:text-base gap-2">
                 <Calendar className="h-4 w-4 sm:h-5 sm:w-5" /> Upcoming Events
               </Button>
             </Link>
