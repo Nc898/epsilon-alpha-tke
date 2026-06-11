@@ -15,7 +15,7 @@ export default function StJudeSection() {
             <p className="text-accent font-semibold text-sm tracking-widest uppercase mb-3">Our Mission</p>
             <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 leading-tight">
               Fighting Childhood Cancer <br className="hidden sm:block" />
-              <span className="text-accent">with St. Jude</span>
+              <span className="text-primary">with St. Jude</span>
             </h2>
             <div className="w-16 h-0.5 bg-accent mb-6" />
             <div className="space-y-4 text-white/80 leading-relaxed">

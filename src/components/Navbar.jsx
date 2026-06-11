@@ -34,7 +34,9 @@ export default function Navbar() {
 
   const linkClass = (to) =>
     `text-[11px] font-semibold tracking-[0.18em] uppercase transition-colors duration-200 ${
-      location.pathname === to ? 'text-primary' : 'text-white/70 hover:text-white'
+      location.pathname === to
+        ? 'text-primary underline decoration-wavy decoration-2 underline-offset-[6px] decoration-primary'
+        : 'text-white/70 hover:text-white'
     }`;
 
   return (
@@ -115,7 +117,7 @@ export default function Navbar() {
                 to={l.to}
                 className={`block py-3 font-semibold uppercase text-sm tracking-widest border-b border-white/5 last:border-0 transition-colors ${
                   location.pathname === l.to
-                    ? 'text-primary'
+                    ? 'text-primary underline decoration-wavy decoration-2 underline-offset-[6px] decoration-primary'
                     : 'text-white/75 hover:text-white'
                 }`}
               >

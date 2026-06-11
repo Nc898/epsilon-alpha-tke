@@ -35,8 +35,14 @@ export default function HeroSection() {
           <p className="text-white font-heading text-sm sm:text-base lg:text-lg tracking-[0.22em] uppercase font-bold mb-4 drop-shadow-md" style={{ textShadow: '0 1px 6px rgba(0,0,0,0.8)' }}>
             Tau Kappa Epsilon — Epsilon Alpha Chapter
           </p>
-          <h1 className="font-heading text-4xl sm:text-5xl lg:text-7xl text-white font-bold leading-[1.1] mb-6">
-            Better Men for a Better World
+          <h1
+            className="font-heading text-white font-bold mb-6"
+            style={{ fontSize: 'clamp(2.75rem, 7.5vw, 6.5rem)', letterSpacing: '-0.02em', lineHeight: 1.05 }}
+          >
+            Better Men for a{' '}
+            <span style={{ color: 'hsl(1 70% 52%)', textShadow: '0 2px 16px rgba(0,0,0,0.55)' }}>
+              Better World
+            </span>
           </h1>
           <p className="text-white/80 text-base sm:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
             Through Service-Oriented Leadership, Professional Competence, Brotherhood, and Philanthropy at Saint Louis University.
