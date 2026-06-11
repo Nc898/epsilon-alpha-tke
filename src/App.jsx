@@ -19,6 +19,8 @@ import Register from './pages/Register';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import EventSignup from './pages/EventSignup';
+import CarShowRedirect from './pages/CarShowRedirect';
+import Donate from './pages/Donate';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -59,6 +61,8 @@ const AuthenticatedApp = () => {
         <Route path="/members" element={<MemberDirectory />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/events/:slug" element={<EventSignup />} />
+        <Route path="/carshow" element={<CarShowRedirect />} />
+        <Route path="/donate" element={<Donate />} />
       </Route>
       <Route path="*" element={<PageNotFound />} />
     </Routes>
