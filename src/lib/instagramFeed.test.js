@@ -21,7 +21,7 @@ describe('mapBeholdPayload', () => {
         permalink: 'https://www.instagram.com/p/abc/',
         imageUrl: 'https://cdn.example.com/full.jpg',
         caption: 'Car show day! #tke',
-        timestamp: '2026-06-01T15:00:00+0000',
+        timestamp: '2026-06-01T15:00:00+00:00',
         isVideo: false,
       },
     ]);
@@ -53,6 +53,24 @@ describe('mapBeholdPayload', () => {
 
   it('defaults caption to empty string', () => {
     expect(mapBeholdPayload([post({ caption: undefined })])[0].caption).toBe('');
+  });
+
+  it('normalizes +0000-style offsets to ISO with colon', () => {
+    expect(mapBeholdPayload([post()])[0].timestamp).toBe('2026-06-01T15:00:00+00:00');
+  });
+
+  it('passes through already-valid ISO timestamps', () => {
+    expect(mapBeholdPayload([post({ timestamp: '2026-06-01T15:00:00.000Z' })])[0].timestamp)
+      .toBe('2026-06-01T15:00:00.000Z');
+  });
+
+  it('nulls unparseable timestamps', () => {
+    expect(mapBeholdPayload([post({ timestamp: 'yesterday' })])[0].timestamp).toBeNull();
+  });
+
+  it('drops posts with non-https permalink or image', () => {
+    expect(mapBeholdPayload([post({ permalink: 'javascript:alert(1)' })])).toEqual([]);
+    expect(mapBeholdPayload([post({ mediaUrl: 'javascript:alert(1)' })])).toEqual([]);
   });
 
   it('returns [] for garbage payloads', () => {
