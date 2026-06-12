@@ -5,6 +5,7 @@ import EventCard from '../components/EventCard';
 import SponsorTierCard from '../components/SponsorTierCard';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
+import Reveal from '../components/Reveal';
 import { Heart, Download, Mail, Building2, ExternalLink } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -58,12 +59,12 @@ export default function Philanthropy() {
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <a href={ST_JUDE_URL} target="_blank" rel="noopener noreferrer">
-              <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold gap-2 h-14 px-10 text-base">
+              <Button size="lg" className="rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold gap-2 h-14 px-10 text-base transition-transform hover:scale-[1.02] active:scale-[0.98]">
                 <Heart className="h-5 w-5" /> Donate to St. Jude
               </Button>
             </a>
             <a href={ST_JUDE_URL} target="_blank" rel="noopener noreferrer">
-              <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 font-semibold gap-2 h-14 px-8 text-base">
+              <Button size="lg" variant="outline" className="rounded-full border-white/30 text-white hover:bg-white/10 font-semibold gap-2 h-14 px-8 text-base transition-transform hover:scale-[1.02] active:scale-[0.98]">
                 <ExternalLink className="h-4 w-4" /> View Our Fundraising Page
               </Button>
             </a>
@@ -74,7 +75,7 @@ export default function Philanthropy() {
       {/* Fundraising Progress */}
       <section className="py-20 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
+          <Reveal className="text-center mb-12">
             <p className="text-accent font-semibold text-sm tracking-widest uppercase mb-3">Our Progress</p>
             <h2 className="font-heading text-3xl sm:text-4xl font-bold text-foreground">Fundraising Impact</h2>
             <p className="text-muted-foreground mt-3 max-w-xl mx-auto">
@@ -85,7 +86,7 @@ export default function Philanthropy() {
               </a>
               , updated three times daily.
             </p>
-          </div>
+          </Reveal>
           <div className="flex justify-center">
             <FundraisingTracker raised={raised} goal={goal} isLoading={statsLoading} lastUpdated={lastUpdated} />
           </div>
@@ -111,7 +112,11 @@ export default function Philanthropy() {
             </p>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {events.map(e => <EventCard key={e.id} event={e} />)}
+              {events.map((e, i) => (
+                <Reveal key={e.id} delay={i * 0.08}>
+                  <EventCard event={e} />
+                </Reveal>
+              ))}
             </div>
           )}
         </div>
@@ -120,17 +125,21 @@ export default function Philanthropy() {
       {/* Sponsorship Tiers */}
       <section className="py-20 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
+          <Reveal className="text-center mb-12">
             <p className="text-accent font-semibold text-sm tracking-widest uppercase mb-3">Partner With Us</p>
             <h2 className="font-heading text-3xl sm:text-4xl font-bold text-foreground mb-4">Sponsorship Opportunities</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
               Your sponsorship directly supports our mission to fight childhood cancer.
               Every partner helps us reach our fundraising goal.
             </p>
-          </div>
+          </Reveal>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-            {TIERS.map(t => <SponsorTierCard key={t.tier} {...t} />)}
+            {TIERS.map((t, i) => (
+              <Reveal key={t.tier} delay={i * 0.08}>
+                <SponsorTierCard {...t} />
+              </Reveal>
+            ))}
           </div>
 
           <div className="flex flex-wrap justify-center gap-4">

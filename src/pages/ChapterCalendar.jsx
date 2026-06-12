@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { startOfMonth, endOfMonth, eachDayOfInterval, format, isSameMonth, isSameDay, addMonths, subMonths, startOfWeek, endOfWeek } from 'date-fns';
 import { Button } from '@/components/ui/button';
+import Reveal from '../components/Reveal';
 import { ChevronLeft, ChevronRight, MapPin, Clock } from 'lucide-react';
 
 const TYPE_COLORS = {
@@ -287,7 +288,7 @@ export default function ChapterCalendar() {
           </div>
 
           {/* Calendar Grid */}
-          <div className="grid grid-cols-7 border border-border rounded-xl overflow-hidden mb-12">
+          <Reveal className="grid grid-cols-7 border border-border rounded-xl overflow-hidden mb-12">
             {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(d => (
               <div key={d} className="bg-muted/50 p-2 sm:p-3 text-center text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                 {d}
@@ -318,10 +319,10 @@ export default function ChapterCalendar() {
                 </div>
               );
             })}
-          </div>
+          </Reveal>
 
           {/* Event List */}
-          <div>
+          <Reveal delay={0.1}>
             <h3 className="font-heading text-xl font-bold text-foreground mb-6">
               Upcoming Events
             </h3>
@@ -362,7 +363,7 @@ export default function ChapterCalendar() {
                   ))}
               </div>
             )}
-          </div>
+          </Reveal>
         </div>
       </section>
     </div>

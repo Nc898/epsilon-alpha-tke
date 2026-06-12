@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Heart } from 'lucide-react';
+import { Menu, X, Heart, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 
@@ -92,9 +92,10 @@ export default function Navbar() {
             <a href={DONATE_URL} target="_blank" rel="noopener noreferrer">
               <Button
                 size="sm"
-                className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold gap-1.5 text-xs"
+                className="group rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold gap-1.5 text-xs transition-transform hover:scale-[1.03] active:scale-[0.97]"
               >
                 <Heart className="h-3.5 w-3.5" /> Donate
+                <ArrowRight className="h-3.5 w-3.5 -ml-1 opacity-0 -translate-x-1 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0" />
               </Button>
             </a>
           </div>
