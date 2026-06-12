@@ -143,11 +143,7 @@ export default function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: reduce ? 0 : 0.85, ease: [0.16, 1, 0.3, 1] }}
         >
-          <p className="text-white/80 text-base sm:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
-            Through Service-Oriented Leadership, Professional Competence, Brotherhood, and Philanthropy at Saint Louis University.
-          </p>
-
-          <div className="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center justify-center gap-3 sm:gap-4 max-w-xs sm:max-w-none mx-auto">
+          <div className="mt-10 flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center justify-center gap-3 sm:gap-4 max-w-xs sm:max-w-none mx-auto">
             <Link to="/philanthropy" className="contents">
               <Button size="lg" className="group w-full sm:w-auto rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-6 sm:px-8 h-12 sm:h-14 text-sm sm:text-base gap-2 transition-transform hover:scale-[1.02] active:scale-[0.98]">
                 <Heart className="h-4 w-4 sm:h-5 sm:w-5" /> Support St. Jude
