@@ -16,7 +16,7 @@ export default function SponsorTierCard({ tier, price }) {
   const label = tier.charAt(0).toUpperCase() + tier.slice(1);
 
   return (
-    <div className="bg-card border border-border rounded-xl overflow-hidden hover:border-accent/30 hover:shadow-lg transition-all duration-300">
+    <div className="bg-card border border-border rounded-xl overflow-hidden hover:border-accent/30 hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300">
       <div className={`bg-gradient-to-r ${config.color} p-4 flex items-center gap-3`}>
         <Star className="h-5 w-5 text-white" />
         <h3 className="font-heading text-lg font-bold text-white">{label} Sponsor</h3>

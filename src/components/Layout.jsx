@@ -4,6 +4,8 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import ScrollToTop from './ScrollToTop';
 import NewsDrawer from './NewsDrawer';
+import GrainOverlay from './GrainOverlay';
+import CustomCursor from './CustomCursor';
 import useLenis from '../lib/useLenis';
 
 export default function Layout() {
@@ -14,6 +16,8 @@ export default function Layout() {
   return (
     <div className="min-h-screen flex flex-col font-body">
       <ScrollToTop />
+      <GrainOverlay />
+      <CustomCursor />
       <Navbar />
       <NewsDrawer />
       <main className="flex-1">

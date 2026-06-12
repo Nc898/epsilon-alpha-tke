@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { Heart, Phone, Mail } from 'lucide-react';
+import { Heart, Phone, Mail, ArrowRight } from 'lucide-react';
+import Reveal from './Reveal';
 
 const LINKS = [
   { label: 'Home', to: '/' },
@@ -13,6 +14,28 @@ const LINKS = [
 export default function Footer() {
   return (
     <footer className="bg-[hsl(0,0%,7%)] text-white/70">
+      {/* Statement band — the award-site signoff */}
+      <div className="border-b border-white/10 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+          <Reveal>
+            <p
+              className="font-heading font-bold tracking-tight text-white leading-[1.02]"
+              style={{ fontSize: 'clamp(2.5rem, 7vw, 6rem)' }}
+            >
+              Better Men for a<br />
+              <span className="text-primary">Better World.</span>
+            </p>
+            <Link
+              to="/recruitment"
+              className="group inline-flex items-center gap-2 mt-8 text-sm font-semibold uppercase tracking-[0.18em] text-white/80 hover:text-white transition-colors"
+            >
+              Join the brotherhood
+              <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+            </Link>
+          </Reveal>
+        </div>
+      </div>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           <div>

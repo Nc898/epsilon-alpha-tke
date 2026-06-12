@@ -12,9 +12,11 @@ export default function EventCard({ event }) {
 
       {event.image && (
         <div className="relative h-48 overflow-hidden">
-          <img src={event.image} alt={event.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+          <div className="duotone-wrap h-full">
+            <img src={event.image} alt={event.title}
+              className="duotone w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+          </div>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
           {event.ticket_price > 0 && (
             <span className="absolute top-3 right-3 bg-accent text-accent-foreground text-xs font-bold px-3 py-1 rounded-full">
               ${event.ticket_price}

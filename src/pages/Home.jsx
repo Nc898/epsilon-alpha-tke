@@ -1,8 +1,10 @@
 import HeroSection from '../components/HeroSection';
 import NextEventBanner from '../components/NextEventBanner';
 import AboutSection from '../components/AboutSection';
+import CreedSection from '../components/CreedSection';
 import StJudeSection from '../components/StJudeSection';
 import ImpactStats from '../components/ImpactStats';
+import Marquee from '../components/Marquee';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
@@ -14,7 +16,9 @@ export default function Home() {
       <HeroSection />
       <NextEventBanner />
       <ImpactStats />
+      <Marquee />
       <AboutSection />
+      <CreedSection />
       <StJudeSection />
 
       {/* CTA Banner */}

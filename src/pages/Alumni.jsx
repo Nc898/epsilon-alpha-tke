@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { FileText, Newspaper, Star, Calendar, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
+import PageHero from '../components/PageHero';
 
 const CATEGORY_ICONS = { newsletter: Newspaper, spotlight: Star, announcement: FileText, event: Calendar };
 
@@ -22,17 +23,13 @@ export default function Alumni() {
   return (
     <div className="pt-24">
       {/* Hero */}
-      <section className="relative py-20 sm:py-28 overflow-hidden">
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(https://static.wixstatic.com/media/12d367_4f26ccd17f8f4e3a8958306ea08c2332~mv2.png)` }} />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/80" />
-        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center text-white">
-          <p className="text-accent font-semibold text-sm tracking-widest uppercase mb-3">Stay Connected</p>
-          <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-bold mb-4">Alumni Portal</h1>
-          <p className="text-white/80 text-lg max-w-2xl mx-auto">
-            Once a TKE, always a TKE. Stay connected with your brothers and the Epsilon Alpha Chapter.
-          </p>
-        </div>
-      </section>
+      <PageHero
+        eyebrow="03 — Stay Connected"
+        title="Alumni Portal"
+        accent="Portal"
+        watermark="1955"
+        lead="Once a TKE, always a TKE. Stay connected with your brothers and the Epsilon Alpha Chapter."
+      />
 
       {/* Updates & Newsletters */}
       <section className="py-20 bg-background">
@@ -57,9 +54,11 @@ export default function Alumni() {
                 return (
                   <motion.div key={u.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }} transition={{ delay: i * 0.1 }}
-                    className="bg-card border border-border rounded-xl overflow-hidden hover:border-accent/30 hover:shadow-lg transition-all">
+                    className="group bg-card border border-border rounded-xl overflow-hidden hover:border-accent/30 hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300">
                     {u.image && (
-                      <img src={u.image} alt={u.title} className="w-full h-48 object-cover" />
+                      <div className="duotone-wrap h-48 overflow-hidden">
+                        <img src={u.image} alt={u.title} className="duotone w-full h-full object-cover" />
+                      </div>
                     )}
                     <div className="p-6">
                       <div className="flex items-center gap-2 mb-3">

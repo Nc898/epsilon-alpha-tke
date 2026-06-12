@@ -2,7 +2,18 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Heart, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { getLenis } from '../lib/useLenis';
+
+const menuList = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.06, delayChildren: 0.1 } },
+};
+
+const menuItem = {
+  hidden: { opacity: 0, y: 24 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } },
+};
 
 const LEFT_LINKS = [
   { to: '/', label: 'Home' },
@@ -32,6 +43,18 @@ export default function Navbar() {
 
   useEffect(() => setOpen(false), [location.pathname]);
 
+  // Lock page scroll behind the fullscreen menu (Lenis keeps scrolling
+  // through overflow:hidden, so stop it explicitly too).
+  useEffect(() => {
+    document.body.style.overflow = open ? 'hidden' : '';
+    const lenis = getLenis();
+    if (lenis) open ? lenis.stop() : lenis.start();
+    return () => {
+      document.body.style.overflow = '';
+      getLenis()?.start();
+    };
+  }, [open]);
+
   const linkClass = (to) =>
     `text-[11px] font-semibold tracking-[0.18em] uppercase transition-colors duration-200 ${
       location.pathname === to
@@ -41,7 +64,7 @@ export default function Navbar() {
 
   return (
     <nav className="fixed top-0 inset-x-0 z-50 bg-black shadow-lg">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div
           className={`flex items-center transition-all duration-500 ${
             scrolled ? 'h-16' : 'h-24'
@@ -113,33 +136,68 @@ export default function Navbar() {
       {/* ── Black accent bar ── */}
       <div className="h-[3px] w-full bg-black" />
 
-      {/* ── Mobile slide-down menu ── */}
-      {open && (
-        <div className="lg:hidden bg-black border-t border-white/10 animate-in slide-in-from-top-2">
-          <div className="px-5 py-5 space-y-1">
-            {[...LEFT_LINKS, ...RIGHT_LINKS].map((l) => (
-              <Link
-                key={l.to}
-                to={l.to}
-                className={`block py-3 font-semibold uppercase text-sm tracking-widest border-b border-white/5 last:border-0 transition-colors ${
-                  location.pathname === l.to
-                    ? 'text-primary underline decoration-wavy decoration-2 underline-offset-[6px] decoration-primary'
-                    : 'text-white/75 hover:text-white'
-                }`}
-              >
-                {l.label}
-              </Link>
-            ))}
-            <div className="pt-4">
-              <a href={DONATE_URL} target="_blank" rel="noopener noreferrer">
-                <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold gap-2">
-                  <Heart className="h-4 w-4" /> Donate to St. Jude
-                </Button>
-              </a>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* ── Fullscreen mobile menu ── */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            key="menu"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:hidden fixed inset-0 z-0 bg-[hsl(0,0%,4%)] overflow-y-auto"
+          >
+            {/* Giant ΤΚΕ watermark */}
+            <span
+              aria-hidden="true"
+              className="fixed -bottom-10 -right-2 font-heading font-bold text-outline-light select-none pointer-events-none leading-none"
+              style={{ fontSize: 'clamp(11rem, 50vw, 20rem)' }}
+            >
+              ΤΚΕ
+            </span>
+
+            <motion.div
+              variants={menuList}
+              initial="hidden"
+              animate="visible"
+              className="relative min-h-full flex flex-col pt-28 pb-10 px-7"
+            >
+              <div className="space-y-2">
+                {[...LEFT_LINKS, ...RIGHT_LINKS].map((l, i) => (
+                  <motion.div key={l.to} variants={menuItem}>
+                    <Link to={l.to} className="group flex items-baseline gap-4 py-1">
+                      <span className="text-[11px] font-semibold text-white/35 tabular-nums">
+                        0{i + 1}
+                      </span>
+                      <span
+                        className={`font-heading font-bold leading-tight transition-colors ${
+                          location.pathname === l.to
+                            ? 'text-primary'
+                            : 'text-white group-hover:text-primary'
+                        }`}
+                        style={{ fontSize: 'clamp(2.1rem, 8vw, 3.4rem)' }}
+                      >
+                        {l.label}
+                      </span>
+                    </Link>
+                  </motion.div>
+                ))}
+              </div>
+
+              <motion.div variants={menuItem} className="mt-auto pt-10">
+                <a href={DONATE_URL} target="_blank" rel="noopener noreferrer">
+                  <Button className="w-full rounded-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold gap-2">
+                    <Heart className="h-4 w-4" /> Donate to St. Jude
+                  </Button>
+                </a>
+                <p className="mt-5 text-center text-xs text-white/40 tracking-widest uppercase">
+                  Tau Kappa Epsilon — Epsilon Alpha
+                </p>
+              </motion.div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 }

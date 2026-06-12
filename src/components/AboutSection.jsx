@@ -10,10 +10,18 @@ const PILLARS = [
 
 export default function AboutSection() {
   return (
-    <section className="py-20 sm:py-28 bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="relative py-20 sm:py-28 bg-background overflow-hidden">
+      {/* Giant outlined watermark — text as graphic */}
+      <span
+        aria-hidden="true"
+        className="absolute -top-8 left-1/2 -translate-x-1/2 font-heading font-bold text-outline select-none pointer-events-none leading-none whitespace-nowrap"
+        style={{ fontSize: 'clamp(8rem, 24vw, 20rem)' }}
+      >
+        ΤΚΕ
+      </span>
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <Reveal className="text-center mb-16">
-          <p className="text-accent font-semibold text-sm tracking-widest uppercase mb-3">Our Foundation</p>
+          <p className="text-accent font-semibold text-sm tracking-widest uppercase mb-3">01 — Our Foundation</p>
           <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-6">
             About Epsilon Alpha
           </h2>

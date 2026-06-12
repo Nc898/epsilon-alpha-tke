@@ -4,6 +4,7 @@ import { base44 } from '@/api/base44Client';
 import { startOfMonth, endOfMonth, eachDayOfInterval, format, isSameMonth, isSameDay, addMonths, subMonths, startOfWeek, endOfWeek } from 'date-fns';
 import { Button } from '@/components/ui/button';
 import Reveal from '../components/Reveal';
+import PageHero from '../components/PageHero';
 import { ChevronLeft, ChevronRight, MapPin, Clock } from 'lucide-react';
 
 const TYPE_COLORS = {
@@ -253,13 +254,13 @@ export default function ChapterCalendar() {
   return (
     <div className="pt-24">
       {/* Header */}
-      <section className="bg-[hsl(0,0%,7%)] py-16 sm:py-20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center text-white">
-          <p className="text-accent font-semibold text-sm tracking-widest uppercase mb-3">Stay Updated</p>
-          <h1 className="font-heading text-4xl sm:text-5xl font-bold mb-4">Chapter Calendar</h1>
-          <p className="text-white/70">All events across the Epsilon Alpha Chapter in one place.</p>
-        </div>
-      </section>
+      <PageHero
+        eyebrow="05 — Stay Updated"
+        title="Chapter Calendar"
+        accent="Calendar"
+        watermark="2026"
+        lead="All events across the Epsilon Alpha Chapter in one place."
+      />
 
       <section className="py-12 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -334,16 +335,19 @@ export default function ChapterCalendar() {
                   .filter(e => e.date && new Date(e.date) >= new Date(new Date().toDateString()))
                   .sort((a, b) => new Date(a.date) - new Date(b.date))
                   .map(e => (
-                    <div key={e.id} className="bg-card border border-border rounded-xl p-5 flex flex-col sm:flex-row items-start sm:items-center gap-4 hover:border-accent/30 transition-all">
-                      <div className="flex items-center gap-3">
+                    <div key={e.id} className="group bg-card border border-border rounded-xl p-5 flex flex-col sm:flex-row items-start sm:items-center gap-4 hover:border-accent/30 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">
+                      <div className="flex items-center gap-4">
                         <span className={`w-3 h-3 rounded-full flex-shrink-0 ${TYPE_COLORS[e.event_type]}`} />
-                        <div className="w-14 h-14 bg-primary/10 rounded-lg flex flex-col items-center justify-center flex-shrink-0">
-                          <span className="text-primary font-bold text-lg leading-none">
-                            {format(new Date(e.date + 'T00:00:00'), 'd')}
-                          </span>
-                          <span className="text-primary text-[10px] font-semibold uppercase">
-                            {format(new Date(e.date + 'T00:00:00'), 'MMM')}
-                          </span>
+                        {/* Tear-off ticket stub */}
+                        <div className="flex items-center flex-shrink-0 pr-4 border-r-2 border-dashed border-border group-hover:border-primary/40 transition-colors">
+                          <div className="flex flex-col items-center justify-center w-16">
+                            <span className="font-heading text-primary font-bold text-3xl leading-none">
+                              {format(new Date(e.date + 'T00:00:00'), 'd')}
+                            </span>
+                            <span className="text-primary text-[10px] font-semibold uppercase tracking-[0.2em] mt-1">
+                              {format(new Date(e.date + 'T00:00:00'), 'MMM')}
+                            </span>
+                          </div>
                         </div>
                       </div>
                       <div className="flex-1 min-w-0">

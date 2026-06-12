@@ -9,6 +9,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { toast } from 'sonner';
 import { Phone, Mail, MapPin, Send, CheckCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
+import PageHero from '../components/PageHero';
+import Magnetic from '../components/Magnetic';
 
 export default function Contact() {
   const params = new URLSearchParams(window.location.search);
@@ -42,61 +44,73 @@ export default function Contact() {
 
   return (
     <div className="pt-24">
-      <section className="bg-[hsl(0,0%,7%)] py-16 sm:py-20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center text-white">
-          <p className="text-accent font-semibold text-sm tracking-widest uppercase mb-3">Reach Out</p>
-          <h1 className="font-heading text-4xl sm:text-5xl font-bold mb-4">Contact Us</h1>
-          <p className="text-white/70">{"We'd love to hear from you. Choose a topic and send us a message."}</p>
-        </div>
-      </section>
+      <PageHero
+        eyebrow="04 — Reach Out"
+        title="Contact Us"
+        accent="Us"
+        watermark="ΕΑ"
+        lead="We'd love to hear from you. Choose a topic and send us a message."
+      />
 
       <section className="py-16 sm:py-20 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16">
             <div className="lg:col-span-2">
-              <h2 className="font-heading text-2xl font-bold text-foreground mb-6">Get in Touch</h2>
-              <div className="space-y-6">
-                <div className="flex items-start gap-4">
-                  <div className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <Phone className="h-5 w-5 text-primary" />
-                  </div>
-                  <div>
-                    <p className="font-semibold text-foreground">Anthony Fahim</p>
-                    <a href="tel:3143745893" className="text-muted-foreground text-sm hover:text-accent transition-colors">
-                      (314) 374-5893
-                    </a>
-                  </div>
-                </div>
-                <div className="flex items-start gap-4">
-                  <div className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <Mail className="h-5 w-5 text-primary" />
-                  </div>
-                  <div>
-                    <p className="font-semibold text-foreground">Email</p>
-                    <a href="mailto:tke.epsilonalpha@slu.edu" className="text-muted-foreground text-sm hover:text-accent transition-colors">
-                      tke.epsilonalpha@slu.edu
-                    </a>
-                  </div>
-                </div>
-                <div className="flex items-start gap-4">
-                  <div className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <MapPin className="h-5 w-5 text-primary" />
-                  </div>
-                  <div>
-                    <p className="font-semibold text-foreground">Saint Louis University</p>
-                    <p className="text-muted-foreground text-sm">1 N Grand Blvd, St. Louis, MO 63103</p>
-                  </div>
-                </div>
-              </div>
+              <div className="relative overflow-hidden rounded-[2rem] bg-[hsl(0,0%,5%)] text-white p-8 sm:p-10 h-full">
+                <span
+                  aria-hidden="true"
+                  className="absolute -bottom-8 -right-3 font-heading font-bold text-outline-light select-none pointer-events-none leading-none"
+                  style={{ fontSize: 'clamp(7rem, 18vw, 11rem)' }}
+                >
+                  ΤΚΕ
+                </span>
 
-              <div className="mt-10 p-6 bg-muted/50 rounded-xl border border-border">
-                <h3 className="font-heading text-lg font-semibold text-foreground mb-2">Inquiry Types</h3>
-                <ul className="space-y-2 text-sm text-muted-foreground">
-                  <li><span className="font-medium text-foreground">General</span> {"—"} questions about TKE</li>
-                  <li><span className="font-medium text-foreground">Sponsorship</span> {"—"} partnership and support</li>
-                  <li><span className="font-medium text-foreground">Alumni</span> {"—"} reconnect and get involved</li>
-                  <li><span className="font-medium text-foreground">Recruitment</span> {"—"} join our chapter</li>
-                </ul>
+                <div className="relative">
+                  <h2 className="font-heading text-2xl font-bold mb-8">Get in Touch</h2>
+                  <div className="space-y-6">
+                    <div className="flex items-start gap-4">
+                      <div className="w-11 h-11 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0">
+                        <Phone className="h-5 w-5 text-primary" />
+                      </div>
+                      <div>
+                        <p className="font-semibold">Anthony Fahim</p>
+                        <a href="tel:3143745893" className="text-white/60 text-sm hover:text-white transition-colors">
+                          (314) 374-5893
+                        </a>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-4">
+                      <div className="w-11 h-11 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0">
+                        <Mail className="h-5 w-5 text-primary" />
+                      </div>
+                      <div>
+                        <p className="font-semibold">Email</p>
+                        <a href="mailto:tke.epsilonalpha@slu.edu" className="text-white/60 text-sm hover:text-white transition-colors">
+                          tke.epsilonalpha@slu.edu
+                        </a>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-4">
+                      <div className="w-11 h-11 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0">
+                        <MapPin className="h-5 w-5 text-primary" />
+                      </div>
+                      <div>
+                        <p className="font-semibold">Saint Louis University</p>
+                        <p className="text-white/60 text-sm">1 N Grand Blvd, St. Louis, MO 63103</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-10 pt-8 border-t border-white/10">
+                    <h3 className="font-heading text-lg font-semibold mb-3">Inquiry Types</h3>
+                    <ul className="space-y-2 text-sm text-white/60">
+                      <li><span className="font-medium text-white">General</span> {"—"} questions about TKE</li>
+                      <li><span className="font-medium text-white">Sponsorship</span> {"—"} partnership and support</li>
+                      <li><span className="font-medium text-white">Alumni</span> {"—"} reconnect and get involved</li>
+                      <li><span className="font-medium text-white">Recruitment</span> {"—"} join our chapter</li>
+                    </ul>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -145,10 +159,12 @@ export default function Contact() {
                     <Textarea value={form.message} onChange={e => setForm(p => ({ ...p, message: e.target.value }))}
                       className="mt-1" placeholder="How can we help you?" rows={5} required />
                   </div>
-                  <Button type="submit" size="lg" disabled={submit.isPending}
-                    className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold h-12 gap-2">
-                    {submit.isPending ? 'Sending...' : <><Send className="h-4 w-4" /> Send Message</>}
-                  </Button>
+                  <Magnetic>
+                    <Button type="submit" size="lg" disabled={submit.isPending}
+                      className="w-full rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold h-12 gap-2 transition-transform hover:scale-[1.01] active:scale-[0.99]">
+                      {submit.isPending ? 'Sending...' : <><Send className="h-4 w-4" /> Send Message</>}
+                    </Button>
+                  </Magnetic>
                 </form>
               )}
             </div>

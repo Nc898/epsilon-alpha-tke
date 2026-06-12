@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { Mail, Search, User, Crown } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import PageHero from '../components/PageHero';
 
 const EXEC_POSITIONS = [
   'President',
@@ -30,7 +31,7 @@ function MemberCard({ member, index }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.4, delay: (index % 6) * 0.06 }}
-      className={`bg-card border rounded-2xl overflow-hidden flex flex-col items-center text-center p-6 hover:shadow-lg transition-all ${
+      className={`group bg-card border rounded-2xl overflow-hidden flex flex-col items-center text-center p-6 hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 ${
         isExec ? 'border-primary/30 shadow-sm' : 'border-border'
       }`}
     >
@@ -39,7 +40,9 @@ function MemberCard({ member, index }) {
         isExec ? 'ring-2 ring-primary ring-offset-2' : 'ring-1 ring-border'
       }`}>
         {member.photo ? (
-          <img src={member.photo} alt={member.name} className="w-full h-full object-cover" />
+          <div className="duotone-wrap w-full h-full">
+            <img src={member.photo} alt={member.name} className="duotone w-full h-full object-cover" />
+          </div>
         ) : (
           <div className="w-full h-full bg-primary/10 flex items-center justify-center">
             <User className="h-10 w-10 text-primary/40" />
@@ -55,7 +58,7 @@ function MemberCard({ member, index }) {
       )}
 
       {/* Name */}
-      <h3 className="font-heading font-bold text-foreground text-lg leading-tight">
+      <h3 className="font-heading font-bold text-foreground text-lg leading-tight relative after:absolute after:left-1/2 after:-translate-x-1/2 after:-bottom-1 after:h-0.5 after:w-0 after:bg-primary after:transition-all after:duration-300 group-hover:after:w-3/4">
         {member.name}
       </h3>
 
@@ -121,15 +124,13 @@ export default function MemberDirectory() {
   return (
     <div className="pt-24">
       {/* Header */}
-      <section className="bg-[hsl(0,0%,7%)] py-16 sm:py-20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center text-white">
-          <p className="text-accent font-semibold text-sm tracking-widest uppercase mb-3">Our Brotherhood</p>
-          <h1 className="font-heading text-4xl sm:text-5xl font-bold mb-4">Member Directory</h1>
-          <p className="text-white/70 max-w-xl mx-auto">
-            Meet the men of TKE Epsilon Alpha — leaders, scholars, and brothers united in purpose.
-          </p>
-        </div>
-      </section>
+      <PageHero
+        eyebrow="06 — Our Brotherhood"
+        title="Member Directory"
+        accent="Directory"
+        watermark="BROTHERS"
+        lead="Meet the men of TKE Epsilon Alpha — leaders, scholars, and brothers united in purpose."
+      />
 
       <section className="py-12 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

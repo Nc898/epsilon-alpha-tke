@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Heart, Users, Calendar, ArrowRight } from 'lucide-react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
+import Magnetic from './Magnetic';
 
 const HERO_IMAGES = [
   'https://media.base44.com/images/public/6a190a936fbf6af2a63c4d1d/d2143a975_tempImagevdeNDs.jpg',
@@ -73,6 +74,18 @@ function ScrollIndicator() {
 export default function HeroSection() {
   const [idx, setIdx] = useState(0);
   const reduce = useReducedMotion();
+  const sectionRef = useRef(null);
+
+  // Parallax: background drifts slower than the page and gently zooms while
+  // the headline rises away and fades — layered depth on scroll.
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start start', 'end start'],
+  });
+  const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '22%']);
+  const bgScale = useTransform(scrollYProgress, [0, 1], [1, 1.12]);
+  const fgY = useTransform(scrollYProgress, [0, 1], ['0%', '-14%']);
+  const fgOpacity = useTransform(scrollYProgress, [0, 0.75], [1, 0.1]);
 
   useEffect(() => {
     const t = setInterval(() => setIdx(p => (p + 1) % HERO_IMAGES.length), 6000);
@@ -82,18 +95,23 @@ export default function HeroSection() {
   const h1Style = { fontSize: 'clamp(2.75rem, 7.5vw, 6.5rem)', letterSpacing: '-0.02em', lineHeight: 1.05 };
 
   return (
-    <section className="relative h-screen min-h-[600px] max-h-[900px] flex items-center overflow-hidden">
-      {HERO_IMAGES.map((img, i) => (
-        <div key={i}
-          className={`absolute inset-0 transition-opacity duration-[1500ms] ease-in-out bg-cover bg-center ${
-            i === idx ? 'opacity-100' : 'opacity-0'
-          }`}
-          style={{ backgroundImage: `url(${img})` }}
-        />
-      ))}
+    <section ref={sectionRef} className="relative h-screen min-h-[600px] max-h-[900px] flex items-center overflow-hidden">
+      <motion.div className="absolute inset-0" style={reduce ? undefined : { y: bgY, scale: bgScale }}>
+        {HERO_IMAGES.map((img, i) => (
+          <div key={i}
+            className={`absolute inset-0 transition-opacity duration-[1500ms] ease-in-out bg-cover bg-center ${
+              i === idx ? 'opacity-100' : 'opacity-0'
+            }`}
+            style={{ backgroundImage: `url(${img})` }}
+          />
+        ))}
+      </motion.div>
       <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/70" />
 
-      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center">
+      <motion.div
+        className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center"
+        style={reduce ? undefined : { y: fgY, opacity: fgOpacity }}
+      >
         {reduce ? (
           <p className="text-white font-heading text-sm sm:text-base lg:text-lg tracking-[0.22em] uppercase font-bold mb-4 drop-shadow-md" style={{ textShadow: '0 1px 6px rgba(0,0,0,0.8)' }}>
             Tau Kappa Epsilon — Epsilon Alpha Chapter
@@ -144,25 +162,31 @@ export default function HeroSection() {
           transition={{ duration: 0.8, delay: reduce ? 0 : 0.85, ease: [0.16, 1, 0.3, 1] }}
         >
           <div className="mt-10 flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center justify-center gap-3 sm:gap-4 max-w-xs sm:max-w-none mx-auto">
-            <Link to="/philanthropy" className="contents">
-              <Button size="lg" className="group w-full sm:w-auto rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-6 sm:px-8 h-12 sm:h-14 text-sm sm:text-base gap-2 transition-transform hover:scale-[1.02] active:scale-[0.98]">
-                <Heart className="h-4 w-4 sm:h-5 sm:w-5" /> Support St. Jude
-                <ArrowRight className="h-4 w-4 -ml-1 opacity-0 -translate-x-1 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0" />
-              </Button>
-            </Link>
-            <Link to="/recruitment" className="contents">
-              <Button size="lg" variant="outline" className="w-full sm:w-auto rounded-full border-white/30 text-white hover:bg-white/10 font-semibold px-6 sm:px-8 h-12 sm:h-14 text-sm sm:text-base gap-2 transition-transform hover:scale-[1.02] active:scale-[0.98]">
-                <Users className="h-4 w-4 sm:h-5 sm:w-5" /> Join TKE
-              </Button>
-            </Link>
-            <Link to="/calendar" className="contents">
-              <Button size="lg" variant="outline" className="w-full sm:w-auto rounded-full border-white/30 text-white hover:bg-white/10 font-semibold px-6 sm:px-8 h-12 sm:h-14 text-sm sm:text-base gap-2 transition-transform hover:scale-[1.02] active:scale-[0.98]">
-                <Calendar className="h-4 w-4 sm:h-5 sm:w-5" /> Upcoming Events
-              </Button>
-            </Link>
+            <Magnetic className="w-full sm:w-auto">
+              <Link to="/philanthropy" className="contents">
+                <Button size="lg" className="group w-full sm:w-auto rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-6 sm:px-8 h-12 sm:h-14 text-sm sm:text-base gap-2 transition-transform hover:scale-[1.02] active:scale-[0.98]">
+                  <Heart className="h-4 w-4 sm:h-5 sm:w-5" /> Support St. Jude
+                  <ArrowRight className="h-4 w-4 -ml-1 opacity-0 -translate-x-1 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0" />
+                </Button>
+              </Link>
+            </Magnetic>
+            <Magnetic className="w-full sm:w-auto">
+              <Link to="/recruitment" className="contents">
+                <Button size="lg" variant="outline" className="w-full sm:w-auto rounded-full border-white/30 text-white hover:bg-white/10 font-semibold px-6 sm:px-8 h-12 sm:h-14 text-sm sm:text-base gap-2 transition-transform hover:scale-[1.02] active:scale-[0.98]">
+                  <Users className="h-4 w-4 sm:h-5 sm:w-5" /> Join TKE
+                </Button>
+              </Link>
+            </Magnetic>
+            <Magnetic className="w-full sm:w-auto">
+              <Link to="/calendar" className="contents">
+                <Button size="lg" variant="outline" className="w-full sm:w-auto rounded-full border-white/30 text-white hover:bg-white/10 font-semibold px-6 sm:px-8 h-12 sm:h-14 text-sm sm:text-base gap-2 transition-transform hover:scale-[1.02] active:scale-[0.98]">
+                  <Calendar className="h-4 w-4 sm:h-5 sm:w-5" /> Upcoming Events
+                </Button>
+              </Link>
+            </Magnetic>
           </div>
         </motion.div>
-      </div>
+      </motion.div>
 
       {/* Scroll indicator — bottom-center at sm+, hidden on mobile where dots live */}
       <ScrollIndicator />

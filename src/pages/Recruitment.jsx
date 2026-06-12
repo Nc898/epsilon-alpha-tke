@@ -9,6 +9,9 @@ import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { Shield, BookOpen, Heart, Briefcase, GraduationCap, Users, Send, Calendar, MapPin } from 'lucide-react';
 import { format } from 'date-fns';
+import confetti from 'canvas-confetti';
+import PageHero from '../components/PageHero';
+import Magnetic from '../components/Magnetic';
 
 const PILLARS = [
   { icon: Shield, title: 'Brotherhood', desc: 'Build lifelong friendships with men who share your values and push you to grow.' },
@@ -35,6 +38,9 @@ export default function Recruitment() {
       setSubmitted(true);
       setForm({ name: '', email: '', phone: '', major: '', graduation_year: '', message: '' });
       toast.success('Your interest form has been submitted!');
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        confetti({ particleCount: 120, spread: 70, origin: { y: 0.7 } });
+      }
     },
   });
 
@@ -50,17 +56,13 @@ export default function Recruitment() {
   return (
     <div className="pt-24">
       {/* Hero */}
-      <section className="relative py-20 sm:py-28 overflow-hidden">
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(https://static.wixstatic.com/media/12d367_4f26ccd17f8f4e3a8958306ea08c2332~mv2.png)` }} />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/80" />
-        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center text-white">
-          <p className="text-accent font-semibold text-sm tracking-widest uppercase mb-3">Join Us</p>
-          <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-bold mb-4">Why TKE?</h1>
-          <p className="text-white/80 text-lg max-w-2xl mx-auto">
-            Discover what makes Tau Kappa Epsilon the premier fraternity experience at Saint Louis University.
-          </p>
-        </div>
-      </section>
+      <PageHero
+        eyebrow="02 — Join Us"
+        title="Why TKE?"
+        accent="TKE?"
+        watermark="RUSH"
+        lead="Discover what makes Tau Kappa Epsilon the premier fraternity experience at Saint Louis University."
+      />
 
       {/* Pillars */}
       <section className="py-20 bg-background">
@@ -73,12 +75,22 @@ export default function Recruitment() {
             {PILLARS.map((p, i) => (
               <motion.div key={p.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }} transition={{ delay: i * 0.08 }}
-                className="bg-card border border-border rounded-xl p-7 hover:border-accent/30 hover:shadow-lg transition-all">
-                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
-                  <p.icon className="h-6 w-6 text-primary" />
+                className="group relative overflow-hidden bg-card border border-border rounded-xl p-7 hover:border-accent/30 hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300">
+                {/* Giant editorial number */}
+                <span
+                  aria-hidden="true"
+                  className="absolute -top-3 right-2 font-heading font-bold text-outline select-none pointer-events-none leading-none transition-opacity duration-300 group-hover:opacity-60"
+                  style={{ fontSize: '5.5rem' }}
+                >
+                  0{i + 1}
+                </span>
+                <div className="relative">
+                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
+                    <p.icon className="h-6 w-6 text-primary" />
+                  </div>
+                  <h3 className="font-heading text-lg font-semibold text-foreground mb-2">{p.title}</h3>
+                  <p className="text-muted-foreground text-sm leading-relaxed">{p.desc}</p>
                 </div>
-                <h3 className="font-heading text-lg font-semibold text-foreground mb-2">{p.title}</h3>
-                <p className="text-muted-foreground text-sm leading-relaxed">{p.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -175,10 +187,12 @@ export default function Recruitment() {
                 <Textarea value={form.message} onChange={e => setForm(p => ({ ...p, message: e.target.value }))}
                   className="bg-white/10 border-white/20 text-white placeholder:text-white/40 mt-1" placeholder="Tell us about yourself..." rows={3} />
               </div>
-              <Button type="submit" size="lg" disabled={submitInquiry.isPending}
-                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold h-12 gap-2">
-                {submitInquiry.isPending ? 'Submitting...' : <><Send className="h-4 w-4" /> Submit Interest Form</>}
-              </Button>
+              <Magnetic>
+                <Button type="submit" size="lg" disabled={submitInquiry.isPending}
+                  className="w-full rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold h-12 gap-2 transition-transform hover:scale-[1.01] active:scale-[0.99]">
+                  {submitInquiry.isPending ? 'Submitting...' : <><Send className="h-4 w-4" /> Submit Interest Form</>}
+                </Button>
+              </Magnetic>
             </form>
           )}
         </div>

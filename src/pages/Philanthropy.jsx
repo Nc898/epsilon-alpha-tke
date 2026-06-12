@@ -3,6 +3,9 @@ import { base44 } from '@/api/base44Client';
 import FundraisingTracker from '../components/FundraisingTracker';
 import EventCard from '../components/EventCard';
 import SponsorTierCard from '../components/SponsorTierCard';
+import PageHero from '../components/PageHero';
+import Marquee from '../components/Marquee';
+import Magnetic from '../components/Magnetic';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 import Reveal from '../components/Reveal';
@@ -45,32 +48,36 @@ export default function Philanthropy() {
   return (
     <div className="pt-24">
       {/* Hero */}
-      <section className="relative py-20 sm:py-28 overflow-hidden">
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(https://static.wixstatic.com/media/12d367_4f26ccd17f8f4e3a8958306ea08c2332~mv2.png)` }} />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/80" />
-        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center text-white">
-          <p className="text-accent font-semibold text-sm tracking-widest uppercase mb-3">Philanthropy</p>
-          <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-bold mb-4">
-            TKE for St. Jude
-          </h1>
-          <p className="text-white/80 text-lg max-w-2xl mx-auto mb-8">
-            Join our fight against childhood cancer. Every dollar raised goes directly to
-            St. Jude Children's Research Hospital.
-          </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <a href={ST_JUDE_URL} target="_blank" rel="noopener noreferrer">
-              <Button size="lg" className="rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold gap-2 h-14 px-10 text-base transition-transform hover:scale-[1.02] active:scale-[0.98]">
-                <Heart className="h-5 w-5" /> Donate to St. Jude
-              </Button>
-            </a>
-            <a href={ST_JUDE_URL} target="_blank" rel="noopener noreferrer">
-              <Button size="lg" variant="outline" className="rounded-full border-white/30 text-white hover:bg-white/10 font-semibold gap-2 h-14 px-8 text-base transition-transform hover:scale-[1.02] active:scale-[0.98]">
-                <ExternalLink className="h-4 w-4" /> View Our Fundraising Page
-              </Button>
-            </a>
-          </div>
-        </div>
-      </section>
+      <PageHero
+        eyebrow="01 — Philanthropy"
+        title="TKE for St. Jude"
+        accent="St. Jude"
+        watermark="ΤΚΕ"
+        lead="Join our fight against childhood cancer. Every dollar raised goes directly to St. Jude Children's Research Hospital."
+      >
+        <Magnetic>
+          <a href={ST_JUDE_URL} target="_blank" rel="noopener noreferrer">
+            <Button size="lg" className="rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold gap-2 h-14 px-10 text-base transition-transform hover:scale-[1.02] active:scale-[0.98]">
+              <Heart className="h-5 w-5" /> Donate to St. Jude
+            </Button>
+          </a>
+        </Magnetic>
+        <a href={ST_JUDE_URL} target="_blank" rel="noopener noreferrer">
+          <Button size="lg" variant="outline" className="rounded-full border-white/30 text-white hover:bg-white/10 font-semibold gap-2 h-14 px-8 text-base transition-transform hover:scale-[1.02] active:scale-[0.98]">
+            <ExternalLink className="h-4 w-4" /> View Our Fundraising Page
+          </Button>
+        </a>
+      </PageHero>
+
+      {/* Live stats marquee */}
+      <Marquee
+        phrases={[
+          `$${raised.toLocaleString()} raised`,
+          `${fStats?.donor_count ?? 42} donors strong`,
+          'Fighting childhood cancer',
+          'TKE × St. Jude',
+        ]}
+      />
 
       {/* Fundraising Progress */}
       <section className="py-20 bg-background">
