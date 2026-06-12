@@ -73,6 +73,7 @@ export default function EventSignup() {
   const { data: event, isLoading, isError } = useQuery({
     queryKey: ['event', slug],
     queryFn: async () => {
+      if (!supabase) return null;
       const { data, error } = await supabase.from('events').select('*').eq('slug', slug).single();
       if (error) throw error;
       return data;

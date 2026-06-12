@@ -21,6 +21,7 @@ export default function NextEventBanner() {
   const { data: event } = useQuery({
     queryKey: ['next-upcoming-event'],
     queryFn: async () => {
+      if (!supabase) return null;
       const today = chicagoDate.format(new Date());
       const { data, error } = await supabase
         .from('events')

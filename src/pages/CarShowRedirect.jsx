@@ -17,6 +17,7 @@ export default function CarShowRedirect() {
   const { data, isLoading } = useQuery({
     queryKey: ['next-open-event'],
     queryFn: async () => {
+      if (!supabase) return null;
       const { data, error } = await supabase
         .from('events')
         .select('slug')
