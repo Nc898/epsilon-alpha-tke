@@ -80,7 +80,7 @@ export default function InstagramFeed({ title = 'Latest from Instagram' }) {
                     href={t.permalink}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group relative block aspect-square overflow-hidden rounded-2xl bg-[hsl(0,0%,7%)]"
+                    className="group relative block aspect-[4/5] overflow-hidden rounded-2xl bg-[hsl(0,0%,7%)]"
                   >
                     <img
                       src={t.imageUrl}

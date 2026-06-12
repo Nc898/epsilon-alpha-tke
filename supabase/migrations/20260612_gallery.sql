@@ -1,6 +1,5 @@
 -- Photo gallery: albums + photos + public 'gallery' storage bucket.
--- NOT YET APPLIED — run via Supabase MCP apply_migration or the SQL editor
--- on project sbwjtbwjghapopiutjdu (tke-epsilon-alpha).
+-- Applied to project sbwjtbwjghapopiutjdu (tke-epsilon-alpha).
 
 -- albums: one row per event album (e.g. "Car Show 2025")
 create table public.albums (
