@@ -75,7 +75,7 @@ export default function Navbar() {
                 src="/assets/tke-crest.png"
                 alt="Tau Kappa Epsilon"
                 initial={{ y: -96, opacity: 0 }}
-                animate={{ y: 0, opacity: 1, height: scrolled ? 48 : 80 }}
+                animate={{ y: 0, opacity: 1, height: scrolled ? 56 : 92 }}
                 transition={{
                   y: { duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.15 },
                   opacity: { duration: 0.5, delay: 0.15 },
