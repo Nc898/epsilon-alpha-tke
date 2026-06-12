@@ -9,13 +9,14 @@ import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import {
   Shield, BookOpen, Heart, Briefcase, GraduationCap, Users, Send,
-  MapPin, Clock, ArrowDown, CalendarDays, Handshake, Mail, Star,
+  MapPin, Clock, ArrowDown, CalendarDays, Handshake, Mail, Star, Instagram,
 } from 'lucide-react';
 import { format } from 'date-fns';
 import confetti from 'canvas-confetti';
 import Magnetic from '../components/Magnetic';
 import Reveal from '../components/Reveal';
 import { getLenis } from '../lib/useLenis';
+import { INSTAGRAM_HANDLE, INSTAGRAM_URL } from '../lib/social';
 
 /* ── Photo wall (godly.website-style hero) ──────────────────────
    Add more photo URLs here as they come in — the wall cycles them. */
@@ -430,6 +431,21 @@ export default function Recruitment() {
               </Magnetic>
             </form>
           )}
+        </div>
+      </section>
+
+      <section className="py-14 bg-background">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 text-center">
+          <Reveal>
+            <p className="text-muted-foreground mb-4">
+              Want to see brotherhood in action first?
+            </p>
+            <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer">
+              <Button variant="outline" size="lg" className="rounded-full font-semibold gap-2 transition-transform hover:scale-[1.02] active:scale-[0.98]">
+                <Instagram className="h-4 w-4" /> Follow our story — @{INSTAGRAM_HANDLE}
+              </Button>
+            </a>
+          </Reveal>
         </div>
       </section>
     </div>

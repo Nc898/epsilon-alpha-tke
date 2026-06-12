@@ -7,10 +7,11 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
-import { Phone, Mail, MapPin, Send, CheckCircle } from 'lucide-react';
+import { Phone, Mail, MapPin, Send, CheckCircle, Instagram } from 'lucide-react';
 import { motion } from 'framer-motion';
 import PageHero from '../components/PageHero';
 import Magnetic from '../components/Magnetic';
+import { INSTAGRAM_HANDLE, INSTAGRAM_URL } from '../lib/social';
 
 export default function Contact() {
   const params = new URLSearchParams(window.location.search);
@@ -97,6 +98,17 @@ export default function Contact() {
                       <div>
                         <p className="font-semibold">Saint Louis University</p>
                         <p className="text-white/60 text-sm">1 N Grand Blvd, St. Louis, MO 63103</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-4">
+                      <div className="w-11 h-11 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0">
+                        <Instagram className="h-5 w-5 text-primary" />
+                      </div>
+                      <div>
+                        <p className="font-semibold">Instagram</p>
+                        <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className="text-white/60 text-sm hover:text-white transition-colors">
+                          DM us @{INSTAGRAM_HANDLE}
+                        </a>
                       </div>
                     </div>
                   </div>

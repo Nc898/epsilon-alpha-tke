@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
-import { Heart, Phone, Mail, ArrowRight } from 'lucide-react';
+import { Heart, Phone, Mail, ArrowRight, Instagram } from 'lucide-react';
 import Reveal from './Reveal';
+import { INSTAGRAM_HANDLE, INSTAGRAM_URL } from '../lib/social';
 
 const LINKS = [
   { label: 'Home', to: '/' },
@@ -76,6 +77,9 @@ export default function Footer() {
               </a>
               <a href="mailto:tke.epsilonalpha@slu.edu" className="flex items-center gap-2 hover:text-accent transition-colors">
                 <Mail className="h-4 w-4" /> tke.epsilonalpha@slu.edu
+              </a>
+              <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-accent transition-colors">
+                <Instagram className="h-4 w-4" /> @{INSTAGRAM_HANDLE}
               </a>
             </div>
           </div>
