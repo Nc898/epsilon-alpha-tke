@@ -53,6 +53,7 @@ export default function Philanthropy() {
         title="TKE for St. Jude"
         accent="St. Jude"
         watermark="ΤΚΕ"
+        spin="stjude"
         lead="Join our fight against childhood cancer. Every dollar raised goes directly to St. Jude Children's Research Hospital."
       >
         <Magnetic>

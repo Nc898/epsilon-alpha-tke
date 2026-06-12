@@ -2,7 +2,7 @@ import { lazy, Suspense, useState } from 'react';
 import Reveal from './Reveal';
 
 // Three.js stays out of the main bundle — only fetched when this renders 3D.
-const Triangle3D = lazy(() => import('./Triangle3D'));
+const Logo3D = lazy(() => import('./Logo3D'));
 
 const CREED = ['Love', 'Charity', 'Esteem'];
 
@@ -68,7 +68,7 @@ export default function CreedSection() {
             <div className="h-[280px] sm:h-[380px] lg:h-[440px]">
               {interactive ? (
                 <Suspense fallback={crestFallback}>
-                  <Triangle3D className="h-full w-full" />
+                  <Logo3D shape="triangle" className="h-full w-full" />
                 </Suspense>
               ) : (
                 crestFallback
