@@ -19,13 +19,13 @@ const LEFT_LINKS = [
   { to: '/', label: 'Home' },
   { to: '/philanthropy', label: 'Philanthropy' },
   { to: '/alumni', label: 'Alumni' },
+  { to: '/members', label: 'Members' },
   { to: '/recruitment', label: 'Recruitment' },
 ];
 
 const RIGHT_LINKS = [
   { to: '/calendar', label: 'Calendar' },
   { to: '/gallery', label: 'Gallery' },
-  { to: '/members', label: 'Members' },
   { to: '/contact', label: 'Contact' },
 ];
 

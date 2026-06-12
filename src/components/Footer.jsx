@@ -82,7 +82,10 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-white/10 mt-12 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs">© {new Date().getFullYear()} TKE Epsilon Alpha Chapter. All rights reserved.</p>
+          <div className="flex items-center gap-4 text-xs">
+            <p>© {new Date().getFullYear()} TKE Epsilon Alpha Chapter. All rights reserved.</p>
+            <Link to="/privacy" className="hover:text-accent transition-colors">Privacy Policy</Link>
+          </div>
           <a href="https://fundraising.stjude.org/site/TR?fr_id=162451&pg=entry" target="_blank" rel="noopener noreferrer"
             className="text-xs text-accent hover:text-accent/80 transition-colors font-semibold">
             Support St. Jude →
