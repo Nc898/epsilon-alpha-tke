@@ -52,7 +52,7 @@ export default function ImpactStats() {
   ];
 
   return (
-    <section className="py-16 bg-background border-y border-border">
+    <section className="py-16 bg-[hsl(240,10%,94%)] border-y border-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
           {STATS.map((s, i) => (

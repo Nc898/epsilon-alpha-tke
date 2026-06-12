@@ -1,4 +1,5 @@
 import HeroSection from '../components/HeroSection';
+import NextEventBanner from '../components/NextEventBanner';
 import AboutSection from '../components/AboutSection';
 import StJudeSection from '../components/StJudeSection';
 import ImpactStats from '../components/ImpactStats';
@@ -11,12 +12,13 @@ export default function Home() {
   return (
     <div>
       <HeroSection />
+      <NextEventBanner />
       <ImpactStats />
       <AboutSection />
       <StJudeSection />
 
       {/* CTA Banner */}
-      <section className="py-20 sm:py-24 bg-background">
+      <section className="py-20 sm:py-24 bg-background rounded-t-[2.5rem] overflow-hidden relative z-10 -mt-10">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
           <Reveal>
             <h2 className="font-heading text-3xl sm:text-4xl font-bold text-foreground mb-6">

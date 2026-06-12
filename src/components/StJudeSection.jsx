@@ -7,7 +7,7 @@ const ST_JUDE_URL = 'https://fundraising.stjude.org/site/TR?fr_id=162451&pg=entr
 
 export default function StJudeSection() {
   return (
-    <section className="py-20 sm:py-28 bg-[hsl(0,0%,7%)] text-white overflow-hidden">
+    <section className="py-20 sm:py-28 bg-[hsl(0,0%,7%)] text-white overflow-hidden rounded-t-[2.5rem]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           <Reveal>
