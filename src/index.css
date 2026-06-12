@@ -153,6 +153,17 @@
   .animate-marquee { animation: none; }
 }
 
+/* Vertical photo-wall columns (godly.website-style hero) */
+@keyframes wall-scroll {
+  from { transform: translateY(0); }
+  to { transform: translateY(-50%); }
+}
+.animate-wall { animation: wall-scroll var(--wall-dur, 48s) linear infinite; }
+.animate-wall-reverse { animation: wall-scroll var(--wall-dur, 48s) linear infinite reverse; }
+@media (prefers-reduced-motion: reduce) {
+  .animate-wall, .animate-wall-reverse { animation: none; }
+}
+
 /* Custom cursor (mounted only on fine pointers without reduced motion) */
 .has-custom-cursor,
 .has-custom-cursor * { cursor: none !important; }
