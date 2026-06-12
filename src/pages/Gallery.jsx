@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { supabase } from '@/lib/supabaseClient';
 import PageHero from '../components/PageHero';
 import Reveal from '../components/Reveal';
+import InstagramFeed from '../components/InstagramFeed';
 import { Camera, Images } from 'lucide-react';
 import { format } from 'date-fns';
 
@@ -102,6 +103,8 @@ export default function Gallery() {
           )}
         </div>
       </section>
+
+      <InstagramFeed title="More on Instagram" />
     </div>
   );
 }

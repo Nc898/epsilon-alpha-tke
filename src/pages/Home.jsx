@@ -5,6 +5,7 @@ import CreedSection from '../components/CreedSection';
 import StJudeSection from '../components/StJudeSection';
 import ImpactStats from '../components/ImpactStats';
 import Marquee from '../components/Marquee';
+import InstagramFeed from '../components/InstagramFeed';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
@@ -20,6 +21,7 @@ export default function Home() {
       <AboutSection />
       <CreedSection />
       <StJudeSection />
+      <InstagramFeed title="Latest from the Chapter" />
 
       {/* CTA Banner */}
       <section className="py-20 sm:py-24 bg-background rounded-t-[2.5rem] overflow-hidden relative z-10 -mt-10">
