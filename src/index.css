@@ -95,3 +95,11 @@
     @apply bg-background text-foreground;
   }
 }
+/* News drawer collapsed-tab pulse */
+@keyframes news-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 hsl(1 66% 41% / 0.55); }
+  50% { box-shadow: 0 0 0 10px hsl(1 66% 41% / 0); }
+}
+.animate-news-pulse {
+  animation: news-pulse 1.8s ease-in-out infinite;
+}
