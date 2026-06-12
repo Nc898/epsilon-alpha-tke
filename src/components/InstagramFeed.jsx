@@ -1,6 +1,6 @@
 // src/components/InstagramFeed.jsx
 import { useQuery } from '@tanstack/react-query';
-import { Instagram, ArrowRight } from 'lucide-react';
+import { Instagram, ArrowRight, Play } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Reveal from './Reveal';
 import { mapBeholdPayload } from '../lib/instagramFeed';
@@ -10,15 +10,16 @@ const FEED_URL = import.meta.env.VITE_BEHOLD_FEED_URL;
 
 function FollowButton({ size = 'default' }) {
   return (
-    <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer">
-      <Button
-        size={size}
-        className="group rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold gap-2 transition-transform hover:scale-[1.02] active:scale-[0.98]"
-      >
+    <Button
+      asChild
+      size={size}
+      className="group rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold gap-2 transition-transform hover:scale-[1.02] active:scale-[0.98]"
+    >
+      <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer">
         <Instagram className="h-4 w-4" /> Follow @{INSTAGRAM_HANDLE}
         <ArrowRight className="h-4 w-4 -ml-1 opacity-0 -translate-x-1 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0" />
-      </Button>
-    </a>
+      </a>
+    </Button>
   );
 }
 
@@ -41,7 +42,7 @@ function FallbackCard() {
 
 export default function InstagramFeed({ title = 'Latest from Instagram' }) {
   const { data: tiles = [], isLoading, isError } = useQuery({
-    queryKey: ['instagram-feed'],
+    queryKey: ['instagram-feed', FEED_URL],
     enabled: Boolean(FEED_URL),
     staleTime: 1000 * 60 * 30,
     queryFn: async () => {
@@ -87,6 +88,11 @@ export default function InstagramFeed({ title = 'Latest from Instagram' }) {
                       loading="lazy"
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     />
+                    {t.isVideo && (
+                      <span className="absolute top-3 left-3 w-7 h-7 rounded-full bg-black/60 flex items-center justify-center">
+                        <Play className="h-3.5 w-3.5 text-white fill-white ml-0.5" />
+                      </span>
+                    )}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     <div className="absolute inset-x-0 bottom-0 p-4 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
                       {t.caption && (

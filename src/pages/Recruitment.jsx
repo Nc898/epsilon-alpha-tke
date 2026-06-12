@@ -440,11 +440,11 @@ export default function Recruitment() {
             <p className="text-muted-foreground mb-4">
               Want to see brotherhood in action first?
             </p>
-            <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer">
-              <Button variant="outline" size="lg" className="rounded-full font-semibold gap-2 transition-transform hover:scale-[1.02] active:scale-[0.98]">
+            <Button asChild variant="outline" size="lg" className="rounded-full font-semibold gap-2 transition-transform hover:scale-[1.02] active:scale-[0.98]">
+              <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer">
                 <Instagram className="h-4 w-4" /> Follow our story — @{INSTAGRAM_HANDLE}
-              </Button>
-            </a>
+              </a>
+            </Button>
           </Reveal>
         </div>
       </section>

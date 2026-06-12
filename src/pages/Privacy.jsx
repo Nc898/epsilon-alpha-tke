@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import PageHero from '../components/PageHero';
 
 const LAST_UPDATED = 'June 12, 2026';
@@ -136,9 +137,7 @@ const SECTIONS = [
           tke.epsilonalpha@slu.edu
         </a>{' '}
         or visit our{' '}
-        <a href="/contact" className="text-primary underline underline-offset-2 hover:text-primary/80">
-          contact page
-        </a>
+        <Link to="/contact" className="text-primary underline underline-offset-2 hover:text-primary/80">contact page</Link>
         .
       </p>
     ),
