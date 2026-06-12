@@ -22,6 +22,9 @@ import EventSignup from './pages/EventSignup';
 import CarShowRedirect from './pages/CarShowRedirect';
 import Donate from './pages/Donate';
 import AdminRegistrations from './pages/AdminRegistrations';
+import Gallery from './pages/Gallery';
+import GalleryAlbum from './pages/GalleryAlbum';
+import AdminGallery from './pages/AdminGallery';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -64,7 +67,10 @@ const AuthenticatedApp = () => {
         <Route path="/events/:slug" element={<EventSignup />} />
         <Route path="/carshow" element={<CarShowRedirect />} />
         <Route path="/donate" element={<Donate />} />
+        <Route path="/gallery" element={<Gallery />} />
+        <Route path="/gallery/:slug" element={<GalleryAlbum />} />
         <Route path="/admin" element={<AdminRegistrations />} />
+        <Route path="/admin/gallery" element={<AdminGallery />} />
       </Route>
       <Route path="*" element={<PageNotFound />} />
     </Routes>

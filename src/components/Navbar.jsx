@@ -24,6 +24,7 @@ const LEFT_LINKS = [
 
 const RIGHT_LINKS = [
   { to: '/calendar', label: 'Calendar' },
+  { to: '/gallery', label: 'Gallery' },
   { to: '/members', label: 'Members' },
   { to: '/contact', label: 'Contact' },
 ];

@@ -8,6 +8,7 @@ const LINKS = [
   { label: 'Alumni', to: '/alumni' },
   { label: 'Recruitment', to: '/recruitment' },
   { label: 'Calendar', to: '/calendar' },
+  { label: 'Gallery', to: '/gallery' },
   { label: 'Contact', to: '/contact' },
 ];
 
