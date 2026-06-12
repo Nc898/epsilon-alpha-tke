@@ -8,10 +8,10 @@ const LEFT_LINKS = [
   { to: '/', label: 'Home' },
   { to: '/philanthropy', label: 'Philanthropy' },
   { to: '/alumni', label: 'Alumni' },
+  { to: '/recruitment', label: 'Recruitment' },
 ];
 
 const RIGHT_LINKS = [
-  { to: '/recruitment', label: 'Recruitment' },
   { to: '/calendar', label: 'Calendar' },
   { to: '/members', label: 'Members' },
   { to: '/contact', label: 'Contact' },
@@ -74,9 +74,14 @@ export default function Navbar() {
               <motion.img
                 src="/assets/tke-crest.png"
                 alt="Tau Kappa Epsilon"
-                animate={{ height: scrolled ? 48 : 80 }}
-                transition={{ duration: 0.45, ease: [0.4, 0, 0.2, 1] }}
-                style={{ width: 'auto' }}
+                initial={{ y: -96, opacity: 0 }}
+                animate={{ y: 0, opacity: 1, height: scrolled ? 48 : 80 }}
+                transition={{
+                  y: { duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.15 },
+                  opacity: { duration: 0.5, delay: 0.15 },
+                  height: { duration: 0.45, ease: [0.4, 0, 0.2, 1] },
+                }}
+                style={{ aspectRatio: '1220 / 1055' }}
                 className="object-contain drop-shadow-lg"
               />
             </Link>

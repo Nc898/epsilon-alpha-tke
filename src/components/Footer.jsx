@@ -17,11 +17,10 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           <div>
             <img
-              src="/assets/tke-logo.png"
+              src="/assets/tke-lockup-dark.png"
               alt="Tau Kappa Epsilon — Epsilon Alpha Chapter"
               width="200"
               className="w-[200px] h-auto mb-4"
-              style={{ filter: 'brightness(0) invert(1)' }}
             />
             <p className="text-sm leading-relaxed mb-4">
               Tau Kappa Epsilon — Epsilon Alpha Chapter at Saint Louis University.
