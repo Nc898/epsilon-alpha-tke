@@ -28,8 +28,9 @@ const wordItem = {
  * 3D logo (TKE triangle by default, St. Jude coin via spin="stjude").
  *
  * `accent` is the substring of `title` to render in chapter red.
+ * `media` renders full-width below the headline row, still inside the dark zone.
  */
-export default function PageHero({ eyebrow, title, accent, watermark = 'ΤΚΕ', lead, spin = 'tke', children }) {
+export default function PageHero({ eyebrow, title, accent, watermark = 'ΤΚΕ', lead, spin = 'tke', media, children }) {
   const reduce = useReducedMotion();
   const spinCfg = SPIN_CONFIG[spin] ?? null;
 
@@ -153,6 +154,17 @@ export default function PageHero({ eyebrow, title, accent, watermark = 'ΤΚΕ',
           </motion.div>
         )}
       </div>
+
+      {media && (
+        <motion.div
+          initial={reduce ? false : { opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: reduce ? 0 : 0.5, ease: [0.16, 1, 0.3, 1] }}
+          className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-14 sm:pb-16 -mt-2"
+        >
+          {media}
+        </motion.div>
+      )}
     </section>
   );
 }

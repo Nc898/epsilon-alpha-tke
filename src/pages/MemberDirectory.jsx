@@ -6,6 +6,7 @@ import { Mail, Search, User, Crown } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import PageHero from '../components/PageHero';
+import ValuesShowcase from '../components/ValuesShowcase';
 
 const EXEC_POSITIONS = [
   'President',
@@ -130,6 +131,7 @@ export default function MemberDirectory() {
         accent="Directory"
         watermark="BROTHERS"
         lead="Meet the men of TKE Epsilon Alpha — leaders, scholars, and brothers united in purpose."
+        media={<ValuesShowcase />}
       />
 
       <section className="py-12 bg-background">
