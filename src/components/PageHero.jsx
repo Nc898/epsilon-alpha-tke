@@ -160,7 +160,7 @@ export default function PageHero({ eyebrow, title, accent, watermark = 'ΤΚΕ',
           initial={reduce ? false : { opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: reduce ? 0 : 0.5, ease: [0.16, 1, 0.3, 1] }}
-          className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-14 sm:pb-16 -mt-2"
+          className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24 sm:pb-36 -mt-2"
         >
           {media}
         </motion.div>
