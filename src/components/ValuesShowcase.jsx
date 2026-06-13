@@ -3,22 +3,29 @@ import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 
 /**
  * Rotating brotherhood showcase for the Member Directory hero: three
- * typographic panels — Love / Charity / Esteem with their definitions from
- * the Declaration of Principles — crossfading to the chapter group photo
- * and back, on a continuous loop. Static (values only) for reduced motion.
+ * typographic panels — each value word stacked letter-by-letter down the
+ * center in hero type, with its Declaration of Principles definition as
+ * faint oversized background text — crossfading to the chapter group photo
+ * and back on a continuous loop. Static (values only) for reduced motion.
+ *
+ * Per-word letter sizes keep the three stacks visually balanced: longer
+ * words get smaller letters so every column fills the same height.
  */
 const VALUES = [
   {
-    word: 'Love',
+    word: 'LOVE',
     desc: 'Binds our hearts with the sturdy chords of fraternal affection.',
+    size: 'clamp(1.7rem, 5.2vw, 4rem)',
   },
   {
-    word: 'Charity',
+    word: 'CHARITY',
     desc: 'Impulsive to see virtues in a brother, and slow to reprove his faults.',
+    size: 'clamp(1.05rem, 3vw, 2.35rem)',
   },
   {
-    word: 'Esteem',
+    word: 'ESTEEM',
     desc: 'Respectful to the honest convictions of others, refraining from treading upon what is sacred to spirit and conscience.',
+    size: 'clamp(1.2rem, 3.5vw, 2.75rem)',
   },
 ];
 
@@ -35,6 +42,16 @@ const card = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } },
 };
 
+const letterList = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.06, delayChildren: 0.25 } },
+};
+
+const letter = {
+  hidden: { opacity: 0, y: 14 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } },
+};
+
 export default function ValuesShowcase() {
   const reduce = useReducedMotion();
   const [showGroup, setShowGroup] = useState(false);
@@ -46,7 +63,7 @@ export default function ValuesShowcase() {
   }, [reduce]);
 
   return (
-    <div className="relative h-[400px] sm:h-[380px] lg:h-[440px]">
+    <div className="relative h-[380px] sm:h-[420px] lg:h-[480px]">
       <AnimatePresence initial={false}>
         {showGroup ? (
           <motion.div
@@ -79,35 +96,60 @@ export default function ValuesShowcase() {
             exit={{ opacity: 0, transition: { duration: 0.9, ease: 'easeInOut' } }}
             className="absolute inset-0 flex flex-col"
           >
-            <div className="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+            <div className="flex-1 grid grid-cols-3 gap-3 sm:gap-4 min-h-0">
               {VALUES.map((v, i) => (
                 <motion.div
                   key={v.word}
                   variants={card}
-                  className="relative overflow-hidden rounded-2xl bg-white/[0.04] border border-white/10 flex flex-col justify-center sm:justify-end p-5 sm:p-7"
+                  className="relative overflow-hidden rounded-2xl bg-white/[0.04] border border-white/10"
                 >
+                  {/* Declaration text as the panel's background texture */}
+                  <p
+                    aria-hidden="true"
+                    className="absolute inset-0 p-3 sm:p-5 font-heading italic font-semibold text-white/[0.08] select-none pointer-events-none leading-snug break-words"
+                    style={{ fontSize: 'clamp(1rem, 2.3vw, 1.85rem)' }}
+                  >
+                    {`${v.desc} ${v.desc} ${v.desc}`}
+                  </p>
+                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/30 pointer-events-none" />
+
+                  {/* The value word, stacked letter-by-letter down the center */}
+                  <motion.div
+                    variants={letterList}
+                    className="relative h-full flex flex-col items-center justify-center"
+                    role="img"
+                    aria-label={`${v.word} — ${v.desc}`}
+                  >
+                    {v.word.split('').map((ch, j) => (
+                      <motion.span
+                        key={j}
+                        variants={letter}
+                        className="font-heading font-bold text-white drop-shadow-md"
+                        style={{ fontSize: v.size, lineHeight: 1.08 }}
+                        aria-hidden="true"
+                      >
+                        {ch}
+                      </motion.span>
+                    ))}
+                    <motion.span
+                      variants={letter}
+                      className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-primary mt-2 sm:mt-3"
+                      aria-hidden="true"
+                    />
+                  </motion.div>
+
                   <span
                     aria-hidden="true"
                     className="absolute top-3 right-4 text-[11px] font-semibold text-white/25 tabular-nums"
                   >
                     0{i + 1}
                   </span>
-                  <p
-                    className="font-heading font-bold text-white leading-none"
-                    style={{ fontSize: 'clamp(2rem, 4.5vw, 3.5rem)' }}
-                  >
-                    {v.word}
-                    <span className="text-primary">.</span>
-                  </p>
-                  <p className="text-white/55 text-xs sm:text-sm leading-relaxed mt-2 sm:mt-3">
-                    {v.desc}
-                  </p>
                 </motion.div>
               ))}
             </div>
             <motion.p
               variants={card}
-              className="text-center text-white/35 text-[11px] sm:text-xs tracking-[0.18em] uppercase mt-4"
+              className="text-center text-white/35 text-[10px] sm:text-xs tracking-[0.18em] uppercase mt-4"
             >
               The triple obligations of every brother in the bond — Declaration of Principles, 1907–08
             </motion.p>
