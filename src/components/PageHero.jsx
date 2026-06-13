@@ -47,8 +47,10 @@ export default function PageHero({ eyebrow, title, accent, watermark = 'ΤΚΕ',
   const words = title.split(/\s+/).map((text) => ({ text, accent: accentWords.has(text) }));
 
   const h1Style = { fontSize: 'clamp(2.75rem, 6.5vw, 5.5rem)', letterSpacing: '-0.02em', lineHeight: 1.05 };
-  // Long watermarks (BROTHERS) render smaller so they aren't clipped.
-  const wmSize = watermark.length <= 4 ? 'clamp(5.5rem, 14vw, 12rem)' : 'clamp(2.75rem, 7vw, 6.5rem)';
+  // Long watermarks (BROTHERS) render smaller so they aren't clipped; heroes
+  // with a media block also use the small size so it fits the clearance strip.
+  const wmSize =
+    watermark.length <= 4 && !media ? 'clamp(5.5rem, 14vw, 12rem)' : 'clamp(2.75rem, 7vw, 6.5rem)';
 
   const logoFallback = spinCfg && (
     <div className="h-full w-full flex items-center justify-center">
