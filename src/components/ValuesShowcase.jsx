@@ -30,7 +30,8 @@ const VALUES = [
 ];
 
 const GROUP_PHOTO = '/assets/tke-banquet.jpg';
-const HOLD_MS = 6000;
+const VALUES_HOLD_MS = 8000;
+const GROUP_HOLD_MS = 3000;
 
 const cardList = {
   hidden: {},
@@ -56,11 +57,15 @@ export default function ValuesShowcase() {
   const reduce = useReducedMotion();
   const [showGroup, setShowGroup] = useState(false);
 
+  // Asymmetric loop: values hold longer than the group photo.
   useEffect(() => {
     if (reduce) return;
-    const t = setInterval(() => setShowGroup((v) => !v), HOLD_MS);
-    return () => clearInterval(t);
-  }, [reduce]);
+    const t = setTimeout(
+      () => setShowGroup((v) => !v),
+      showGroup ? GROUP_HOLD_MS : VALUES_HOLD_MS
+    );
+    return () => clearTimeout(t);
+  }, [reduce, showGroup]);
 
   return (
     <div className="relative h-[380px] sm:h-[420px] lg:h-[480px]">
