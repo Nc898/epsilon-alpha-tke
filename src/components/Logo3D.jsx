@@ -145,6 +145,45 @@ export default function Logo3D({ shape = 'triangle', textureUrl = '/assets/tke-c
     };
     window.addEventListener('pointermove', onPointer, { passive: true });
 
+    // Spin control: hovering brakes the auto-spin; moving the cursor across
+    // the logo scrubs it directly (either direction) and imparts momentum,
+    // so after leaving it cruises at base speed in whichever direction the
+    // user last flicked it.
+    const BASE_SPEED = 0.45; // rad/s
+    let spinVelocity = BASE_SPEED;
+    let spinDirection = 1;
+    const MAX_FLICK = 4; // rad/s
+    let hovering = false;
+    let lastDragX = null;
+    let lastDragTime = 0;
+
+    const onEnter = () => {
+      hovering = true;
+      lastDragX = null;
+    };
+    const onLeave = () => {
+      hovering = false;
+      lastDragX = null;
+      if (spinVelocity !== 0) spinDirection = Math.sign(spinVelocity);
+    };
+    const onDrag = (e) => {
+      if (!hovering) return;
+      if (lastDragX !== null) {
+        const dx = e.clientX - lastDragX;
+        const dtSec = (e.timeStamp - lastDragTime) / 1000;
+        spinner.rotation.y += dx * 0.012; // scrub with the cursor
+        if (dtSec > 0) {
+          // flick momentum from real cursor speed, capped so it can't whirl
+          spinVelocity = THREE.MathUtils.clamp((dx * 0.012) / dtSec, -MAX_FLICK, MAX_FLICK);
+        }
+      }
+      lastDragX = e.clientX;
+      lastDragTime = e.timeStamp;
+    };
+    mount.addEventListener('pointerenter', onEnter);
+    mount.addEventListener('pointerleave', onLeave);
+    mount.addEventListener('pointermove', onDrag, { passive: true });
+
     const resize = () => {
       const w = mount.clientWidth;
       const ht = mount.clientHeight;
@@ -160,8 +199,16 @@ export default function Logo3D({ shape = 'triangle', textureUrl = '/assets/tke-c
     const clock = new THREE.Clock();
     let raf;
     const tick = () => {
+      const dt = Math.min(clock.getDelta(), 0.1);
       const t = clock.getElapsedTime();
-      spinner.rotation.y = t * 0.45;
+      if (hovering) {
+        // Brake toward a stop; onDrag re-injects velocity while moving
+        spinVelocity += (0 - spinVelocity) * Math.min(1, dt * 6);
+      } else {
+        // Cruise back to base speed in the user's last spin direction
+        spinVelocity += (BASE_SPEED * spinDirection - spinVelocity) * Math.min(1, dt * 1.5);
+      }
+      spinner.rotation.y += spinVelocity * dt;
       group.position.y = Math.sin(t * 0.8) * 0.15;
       group.rotation.x += (targetTiltX - group.rotation.x) * 0.05;
       group.rotation.y += (targetTiltY - group.rotation.y) * 0.05;
@@ -174,6 +221,9 @@ export default function Logo3D({ shape = 'triangle', textureUrl = '/assets/tke-c
       cancelAnimationFrame(raf);
       ro.disconnect();
       window.removeEventListener('pointermove', onPointer);
+      mount.removeEventListener('pointerenter', onEnter);
+      mount.removeEventListener('pointerleave', onLeave);
+      mount.removeEventListener('pointermove', onDrag);
       disposables.forEach((d) => d.dispose());
       renderer.dispose();
       mount.removeChild(renderer.domElement);
