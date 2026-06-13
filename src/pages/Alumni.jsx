@@ -6,7 +6,7 @@ import { FileText, Newspaper, Star, Calendar, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
 import PageHero from '../components/PageHero';
-import ChapterTimeline from '../components/ChapterTimeline';
+import RiverTimeline from '../components/RiverTimeline';
 
 const CATEGORY_ICONS = { newsletter: Newspaper, spotlight: Star, announcement: FileText, event: Calendar };
 
@@ -30,8 +30,9 @@ export default function Alumni() {
         accent="Portal"
         watermark="1955"
         lead="Once a TKE, always a TKE. Stay connected with your brothers and the Epsilon Alpha Chapter."
-        media={<ChapterTimeline />}
       />
+
+      <RiverTimeline />
 
       {/* Updates & Newsletters */}
       <section className="py-20 bg-background">
