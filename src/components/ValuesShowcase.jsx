@@ -2,23 +2,23 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 
 /**
- * Rotating brotherhood showcase for the Member Directory hero: three vertical
- * photo cards captioned Love / Charity / Esteem, crossfading to the full
- * chapter group photo and back, on a continuous loop. Static (values only)
- * for reduced motion.
+ * Rotating brotherhood showcase for the Member Directory hero: three
+ * typographic panels — Love / Charity / Esteem with their definitions from
+ * the Declaration of Principles — crossfading to the chapter group photo
+ * and back, on a continuous loop. Static (values only) for reduced motion.
  */
 const VALUES = [
   {
     word: 'Love',
-    img: 'https://media.base44.com/images/public/6a190a936fbf6af2a63c4d1d/d2143a975_tempImagevdeNDs.jpg',
+    desc: 'Binds our hearts with the sturdy chords of fraternal affection.',
   },
   {
     word: 'Charity',
-    img: 'https://media.base44.com/images/public/6a190a936fbf6af2a63c4d1d/34dc63c53_tempImage0dskXs.jpg',
+    desc: 'Impulsive to see virtues in a brother, and slow to reprove his faults.',
   },
   {
     word: 'Esteem',
-    img: 'https://media.base44.com/images/public/6a190a936fbf6af2a63c4d1d/793feca1a_IMG_61365.jpg',
+    desc: 'Respectful to the honest convictions of others, refraining from treading upon what is sacred to spirit and conscience.',
   },
 ];
 
@@ -46,7 +46,7 @@ export default function ValuesShowcase() {
   }, [reduce]);
 
   return (
-    <div className="relative h-[320px] sm:h-[400px] lg:h-[460px]">
+    <div className="relative h-[400px] sm:h-[380px] lg:h-[440px]">
       <AnimatePresence initial={false}>
         {showGroup ? (
           <motion.div
@@ -77,21 +77,40 @@ export default function ValuesShowcase() {
             initial={reduce ? false : 'hidden'}
             animate="visible"
             exit={{ opacity: 0, transition: { duration: 0.9, ease: 'easeInOut' } }}
-            className="absolute inset-0 grid grid-cols-3 gap-3 sm:gap-4"
+            className="absolute inset-0 flex flex-col"
           >
-            {VALUES.map((v) => (
-              <motion.div key={v.word} variants={card} className="relative overflow-hidden rounded-2xl">
-                <img src={v.img} alt="" className="w-full h-full object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent" />
-                <p
-                  className="absolute bottom-4 left-4 sm:bottom-5 sm:left-5 font-heading font-bold text-white drop-shadow"
-                  style={{ fontSize: 'clamp(1.25rem, 3.2vw, 2.25rem)' }}
+            <div className="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+              {VALUES.map((v, i) => (
+                <motion.div
+                  key={v.word}
+                  variants={card}
+                  className="relative overflow-hidden rounded-2xl bg-white/[0.04] border border-white/10 flex flex-col justify-center sm:justify-end p-5 sm:p-7"
                 >
-                  {v.word}
-                  <span className="text-primary">.</span>
-                </p>
-              </motion.div>
-            ))}
+                  <span
+                    aria-hidden="true"
+                    className="absolute top-3 right-4 text-[11px] font-semibold text-white/25 tabular-nums"
+                  >
+                    0{i + 1}
+                  </span>
+                  <p
+                    className="font-heading font-bold text-white leading-none"
+                    style={{ fontSize: 'clamp(2rem, 4.5vw, 3.5rem)' }}
+                  >
+                    {v.word}
+                    <span className="text-primary">.</span>
+                  </p>
+                  <p className="text-white/55 text-xs sm:text-sm leading-relaxed mt-2 sm:mt-3">
+                    {v.desc}
+                  </p>
+                </motion.div>
+              ))}
+            </div>
+            <motion.p
+              variants={card}
+              className="text-center text-white/35 text-[11px] sm:text-xs tracking-[0.18em] uppercase mt-4"
+            >
+              The triple obligations of every brother in the bond — Declaration of Principles, 1907–08
+            </motion.p>
           </motion.div>
         )}
       </AnimatePresence>
