@@ -1,0 +1,3 @@
+# Alumni who have opted out — one email per line (case-insensitive).
+# The send script skips every address listed here.
+# Add a line whenever someone replies "unsubscribe" or emails the unsubscribe link.

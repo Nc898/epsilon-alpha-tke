@@ -1,0 +1,6 @@
+# Never commit alumni PII or secrets
+.env
+alumni-contacts.json
+email-content/preview.html
+email-content/send-log.json
+node_modules/
