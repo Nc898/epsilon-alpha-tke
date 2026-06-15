@@ -102,8 +102,8 @@ const SECTIONS = [
       <p>
         You can ask us to access, correct, or delete the personal information we hold about you,
         or to stop sending you emails, by contacting us at{' '}
-        <a href="mailto:tke.epsilonalpha@slu.edu" className="text-primary underline underline-offset-2 hover:text-primary/80">
-          tke.epsilonalpha@slu.edu
+        <a href="mailto:slutkestewardship@gmail.com" className="text-primary underline underline-offset-2 hover:text-primary/80">
+          slutkestewardship@gmail.com
         </a>
         . We'll respond as soon as we're able.
       </p>
@@ -133,8 +133,8 @@ const SECTIONS = [
     body: (
       <p>
         Questions about this policy or your information? Email us at{' '}
-        <a href="mailto:tke.epsilonalpha@slu.edu" className="text-primary underline underline-offset-2 hover:text-primary/80">
-          tke.epsilonalpha@slu.edu
+        <a href="mailto:slutkestewardship@gmail.com" className="text-primary underline underline-offset-2 hover:text-primary/80">
+          slutkestewardship@gmail.com
         </a>{' '}
         or visit our{' '}
         <Link to="/contact" className="text-primary underline underline-offset-2 hover:text-primary/80">contact page</Link>

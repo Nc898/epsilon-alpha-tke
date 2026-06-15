@@ -12,7 +12,7 @@ const CHERRY = '#AD2624';
 const SERIF = "Georgia, 'Times New Roman', serif";
 const SANS = "-apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
 
-const CONTACT_EMAIL = 'tke.epsilonalpha@slu.edu';
+const CONTACT_EMAIL = 'slutkestewardship@gmail.com';
 const CHAPTER_LINE = 'TKE Epsilon Alpha — Saint Louis University';
 
 /** Format 'YYYY-MM-DD' as e.g. "Sunday, July 26, 2026" without external deps. */

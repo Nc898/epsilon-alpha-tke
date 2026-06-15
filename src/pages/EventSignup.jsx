@@ -247,8 +247,8 @@ export default function EventSignup() {
         <StatusCard icon={<Users className="h-8 w-8 text-primary" />} title="This show is full">
           <p className="text-muted-foreground mb-6">
             {"Every spot has been claimed. Questions, or want to be notified if one opens up? Reach us at "}
-            <a href="mailto:tke.epsilonalpha@slu.edu" className="text-primary font-medium hover:underline">
-              tke.epsilonalpha@slu.edu
+            <a href="mailto:slutkestewardship@gmail.com" className="text-primary font-medium hover:underline">
+              slutkestewardship@gmail.com
             </a>
             .
           </p>

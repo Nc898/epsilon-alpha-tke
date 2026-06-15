@@ -75,8 +75,8 @@ export default function Footer() {
               <a href="tel:3143745893" className="flex items-center gap-2 hover:text-accent transition-colors">
                 <Phone className="h-4 w-4" /> (314) 374-5893
               </a>
-              <a href="mailto:tke.epsilonalpha@slu.edu" className="flex items-center gap-2 hover:text-accent transition-colors">
-                <Mail className="h-4 w-4" /> tke.epsilonalpha@slu.edu
+              <a href="mailto:slutkestewardship@gmail.com" className="flex items-center gap-2 hover:text-accent transition-colors">
+                <Mail className="h-4 w-4" /> slutkestewardship@gmail.com
               </a>
               <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-accent transition-colors">
                 <Instagram className="h-4 w-4" /> @{INSTAGRAM_HANDLE}

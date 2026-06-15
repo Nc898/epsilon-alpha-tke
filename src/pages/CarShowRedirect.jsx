@@ -61,8 +61,8 @@ export default function CarShowRedirect() {
             </h1>
             <p className="text-muted-foreground mb-6">
               {"Registration for our next show isn't open yet — check back soon or follow @tke_slu. Questions? Reach us at "}
-              <a href="mailto:tke.epsilonalpha@slu.edu" className="text-primary font-medium hover:underline">
-                tke.epsilonalpha@slu.edu
+              <a href="mailto:slutkestewardship@gmail.com" className="text-primary font-medium hover:underline">
+                slutkestewardship@gmail.com
               </a>
               .
             </p>
