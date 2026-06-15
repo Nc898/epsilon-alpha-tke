@@ -26,6 +26,7 @@ import Gallery from './pages/Gallery';
 import GalleryAlbum from './pages/GalleryAlbum';
 import AdminGallery from './pages/AdminGallery';
 import Privacy from './pages/Privacy';
+import Terms from './pages/Terms';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -73,6 +74,7 @@ const AuthenticatedApp = () => {
         <Route path="/admin" element={<AdminRegistrations />} />
         <Route path="/admin/gallery" element={<AdminGallery />} />
         <Route path="/privacy" element={<Privacy />} />
+        <Route path="/terms" element={<Terms />} />
       </Route>
       <Route path="*" element={<PageNotFound />} />
     </Routes>
