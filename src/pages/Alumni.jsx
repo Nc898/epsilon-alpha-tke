@@ -22,7 +22,7 @@ export default function Alumni() {
   });
 
   return (
-    <div className="pt-24">
+    <div className="pt-24 bg-[hsl(0,0%,7%)]">
       {/* Hero */}
       <PageHero
         eyebrow="03 — Stay Connected"

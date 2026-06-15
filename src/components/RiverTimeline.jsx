@@ -76,7 +76,7 @@ function Milestone({ item, index }) {
         whileInView={{ scale: 1 }}
         viewport={{ once: true, margin: '-120px' }}
         transition={{ type: 'spring', stiffness: 260, damping: 18 }}
-        className="absolute left-8 sm:left-1/2 top-2 sm:top-1/2 -translate-x-1/2 sm:-translate-y-1/2 w-4 h-4 rounded-full bg-primary ring-4 ring-background animate-news-pulse z-10"
+        className="absolute left-8 sm:left-1/2 top-2 sm:top-1/2 -translate-x-1/2 sm:-translate-y-1/2 w-4 h-4 rounded-full bg-primary ring-4 ring-[hsl(0,0%,7%)] animate-news-pulse z-10"
         aria-hidden="true"
       />
 
@@ -105,7 +105,7 @@ function Milestone({ item, index }) {
             <p className="font-heading font-bold text-primary text-3xl sm:text-4xl leading-none">
               {item.year}
             </p>
-            <p className="text-muted-foreground text-sm sm:text-base leading-relaxed mt-2">
+            <p className="text-white/65 text-sm sm:text-base leading-relaxed mt-2">
               {item.text}
             </p>
           </div>
@@ -129,14 +129,14 @@ export default function RiverTimeline() {
   const d = riverPath(HISTORY.length);
 
   return (
-    <section className="py-20 sm:py-24 bg-background overflow-hidden">
+    <section className="py-20 sm:py-24 bg-[hsl(0,0%,7%)] overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <Reveal className="text-center mb-16 sm:mb-20">
           <p className="text-accent font-semibold text-sm tracking-widest uppercase mb-3">Our History</p>
-          <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-4">
+          <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
             The Epsilon-Alpha Story
           </h2>
-          <p className="text-muted-foreground max-w-xl mx-auto">
+          <p className="text-white/65 max-w-xl mx-auto">
             Seven decades of brotherhood — follow the river.
           </p>
         </Reveal>
@@ -153,7 +153,7 @@ export default function RiverTimeline() {
             <path
               d={d}
               fill="none"
-              stroke="hsl(var(--border))"
+              stroke="rgba(255,255,255,0.14)"
               strokeWidth="2"
               vectorEffect="non-scaling-stroke"
               strokeLinecap="round"
