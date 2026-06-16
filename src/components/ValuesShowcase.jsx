@@ -8,24 +8,25 @@ import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
  * faint oversized background text — crossfading to the chapter group photo
  * and back on a continuous loop. Static (values only) for reduced motion.
  *
- * Per-word letter sizes keep the three stacks visually balanced: longer
- * words get smaller letters so every column fills the same height.
+ * All three value words use one shared letter size (LETTER_SIZE), tuned so
+ * the longest word (CHARITY, 7 letters) still fits its column height. The
+ * stacks are vertically centered, so shorter words simply sit with more
+ * breathing room above and below.
  */
+const LETTER_SIZE = 'clamp(1.3rem, 3.4vw, 2.6rem)';
+
 const VALUES = [
   {
     word: 'LOVE',
     desc: 'Binds our hearts with the sturdy chords of fraternal affection.',
-    size: 'clamp(1.7rem, 5.2vw, 4rem)',
   },
   {
     word: 'CHARITY',
     desc: 'Impulsive to see virtues in a brother, and slow to reprove his faults.',
-    size: 'clamp(1.05rem, 3vw, 2.35rem)',
   },
   {
     word: 'ESTEEM',
     desc: 'Respectful to the honest convictions of others, refraining from treading upon what is sacred to spirit and conscience.',
-    size: 'clamp(1.2rem, 3.5vw, 2.75rem)',
   },
 ];
 
@@ -130,7 +131,7 @@ export default function ValuesShowcase() {
                         key={j}
                         variants={letter}
                         className="font-heading font-bold text-white drop-shadow-md"
-                        style={{ fontSize: v.size, lineHeight: 1.08 }}
+                        style={{ fontSize: LETTER_SIZE, lineHeight: 1.08 }}
                         aria-hidden="true"
                       >
                         {ch}
