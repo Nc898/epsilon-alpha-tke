@@ -5,7 +5,7 @@ import JSZip from 'jszip';
 import { supabase } from '@/lib/supabaseClient';
 import { photoUrl } from './Gallery';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Download, X, ChevronLeft, ChevronRight, Loader2, Images } from 'lucide-react';
+import { ArrowLeft, Download, Share2, X, ChevronLeft, ChevronRight, Loader2, Images } from 'lucide-react';
 import { format } from 'date-fns';
 
 async function downloadBlob(blob, filename) {
@@ -15,6 +15,33 @@ async function downloadBlob(blob, filename) {
   a.download = filename;
   a.click();
   URL.revokeObjectURL(url);
+}
+
+// True on devices whose browser can share image files through the native
+// sheet (iOS Safari, Android Chrome) — that sheet is what offers "Save Image"
+// / "Add to Photos", AirDrop, Messages, Instagram, etc. Desktop browsers
+// generally can't share files, so we fall back to a plain download there.
+const canShareFiles =
+  typeof navigator !== 'undefined' &&
+  navigator.canShare &&
+  navigator.canShare({ files: [new File([''], 't.jpg', { type: 'image/jpeg' })] });
+
+async function fetchPhotoFile(url, filename) {
+  const blob = await (await fetch(url)).blob();
+  return new File([blob], filename, { type: blob.type || 'image/jpeg' });
+}
+
+// Native share → save to camera roll / AirDrop / Messages / socials. Returns
+// false if the device can't share files so the caller can fall back.
+async function sharePhoto(url, filename) {
+  if (!canShareFiles) return false;
+  try {
+    await navigator.share({ files: [await fetchPhotoFile(url, filename)] });
+  } catch (err) {
+    if (err?.name === 'AbortError') return true; // user dismissed the sheet
+    return false;
+  }
+  return true;
 }
 
 function Lightbox({ photos, index, onClose, onMove }) {
@@ -74,15 +101,29 @@ function Lightbox({ photos, index, onClose, onMove }) {
         <ChevronRight className="h-8 w-8" />
       </button>
 
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-4" onClick={(e) => e.stopPropagation()}>
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-3" onClick={(e) => e.stopPropagation()}>
         <span className="text-white/60 text-sm tabular-nums">{index + 1} / {photos.length}</span>
+        {canShareFiles && (
+          <Button
+            size="sm"
+            onClick={() => sharePhoto(url, photo.storage_path.split('/').pop())}
+            className="rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold gap-1.5 text-xs"
+          >
+            <Share2 className="h-3.5 w-3.5" /> Save / Share
+          </Button>
+        )}
         <Button
           size="sm"
+          variant={canShareFiles ? 'outline' : 'default'}
           onClick={async () => {
             const blob = await (await fetch(url)).blob();
             downloadBlob(blob, photo.storage_path.split('/').pop());
           }}
-          className="rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold gap-1.5 text-xs"
+          className={
+            canShareFiles
+              ? 'rounded-full border-white/30 bg-white/10 text-white hover:bg-white/20 hover:text-white font-semibold gap-1.5 text-xs'
+              : 'rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold gap-1.5 text-xs'
+          }
         >
           <Download className="h-3.5 w-3.5" /> Download
         </Button>
