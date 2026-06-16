@@ -1,0 +1,17 @@
+{
+  "name": "TKE at SLU — Tau Kappa Epsilon, Epsilon Alpha Chapter",
+  "short_name": "TKE at SLU",
+  "description": "Tau Kappa Epsilon — Epsilon Alpha Chapter at Saint Louis University. Building Better Men since 1955.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#AD2624",
+  "icons": [
+    {
+      "src": "/assets/tke-crest.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
