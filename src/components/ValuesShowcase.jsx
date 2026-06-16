@@ -119,10 +119,11 @@ export default function ValuesShowcase() {
                   </p>
                   <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/30 pointer-events-none" />
 
-                  {/* The value word, stacked letter-by-letter down the center */}
+                  {/* The value word, stacked letter-by-letter and top-aligned
+                      so all three words start on the same line. */}
                   <motion.div
                     variants={letterList}
-                    className="relative h-full flex flex-col items-center justify-center"
+                    className="relative h-full flex flex-col items-center justify-start pt-8 sm:pt-10"
                     role="img"
                     aria-label={`${v.word} — ${v.desc}`}
                   >
