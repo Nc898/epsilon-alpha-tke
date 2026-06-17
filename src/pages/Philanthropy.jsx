@@ -9,8 +9,9 @@ import Magnetic from '../components/Magnetic';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 import Reveal from '../components/Reveal';
-import { Heart, Download, Mail, Building2, ExternalLink } from 'lucide-react';
+import { Heart, Download, Mail, Building2, ExternalLink, Car, Calendar, MapPin, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { CAR_SHOW } from '@/lib/carShow';
 
 const ST_JUDE_URL = 'https://fundraising.stjude.org/site/TR?fr_id=162451&pg=entry';
 
@@ -63,6 +64,11 @@ export default function Philanthropy() {
             </Button>
           </a>
         </Magnetic>
+        <Link to="/carshow">
+          <Button size="lg" variant="outline" className="rounded-full border-white/30 text-white hover:bg-white/10 font-semibold gap-2 h-14 px-8 text-base transition-transform hover:scale-[1.02] active:scale-[0.98]">
+            <Car className="h-5 w-5" /> Register for the Car Show
+          </Button>
+        </Link>
         <a href={ST_JUDE_URL} target="_blank" rel="noopener noreferrer">
           <Button size="lg" variant="outline" className="rounded-full border-white/30 text-white hover:bg-white/10 font-semibold gap-2 h-14 px-8 text-base transition-transform hover:scale-[1.02] active:scale-[0.98]">
             <ExternalLink className="h-4 w-4" /> View Our Fundraising Page
@@ -79,6 +85,56 @@ export default function Philanthropy() {
           'TKE × St. Jude',
         ]}
       />
+
+      {/* Featured Event — Car Show */}
+      <section className="py-16 sm:py-20 bg-background">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Reveal>
+            <div className="relative overflow-hidden rounded-[2rem] bg-[hsl(0,0%,7%)] text-white shadow-2xl">
+              <div className="grid grid-cols-1 lg:grid-cols-2">
+                <div className="relative min-h-[260px] lg:min-h-full">
+                  <div className="duotone-wrap absolute inset-0">
+                    <img src="/assets/photos/p26.jpg" alt="TKE Car Show for St. Jude"
+                      className="duotone w-full h-full object-cover" />
+                  </div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-[hsl(0,0%,7%)] via-transparent to-transparent lg:bg-gradient-to-r" />
+                  <span className="absolute top-5 left-5 inline-flex items-center gap-2 bg-primary text-primary-foreground text-xs font-bold uppercase tracking-wide rounded-full px-4 py-1.5">
+                    <Car className="h-3.5 w-3.5" /> Featured Event
+                  </span>
+                </div>
+                <div className="p-8 sm:p-10 lg:p-12 flex flex-col justify-center">
+                  <p className="text-accent font-semibold text-sm tracking-widest uppercase mb-3">{CAR_SHOW.presenter}</p>
+                  <h3 className="font-heading text-3xl sm:text-4xl font-bold leading-tight mb-4">
+                    Classics &amp; Imports <span className="text-primary">Car Show</span>
+                  </h3>
+                  <div className="space-y-2 text-white/75 mb-6">
+                    <p className="flex items-center gap-3"><Calendar className="h-4 w-4 text-primary flex-shrink-0" /> {CAR_SHOW.dateLabel} · {CAR_SHOW.hoursLabel}</p>
+                    <p className="flex items-center gap-3"><MapPin className="h-4 w-4 text-primary flex-shrink-0" /> {CAR_SHOW.venue}</p>
+                    <p className="flex items-center gap-3"><Heart className="h-4 w-4 text-primary flex-shrink-0" /> Benefiting {CAR_SHOW.beneficiary}</p>
+                  </div>
+                  <p className="text-white/55 text-sm mb-7">
+                    ${CAR_SHOW.earlyBirdPrice} early-bird through {CAR_SHOW.earlyBirdEndsLabel} · ${CAR_SHOW.regularPrice} after · limited to {CAR_SHOW.capacity} vehicles, first come first served.
+                  </p>
+                  <div className="flex flex-wrap gap-3">
+                    <Magnetic>
+                      <a href={CAR_SHOW.registerUrl} target="_blank" rel="noopener noreferrer">
+                        <Button size="lg" className="rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold gap-2 h-12 px-7 transition-transform hover:scale-[1.02] active:scale-[0.98]">
+                          <Car className="h-5 w-5" /> Register Your Vehicle
+                        </Button>
+                      </a>
+                    </Magnetic>
+                    <Link to="/carshow">
+                      <Button size="lg" variant="outline" className="rounded-full border-white/25 text-white hover:bg-white/10 font-semibold gap-2 h-12 px-7 transition-transform hover:scale-[1.02] active:scale-[0.98]">
+                        Event Details <ArrowRight className="h-4 w-4" />
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </section>
 
       {/* Fundraising Progress */}
       <section className="py-20 bg-background">
