@@ -8,6 +8,7 @@ const LINKS = [
   { label: 'Philanthropy', to: '/philanthropy' },
   { label: 'Alumni', to: '/alumni' },
   { label: 'Recruitment', to: '/recruitment' },
+  { label: 'News', to: '/news' },
   { label: 'Calendar', to: '/calendar' },
   { label: 'Gallery', to: '/gallery' },
   { label: 'Contact', to: '/contact' },

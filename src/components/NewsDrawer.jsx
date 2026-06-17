@@ -2,19 +2,8 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { Newspaper, X, ArrowRight, Flag } from 'lucide-react';
-
-// News items — newest first. Append here for future reminders.
-const NEWS_ITEMS = [
-  {
-    id: 'carshow-2026',
-    icon: Flag,
-    tag: 'Registration Open',
-    title: 'TKE for St. Jude Car Show — Foundry Classics',
-    body: 'Sunday, July 26 at City Foundry STL. $20 entry benefits St. Jude Children\'s Research Hospital. Rain or shine — rain date August 2.',
-    cta: { label: 'Sign Up Your Car', to: '/carshow' },
-  },
-];
+import { Newspaper, X, ArrowRight } from 'lucide-react';
+import { NEWS_ITEMS } from '../lib/news';
 
 const SESSION_KEY = 'tke-news-autoopened';
 

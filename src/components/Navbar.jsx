@@ -24,6 +24,7 @@ const LEFT_LINKS = [
 ];
 
 const RIGHT_LINKS = [
+  { to: '/news', label: 'News' },
   { to: '/calendar', label: 'Calendar' },
   { to: '/gallery', label: 'Gallery' },
   { to: '/contact', label: 'Contact' },
@@ -67,14 +68,14 @@ export default function Navbar() {
     <nav className="fixed top-0 inset-x-0 z-50 bg-black shadow-lg">
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div
-          className={`flex items-center transition-all duration-500 ${
+          className={`grid grid-cols-[1fr_auto_1fr] items-center transition-all duration-500 ${
             scrolled ? 'h-16' : 'h-24'
           }`}
         >
           {/* ── Left links (desktop) / Hamburger (mobile) ── */}
-          <div className="flex items-center flex-1">
-            {/* Desktop */}
-            <div className="hidden lg:flex items-center gap-10">
+          <div className="flex items-center min-w-0">
+            {/* Desktop — spread edge→crest so the bar mirrors around the logo */}
+            <div className="hidden xl:flex items-center justify-between gap-4 2xl:gap-6 w-full">
               {LEFT_LINKS.map((l) => (
                 <Link key={l.to} to={l.to} className={linkClass(l.to)}>
                   {l.label}
@@ -85,34 +86,22 @@ export default function Navbar() {
             {/* Mobile hamburger */}
             <button
               onClick={() => setOpen(!open)}
-              className="lg:hidden p-2 text-white"
+              className="xl:hidden p-2 text-white"
               aria-label="Toggle menu"
             >
               {open ? <X size={22} /> : <Menu size={22} />}
             </button>
           </div>
 
-          {/* ── Center crest (triangle only — full lockup lives in footer/print) ── */}
-          <div className="flex-shrink-0 flex justify-center">
-            <Link to="/" aria-label="TKE Epsilon Alpha Home">
-              <motion.img
-                src="/assets/tke-crest.png"
-                alt="Tau Kappa Epsilon"
-                initial={{ y: -96, opacity: 0 }}
-                animate={{ y: 0, opacity: 1, height: scrolled ? 56 : 92 }}
-                transition={{
-                  y: { duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.15 },
-                  opacity: { duration: 0.5, delay: 0.15 },
-                  height: { duration: 0.45, ease: [0.4, 0, 0.2, 1] },
-                }}
-                style={{ aspectRatio: '1220 / 1055' }}
-                className="object-contain drop-shadow-lg"
-              />
-            </Link>
-          </div>
+          {/* ── Center spacer — reserves horizontal room for the overhanging crest ── */}
+          <div
+            className="flex-shrink-0 transition-all duration-500"
+            style={{ width: scrolled ? 92 : 160 }}
+            aria-hidden="true"
+          />
 
-          {/* ── Right links + Donate (desktop) ── */}
-          <div className="hidden lg:flex items-center gap-10 flex-1 justify-end">
+          {/* ── Right links + Donate (desktop) — mirror of the left group ── */}
+          <div className="hidden xl:flex items-center justify-between gap-4 2xl:gap-6 w-full">
             {RIGHT_LINKS.map((l) => (
               <Link key={l.to} to={l.to} className={linkClass(l.to)}>
                 {l.label}
@@ -128,10 +117,29 @@ export default function Navbar() {
               </Button>
             </a>
           </div>
-
-          {/* Mobile right spacer to keep logo centered */}
-          <div className="flex-1 lg:hidden" />
         </div>
+
+        {/* ── Center crest — anchored to the bar but oversized so it dips below
+             the header onto the page, like a badge pinned over the edge ── */}
+        <Link
+          to="/"
+          aria-label="TKE Epsilon Alpha Home"
+          className="absolute left-1/2 -translate-x-1/2 top-1.5 z-20"
+        >
+          <motion.img
+            src="/assets/tke-crest.png"
+            alt="Tau Kappa Epsilon"
+            initial={{ y: -110, opacity: 0 }}
+            animate={{ y: 0, opacity: 1, height: scrolled ? 80 : 144 }}
+            transition={{
+              y: { duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.15 },
+              opacity: { duration: 0.5, delay: 0.15 },
+              height: { duration: 0.45, ease: [0.4, 0, 0.2, 1] },
+            }}
+            style={{ aspectRatio: '1220 / 1055' }}
+            className="object-contain drop-shadow-[0_8px_16px_rgba(0,0,0,0.55)]"
+          />
+        </Link>
       </div>
 
       {/* ── Black accent bar ── */}
@@ -146,7 +154,7 @@ export default function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            className="lg:hidden fixed inset-0 z-0 bg-[hsl(0,0%,4%)] overflow-y-auto"
+            className="xl:hidden fixed inset-0 z-0 bg-[hsl(0,0%,4%)] overflow-y-auto"
           >
             {/* Giant ΤΚΕ watermark */}
             <span
