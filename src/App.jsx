@@ -13,6 +13,7 @@ import Alumni from './pages/Alumni';
 import Recruitment from './pages/Recruitment';
 import ChapterCalendar from './pages/ChapterCalendar';
 import Contact from './pages/Contact';
+import News from './pages/News';
 import MemberDirectory from './pages/MemberDirectory';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -66,6 +67,7 @@ const AuthenticatedApp = () => {
         <Route path="/calendar" element={<ChapterCalendar />} />
         <Route path="/members" element={<MemberDirectory />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/news" element={<News />} />
         <Route path="/events/:slug" element={<EventSignup />} />
         <Route path="/carshow" element={<CarShowRedirect />} />
         <Route path="/donate" element={<Donate />} />
