@@ -15,37 +15,37 @@ const HISTORY = [
   {
     year: '1955',
     text: 'Epsilon-Alpha Chapter chartered at Saint Louis University.',
-    img: 'https://media.base44.com/images/public/6a190a936fbf6af2a63c4d1d/d2143a975_tempImagevdeNDs.jpg',
+    img: '/assets/photos/q05.jpg',
   },
   {
     year: '1956',
     text: 'Chapter earns its first Top TKE Chapter Award.',
-    img: 'https://media.base44.com/images/public/6a190a936fbf6af2a63c4d1d/793feca1a_IMG_61365.jpg',
+    img: '/assets/photos/p15.jpg',
   },
   {
     year: '1980',
     text: 'Epsilon-Alpha alumni association established.',
-    img: 'https://media.base44.com/images/public/6a190a936fbf6af2a63c4d1d/8454d81a7_tempImage9R7i2T.jpg',
+    img: '/assets/photos/p07.jpg',
   },
   {
     year: '2005',
     text: 'Fifty years of brotherhood celebrated at SLU.',
-    img: 'https://media.base44.com/images/public/6a190a936fbf6af2a63c4d1d/34dc63c53_tempImage0dskXs.jpg',
+    img: '/assets/photos/p17.jpg',
   },
   {
     year: '2015',
     text: 'Chapter passes its first major fundraising milestone for St. Jude.',
-    img: '/assets/tke-banquet.jpg',
+    img: '/assets/photos/p21.jpg',
   },
   {
     year: '2025',
     text: 'Inaugural TKE for St. Jude Car Show at City Foundry STL.',
-    img: 'https://media.base44.com/images/public/6a190a936fbf6af2a63c4d1d/d2143a975_tempImagevdeNDs.jpg',
+    img: '/assets/photos/q17.jpg',
   },
   {
     year: '2026',
     text: 'Seventy-one years strong — actives and alumni, one bond.',
-    img: '/assets/tke-banquet.jpg',
+    img: '/assets/photos/q34.jpg',
   },
 ];
 

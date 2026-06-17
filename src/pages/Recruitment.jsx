@@ -21,10 +21,22 @@ import { INSTAGRAM_HANDLE, INSTAGRAM_URL } from '../lib/social';
 /* ── Photo wall (godly.website-style hero) ──────────────────────
    Add more photo URLs here as they come in — the wall cycles them. */
 const WALL_PHOTOS = [
-  'https://media.base44.com/images/public/6a190a936fbf6af2a63c4d1d/d2143a975_tempImagevdeNDs.jpg',
-  'https://media.base44.com/images/public/6a190a936fbf6af2a63c4d1d/793feca1a_IMG_61365.jpg',
-  'https://media.base44.com/images/public/6a190a936fbf6af2a63c4d1d/8454d81a7_tempImage9R7i2T.jpg',
-  'https://media.base44.com/images/public/6a190a936fbf6af2a63c4d1d/34dc63c53_tempImage0dskXs.jpg',
+  '/assets/photos/q06.jpg', // Bugatti Chiron at the show
+  '/assets/photos/p07.jpg', // letterman jackets + TKE triangle at St. Jude
+  '/assets/photos/p13.jpg', // elf costumes
+  '/assets/photos/q02.jpg', // brother in a Lamborghini
+  '/assets/photos/p21.jpg', // St. Jude Walk
+  '/assets/photos/p09.jpg', // chapter game night
+  '/assets/photos/p26.jpg', // Ferrari + "TKE Car Show for St. Jude" banner
+  '/assets/photos/q22.jpg', // Mario at a costume night
+  '/assets/photos/q33.jpg', // TKE hearts Ronald McDonald House
+  '/assets/photos/p19.jpg', // late-night hangout
+  '/assets/photos/p18.jpg', // supercars at sunset
+  '/assets/photos/q07.jpg', // graduation
+  '/assets/photos/p28.jpg', // suiting up before a formal
+  '/assets/photos/q31.jpg', // western party
+  '/assets/photos/p27.jpg', // Halloween formal
+  '/assets/photos/q26.jpg', // accepting a St. Jude award
 ];
 
 /* ── Rush events — Anthony fills in real title/date/time/location.
