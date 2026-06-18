@@ -1,8 +1,6 @@
 // api/contact.js — forwards contact form submissions to the chapter email via Resend.
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 const INQUIRY_LABELS = {
   general: 'General Inquiry',
   sponsorship: 'Sponsorship Inquiry',
@@ -17,6 +15,12 @@ export default async function handler(req, res) {
   if (!name || !email || !message) {
     return res.status(400).json({ error: 'name, email, and message are required' });
   }
+
+  if (!process.env.RESEND_API_KEY) {
+    console.error('contact: RESEND_API_KEY is not configured');
+    return res.status(500).json({ error: 'Email is not configured. Please try again later.' });
+  }
+  const resend = new Resend(process.env.RESEND_API_KEY);
 
   const label = INQUIRY_LABELS[inquiry_type] ?? 'General Inquiry';
 
