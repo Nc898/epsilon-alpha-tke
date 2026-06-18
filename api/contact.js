@@ -52,7 +52,7 @@ export default async function handler(req, res) {
   const text = `New ${label} from ${name} <${email}>\n\n${message}`;
 
   try {
-    await resend.emails.send({
+    const { data, error } = await resend.emails.send({
       from: process.env.EMAIL_FROM,
       to: 'slutkestewardship@gmail.com',
       reply_to: email,
@@ -60,7 +60,13 @@ export default async function handler(req, res) {
       html,
       text,
     });
-    return res.status(200).json({ ok: true });
+    // The Resend SDK resolves (does not throw) on API errors — it returns
+    // { data, error }. We must inspect `error` explicitly or sends fail silently.
+    if (error) {
+      console.error('contact email rejected by Resend:', error);
+      return res.status(502).json({ error: 'Email provider rejected the message.', detail: error.message ?? String(error) });
+    }
+    return res.status(200).json({ ok: true, id: data?.id });
   } catch (err) {
     console.error('contact email failed:', err);
     return res.status(500).json({ error: 'Failed to send message. Please try again.' });
