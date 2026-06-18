@@ -2,6 +2,7 @@
 import Stripe from 'stripe';
 import { supabaseAdmin } from './_lib/supabaseAdmin.js';
 import { registrationSchema } from '../src/lib/registrationSchema.js';
+import { entryCentsNow } from '../src/lib/eventPricing.js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -33,6 +34,9 @@ export default async function handler(req, res) {
       }
     }
 
+    // Authoritative price: honors the early-bird window server-side so the
+    // charge can't be tampered with from the client.
+    const entryCents = entryCentsNow(event);
     const donationCents = reg.donation_dollars * 100;
     const { data: row, error: insertErr } = await supabaseAdmin
       .from('registrations')
@@ -50,7 +54,7 @@ export default async function handler(req, res) {
       price_data: {
         currency: 'usd',
         product_data: { name: `${event.title} — Entry` },
-        unit_amount: event.entry_price_cents,
+        unit_amount: entryCents,
       },
       quantity: 1,
     }];

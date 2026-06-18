@@ -21,6 +21,10 @@ export const CAR_SHOW = {
 
   registerUrl: REGISTER_URL,
 
+  // Supabase event slug — the registration form lives at /events/<slug>.
+  // Must match the `slug` in the seed SQL (supabase/migrations/20260617_car_show_event.sql).
+  slug: 'car-show-2026',
+
   // Date / time (America/Chicago)
   dateISO: '2026-07-26',
   dateLabel: 'Sunday, July 26, 2026',
