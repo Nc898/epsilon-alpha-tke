@@ -70,7 +70,7 @@ export function googleCalendarUrl() {
   const details = encodeURIComponent(
     `${CAR_SHOW.presenter}. A rain-or-shine car show benefiting ${CAR_SHOW.beneficiary}. ` +
       `Registered show vehicles arrive by ${CAR_SHOW.arriveByLabel} — meet ${CAR_SHOW.meetingSpot}. ` +
-      `Register: ${CAR_SHOW.registerUrl}`
+      `Register: https://www.tkeslu.org/carshow`
   );
   const location = encodeURIComponent(`${CAR_SHOW.venue}, ${CAR_SHOW.address}`);
   return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${text}&dates=${dates}&details=${details}&location=${location}`;

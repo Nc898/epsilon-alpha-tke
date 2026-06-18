@@ -42,7 +42,7 @@ const ARRIVAL_STEPS = [
 function RegisterButton({ size = 'lg', className = '' }) {
   return (
     <Magnetic>
-      <a href={CAR_SHOW.registerUrl} target="_blank" rel="noopener noreferrer" className="contents">
+      <Link to={`/events/${CAR_SHOW.slug}`} className="contents">
         <Button
           size={size}
           className={`group rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold gap-2 transition-transform hover:scale-[1.02] active:scale-[0.98] ${className}`}
@@ -50,7 +50,7 @@ function RegisterButton({ size = 'lg', className = '' }) {
           <Car className="h-5 w-5" /> Register Your Vehicle
           <ArrowRight className="h-4 w-4 -ml-1 opacity-0 -translate-x-1 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0" />
         </Button>
-      </a>
+      </Link>
     </Magnetic>
   );
 }
