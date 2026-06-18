@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -26,11 +25,24 @@ export default function Contact() {
   }, []);
 
   const submit = useMutation({
-    mutationFn: (data) => base44.entities.ContactInquiry.create(data),
+    mutationFn: async (data) => {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) {
+        const { error } = await res.json().catch(() => ({}));
+        throw new Error(error || 'Failed to send message.');
+      }
+    },
     onSuccess: () => {
       setSubmitted(true);
       setForm({ name: '', email: '', inquiry_type: 'general', message: '' });
       toast.success('Your message has been sent!');
+    },
+    onError: (err) => {
+      toast.error(err.message || 'Something went wrong. Please try again.');
     },
   });
 
