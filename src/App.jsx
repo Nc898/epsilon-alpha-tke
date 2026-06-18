@@ -20,7 +20,7 @@ import Register from './pages/Register';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import EventSignup from './pages/EventSignup';
-import CarShowRedirect from './pages/CarShowRedirect';
+import CarShow from './pages/CarShow';
 import Donate from './pages/Donate';
 import AdminRegistrations from './pages/AdminRegistrations';
 import Gallery from './pages/Gallery';
@@ -69,7 +69,8 @@ const AuthenticatedApp = () => {
         <Route path="/contact" element={<Contact />} />
         <Route path="/news" element={<News />} />
         <Route path="/events/:slug" element={<EventSignup />} />
-        <Route path="/carshow" element={<CarShowRedirect />} />
+        <Route path="/carshow" element={<CarShow />} />
+        <Route path="/car-show" element={<CarShow />} />
         <Route path="/donate" element={<Donate />} />
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/gallery/:slug" element={<GalleryAlbum />} />

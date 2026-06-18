@@ -41,7 +41,10 @@ export default async function handler(req, res) {
           .eq('id', regId)
           .select('*, events(*)').single();
 
-        if (reg) {
+        // Confirmation email is best-effort: the paid registration is already
+        // saved above. Only attempt a send when Resend is configured, so a
+        // missing email setup never blocks checkout or triggers webhook retries.
+        if (reg && process.env.RESEND_API_KEY && process.env.EMAIL_FROM) {
           // idempotent: unique (registration_id, email_type) — insert first, send only if new
           const { error: logErr } = await supabaseAdmin
             .from('email_log')

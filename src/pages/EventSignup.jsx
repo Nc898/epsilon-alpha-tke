@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { supabase } from '@/lib/supabaseClient';
 import { registrationSchema } from '@/lib/registrationSchema';
+import { entryCentsNow, isEarlyBird } from '@/lib/eventPricing';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -116,7 +117,8 @@ export default function EventSignup() {
   });
 
   const donationRaw = watch('donation_dollars');
-  const entryDollars = event ? Math.round(event.entry_price_cents) / 100 : 20;
+  const entryDollars = event ? entryCentsNow(event) / 100 : 20;
+  const earlyBird = isEarlyBird(event);
   const donation = Number(donationRaw) > 0 ? Math.floor(Number(donationRaw)) : 0;
   const total = entryDollars + donation;
 
@@ -206,6 +208,11 @@ export default function EventSignup() {
           <div className="mt-5 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 text-sm">
             <span className="inline-flex items-center gap-2 text-white font-semibold">
               <Ticket className="h-4 w-4 text-accent" /> ${entryDollars} entry
+              {earlyBird && (
+                <span className="rounded-full bg-accent/20 text-accent text-[11px] font-bold uppercase tracking-wide px-2 py-0.5">
+                  Early-bird
+                </span>
+              )}
             </span>
             <span className="inline-flex items-center gap-2 text-white/70">
               <CloudRain className="h-4 w-4 text-accent" />

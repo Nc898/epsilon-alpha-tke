@@ -6,9 +6,11 @@ import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion
 import Magnetic from './Magnetic';
 
 const HERO_IMAGES = [
-  'https://media.base44.com/images/public/6a190a936fbf6af2a63c4d1d/d2143a975_tempImagevdeNDs.jpg',
-  'https://media.base44.com/images/public/6a190a936fbf6af2a63c4d1d/793feca1a_IMG_61365.jpg',
-  'https://media.base44.com/images/public/6a190a936fbf6af2a63c4d1d/8454d81a7_tempImage9R7i2T.jpg',
+  '/assets/photos/q15.jpg', // brothers + Lamborghini + TKE flag at the car show
+  '/assets/photos/q17.jpg', // City Foundry STL — the car show in full swing
+  '/assets/photos/q34.jpg', // overhead — the whole chapter among the show cars
+  '/assets/photos/q16.jpg', // a row of show cars
+  '/assets/photos/p17.jpg', // St. Jude Fundraising Dinner
 ];
 
 const ACCENT_STYLE = { color: 'hsl(1 70% 52%)', textShadow: '0 2px 16px rgba(0,0,0,0.55)' };
