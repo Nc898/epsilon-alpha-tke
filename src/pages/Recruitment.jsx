@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -225,7 +224,17 @@ export default function Recruitment() {
   const [submitted, setSubmitted] = useState(false);
 
   const submitInquiry = useMutation({
-    mutationFn: (data) => base44.entities.RecruitmentInquiry.create(data),
+    mutationFn: async (data) => {
+      const res = await fetch('/api/recruitment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) {
+        const { error } = await res.json().catch(() => ({}));
+        throw new Error(error || 'Failed to submit form.');
+      }
+    },
     onSuccess: () => {
       setSubmitted(true);
       setForm({ name: '', email: '', phone: '', major: '', graduation_year: '', message: '' });
@@ -233,6 +242,9 @@ export default function Recruitment() {
       if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
         confetti({ particleCount: 120, spread: 70, origin: { y: 0.7 } });
       }
+    },
+    onError: (err) => {
+      toast.error(err.message || 'Something went wrong. Please try again.');
     },
   });
 
