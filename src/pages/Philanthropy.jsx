@@ -1,13 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import FundraisingTracker from '../components/FundraisingTracker';
-import EventCard from '../components/EventCard';
 import SponsorTierCard from '../components/SponsorTierCard';
 import PageHero from '../components/PageHero';
 import Marquee from '../components/Marquee';
 import Magnetic from '../components/Magnetic';
 import { Button } from '@/components/ui/button';
-import { motion } from 'framer-motion';
 import Reveal from '../components/Reveal';
 import { Heart, Download, Mail, Building2, ExternalLink, Car, Calendar, MapPin, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -25,11 +23,6 @@ const TIERS = [
 ];
 
 export default function Philanthropy() {
-  const { data: events = [], isLoading: eventsLoading } = useQuery({
-    queryKey: ['events', 'philanthropy'],
-    queryFn: () => base44.entities.ChapterEvent.filter({ event_type: 'philanthropy' }, '-date'),
-  });
-
   const { data: sponsors = [] } = useQuery({
     queryKey: ['sponsors'],
     queryFn: () => base44.entities.Sponsor.filter({ active: true }),
@@ -154,35 +147,6 @@ export default function Philanthropy() {
           <div className="flex justify-center">
             <FundraisingTracker raised={raised} goal={goal} isLoading={statsLoading} lastUpdated={lastUpdated} />
           </div>
-        </div>
-      </section>
-
-      {/* Events */}
-      <section className="py-20 bg-muted/50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }} className="text-center mb-12">
-            <p className="text-accent font-semibold text-sm tracking-widest uppercase mb-3">Upcoming</p>
-            <h2 className="font-heading text-3xl sm:text-4xl font-bold text-foreground">Philanthropy Events</h2>
-          </motion.div>
-
-          {eventsLoading ? (
-            <div className="flex justify-center py-12">
-              <div className="w-8 h-8 border-4 border-muted border-t-primary rounded-full animate-spin" />
-            </div>
-          ) : events.length === 0 ? (
-            <p className="text-center text-muted-foreground py-12">
-              New events are being planned — check back soon for exciting opportunities.
-            </p>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {events.map((e, i) => (
-                <Reveal key={e.id} delay={i * 0.08}>
-                  <EventCard event={e} />
-                </Reveal>
-              ))}
-            </div>
-          )}
         </div>
       </section>
 

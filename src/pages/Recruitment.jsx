@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -145,10 +144,10 @@ function RushHero() {
     <section className="relative h-screen min-h-[640px] overflow-hidden bg-[hsl(0,0%,4%)]">
       {/* 4-column scrolling photo wall */}
       <div className="absolute inset-0 grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 px-3 sm:px-4 opacity-50">
-        <WallColumn duration="52s" start={0} />
-        <WallColumn duration="66s" start={1} reverse />
-        <WallColumn duration="58s" start={2} className="hidden md:block" />
-        <WallColumn duration="72s" start={3} reverse className="hidden md:block" />
+        <WallColumn duration="85s" start={0} />
+        <WallColumn duration="105s" start={1} reverse />
+        <WallColumn duration="95s" start={2} className="hidden md:block" />
+        <WallColumn duration="115s" start={3} reverse className="hidden md:block" />
       </div>
       <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/50 to-black/85" />
 
@@ -225,7 +224,17 @@ export default function Recruitment() {
   const [submitted, setSubmitted] = useState(false);
 
   const submitInquiry = useMutation({
-    mutationFn: (data) => base44.entities.RecruitmentInquiry.create(data),
+    mutationFn: async (data) => {
+      const res = await fetch('/api/recruitment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) {
+        const { error } = await res.json().catch(() => ({}));
+        throw new Error(error || 'Failed to submit form.');
+      }
+    },
     onSuccess: () => {
       setSubmitted(true);
       setForm({ name: '', email: '', phone: '', major: '', graduation_year: '', message: '' });
@@ -233,6 +242,9 @@ export default function Recruitment() {
       if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
         confetti({ particleCount: 120, spread: 70, origin: { y: 0.7 } });
       }
+    },
+    onError: (err) => {
+      toast.error(err.message || 'Something went wrong. Please try again.');
     },
   });
 
