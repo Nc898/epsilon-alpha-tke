@@ -145,10 +145,10 @@ function RushHero() {
     <section className="relative h-screen min-h-[640px] overflow-hidden bg-[hsl(0,0%,4%)]">
       {/* 4-column scrolling photo wall */}
       <div className="absolute inset-0 grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 px-3 sm:px-4 opacity-50">
-        <WallColumn duration="52s" start={0} />
-        <WallColumn duration="66s" start={1} reverse />
-        <WallColumn duration="58s" start={2} className="hidden md:block" />
-        <WallColumn duration="72s" start={3} reverse className="hidden md:block" />
+        <WallColumn duration="85s" start={0} />
+        <WallColumn duration="105s" start={1} reverse />
+        <WallColumn duration="95s" start={2} className="hidden md:block" />
+        <WallColumn duration="115s" start={3} reverse className="hidden md:block" />
       </div>
       <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/50 to-black/85" />
 
