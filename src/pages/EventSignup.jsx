@@ -8,7 +8,7 @@ import confetti from 'canvas-confetti';
 import { toast } from 'sonner';
 import {
   Calendar, Clock, MapPin, CloudRain, Ticket, Loader2,
-  CheckCircle2, X, AlertTriangle, Users,
+  CheckCircle2, X, AlertTriangle, Users, Heart,
 } from 'lucide-react';
 import { supabase } from '@/lib/supabaseClient';
 import { registrationSchema } from '@/lib/registrationSchema';
@@ -20,6 +20,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const CAR_CLASSES = ['classic', 'exotic', 'performance', 'other'];
+const ST_JUDE_URL = 'https://fundraising.stjude.org/site/TR?fr_id=162451&pg=entry';
 
 function formatEventDate(dateStr) {
   if (!dateStr) return null;
@@ -107,7 +108,6 @@ export default function EventSignup() {
     register,
     handleSubmit,
     control,
-    watch,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(registrationSchema),
@@ -118,11 +118,9 @@ export default function EventSignup() {
     },
   });
 
-  const donationRaw = watch('donation_dollars');
   const entryDollars = event ? entryCentsNow(event) / 100 : 20;
   const earlyBird = isEarlyBird(event);
-  const donation = Number(donationRaw) > 0 ? Math.floor(Number(donationRaw)) : 0;
-  const total = entryDollars + donation;
+  const total = entryDollars;
 
   const paidCount = counts?.[0]?.paid_count ?? 0;
   const spotsLeft = event?.capacity != null ? Math.max(event.capacity - paidCount, 0) : null;
@@ -268,6 +266,18 @@ export default function EventSignup() {
           <p className="text-muted-foreground mb-6">
             A confirmation email with your registration number is on its way — check your inbox.
           </p>
+          <div className="bg-primary/5 border border-primary/20 rounded-xl p-5 mb-6 text-left sm:text-center">
+            <p className="font-heading font-bold text-foreground mb-1">Want to do even more for the kids?</p>
+            <p className="text-muted-foreground text-sm mb-4">
+              Every extra dollar goes straight to St. Jude Children&apos;s Research Hospital — families
+              never receive a bill for treatment.
+            </p>
+            <a href={ST_JUDE_URL} target="_blank" rel="noopener noreferrer">
+              <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold gap-2">
+                <Heart className="h-4 w-4" /> Donate to St. Jude
+              </Button>
+            </a>
+          </div>
           <Button asChild variant="outline">
             <Link to="/">Back to home</Link>
           </Button>
@@ -387,26 +397,6 @@ export default function EventSignup() {
                     )}
                   />
                   <FieldError error={errors.car_class} />
-                </div>
-
-                <div>
-                  <Label htmlFor="donation_dollars" className="text-sm">
-                    Add a St. Jude donation <span className="text-muted-foreground font-normal">(optional)</span>
-                  </Label>
-                  <div className="relative mt-1">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">$</span>
-                    <Input
-                      id="donation_dollars"
-                      type="number"
-                      min="0"
-                      step="1"
-                      inputMode="numeric"
-                      className="pl-7"
-                      placeholder="0"
-                      {...register('donation_dollars')}
-                    />
-                  </div>
-                  <FieldError error={errors.donation_dollars} />
                 </div>
 
                 <Button
