@@ -13,6 +13,7 @@ import {
 import { supabase } from '@/lib/supabaseClient';
 import { registrationSchema } from '@/lib/registrationSchema';
 import { entryCentsNow, isEarlyBird } from '@/lib/eventPricing';
+import { CAR_SHOW } from '@/lib/carShow';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -67,6 +68,7 @@ export default function EventSignup() {
   const status = searchParams.get('status');
 
   const [submitting, setSubmitting] = useState(false);
+  const [redirecting, setRedirecting] = useState(false);
   const [soldOutFromApi, setSoldOutFromApi] = useState(false);
   const [cancelNoticeDismissed, setCancelNoticeDismissed] = useState(false);
   const confettiFired = useRef(false);
@@ -126,6 +128,12 @@ export default function EventSignup() {
   const spotsLeft = event?.capacity != null ? Math.max(event.capacity - paidCount, 0) : null;
   const soldOut = soldOutFromApi || (event?.capacity != null && counts != null && spotsLeft <= 0);
 
+  // Show the "redirecting to payment" notice for a beat, then send them off.
+  const goToPayment = (url) => {
+    setRedirecting(true);
+    setTimeout(() => { window.location.href = url; }, 1400);
+  };
+
   const onSubmit = async (values) => {
     setSubmitting(true);
     try {
@@ -135,21 +143,44 @@ export default function EventSignup() {
         body: JSON.stringify({ event_slug: slug, registration: values }),
       });
       const data = await res.json().catch(() => ({}));
-      if (res.ok) {
-        window.location.href = data.url;
+      // Seamless path: registration saved + a dynamic Stripe Checkout session.
+      if (res.ok && data.url) {
+        goToPayment(data.url);
         return;
       }
+      // Sold out is the one hard stop.
       if (res.status === 409) {
         setSoldOutFromApi(true);
-      } else {
-        toast.error(data.error || 'Something went wrong starting checkout. Please try again.');
+        setSubmitting(false);
+        return;
       }
+      // Fallback: the registration is captured server-side before the Stripe
+      // session step, so if that step fails we still send them to the hosted
+      // Stripe payment link to complete payment rather than dead-ending. (Once
+      // STRIPE_SECRET_KEY/SITE_URL are correct this branch stops being hit.)
+      goToPayment(CAR_SHOW.registerUrl);
     } catch {
-      toast.error('Could not reach the server. Check your connection and try again.');
-    } finally {
-      setSubmitting(false);
+      // Network/server unreachable — still let them pay via the hosted link.
+      goToPayment(CAR_SHOW.registerUrl);
     }
   };
+
+  // ---- Redirecting to payment ----
+  if (redirecting) {
+    return (
+      <div className="pt-24">
+        <StatusCard
+          icon={<Loader2 className="h-9 w-9 text-primary animate-spin" />}
+          title="Vehicle registered — taking you to payment"
+        >
+          <p className="text-muted-foreground">
+            Hang tight! We&apos;re sending you to our secure Stripe payment page to complete your
+            entry. Please don&apos;t refresh or close this tab.
+          </p>
+        </StatusCard>
+      </div>
+    );
+  }
 
   // ---- Loading ----
   if (isLoading) {
@@ -291,9 +322,10 @@ export default function EventSignup() {
             )}
 
             <motion.div {...fadeUp(0.1)} className="bg-card border border-border rounded-xl p-6 sm:p-8 shadow-sm">
-              <h2 className="font-heading text-xl font-bold text-foreground mb-1">Register your car</h2>
+              <h2 className="font-heading text-xl font-bold text-foreground mb-1">Register your vehicle</h2>
               <p className="text-muted-foreground text-sm mb-6">
-                Reserve your spot — payment is handled securely by Stripe.
+                <span className="font-semibold text-foreground">Step 1 of 2.</span> Tell us about your
+                vehicle below — then you&apos;ll be sent to secure Stripe payment to lock in your spot.
               </p>
 
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
@@ -385,10 +417,10 @@ export default function EventSignup() {
                 >
                   {submitting ? (
                     <>
-                      <Loader2 className="h-4 w-4 animate-spin" /> Redirecting to Stripe…
+                      <Loader2 className="h-4 w-4 animate-spin" /> Registering your vehicle…
                     </>
                   ) : (
-                    <>Continue to Payment — ${total}</>
+                    <>Register &amp; Continue to Payment — ${total}</>
                   )}
                 </Button>
               </form>

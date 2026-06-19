@@ -110,11 +110,11 @@ export default function Philanthropy() {
                   </p>
                   <div className="flex flex-wrap gap-3">
                     <Magnetic>
-                      <a href={CAR_SHOW.registerUrl} target="_blank" rel="noopener noreferrer">
+                      <Link to={`/events/${CAR_SHOW.slug}`}>
                         <Button size="lg" className="rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold gap-2 h-12 px-7 transition-transform hover:scale-[1.02] active:scale-[0.98]">
                           <Car className="h-5 w-5" /> Register Your Vehicle
                         </Button>
-                      </a>
+                      </Link>
                     </Magnetic>
                     <Link to="/carshow">
                       <Button size="lg" variant="outline" className="rounded-full border-white/25 text-white hover:bg-white/10 font-semibold gap-2 h-12 px-7 transition-transform hover:scale-[1.02] active:scale-[0.98]">
