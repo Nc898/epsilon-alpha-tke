@@ -4,6 +4,7 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import ScrollToTop from './ScrollToTop';
 import NewsDrawer from './NewsDrawer';
+import ExternalLinkInterstitial from './ExternalLinkInterstitial';
 import GrainOverlay from './GrainOverlay';
 import CustomCursor from './CustomCursor';
 import useLenis from '../lib/useLenis';
@@ -20,6 +21,7 @@ export default function Layout() {
       <CustomCursor />
       <Navbar />
       <NewsDrawer />
+      <ExternalLinkInterstitial />
       <main className="flex-1">
         {/* Keyed on pathname so each route entry fades/rises in. No exit
             animation — exit + ScrollToTop causes flicker. */}
