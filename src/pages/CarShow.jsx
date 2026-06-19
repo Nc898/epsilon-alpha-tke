@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import {
   Calendar, Clock, MapPin, Heart, Car, Flag, CloudRain, ArrowRight,
   Phone, Mail, CalendarPlus, Navigation, Trophy, Users, AlertTriangle, ShieldCheck,
+  Download, Camera, Instagram,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import PageHero from '../components/PageHero';
@@ -281,6 +282,75 @@ export default function CarShow() {
               </div>
             </div>
           </Reveal>
+        </div>
+      </section>
+
+      {/* ── Spread the word — flyer ── */}
+      <section className="py-20 sm:py-24 bg-muted/50">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Reveal className="text-center mb-12">
+            <p className="text-accent font-semibold text-sm tracking-widest uppercase mb-3">Spread the Word</p>
+            <h2 className="font-heading text-3xl sm:text-4xl font-bold text-foreground mb-3">Share the flyer</h2>
+            <p className="text-muted-foreground max-w-xl mx-auto">
+              Help us pack the lot for the kids — download the flyer and pass it along to friends, family,
+              and fellow enthusiasts.
+            </p>
+          </Reveal>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-center">
+            <Reveal>
+              <a
+                href="/assets/car-show-flyer.png"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block group"
+                aria-label="Open full-size car show flyer"
+              >
+                <img
+                  src="/assets/car-show-flyer-preview.jpg"
+                  alt="TKE × City Foundry STL All-Classics & Imports Car Show flyer — Sunday, July 26, 2026, benefiting St. Jude"
+                  className="w-full max-w-sm mx-auto rounded-2xl shadow-2xl ring-1 ring-border transition-transform duration-300 group-hover:scale-[1.02]"
+                />
+              </a>
+            </Reveal>
+
+            <Reveal delay={0.1}>
+              <div className="space-y-6">
+                <a href="/assets/car-show-flyer.png" download="TKE-Car-Show-2026-Flyer.png" className="inline-block">
+                  <Magnetic>
+                    <Button
+                      size="lg"
+                      className="rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold gap-2 h-14 px-9 text-base transition-transform hover:scale-[1.02] active:scale-[0.98]"
+                    >
+                      <Download className="h-5 w-5" /> Download Flyer
+                    </Button>
+                  </Magnetic>
+                </a>
+                <p className="text-muted-foreground text-sm">
+                  High-resolution image — great for printing, texting, or posting on social.
+                </p>
+
+                <div className="bg-card border border-border rounded-2xl p-6 sm:p-7">
+                  <div className="flex items-center gap-3 mb-2">
+                    <Camera className="h-5 w-5 text-primary flex-shrink-0" />
+                    <h3 className="font-heading font-bold text-foreground text-lg">Photographers, let&apos;s collaborate</h3>
+                  </div>
+                  <p className="text-muted-foreground text-sm leading-relaxed">
+                    We&apos;d be more than happy to have photographers collaborate with us to capture the
+                    show. Reach out through our Instagram to get involved.
+                  </p>
+                  <a
+                    href="https://www.instagram.com/tkeslu_carshow"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 mt-4 font-semibold text-primary hover:underline"
+                  >
+                    <Instagram className="h-4 w-4" /> @tkeslu_carshow
+                  </a>
+                </div>
+              </div>
+            </Reveal>
+          </div>
         </div>
       </section>
 
