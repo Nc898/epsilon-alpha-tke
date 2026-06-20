@@ -3,7 +3,7 @@ import Lenis from 'lenis';
 import { Link } from 'react-router-dom';
 import { ArrowRight, ArrowUpRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import CosmicIntro from '../components/next/CosmicIntro';
+import SatelliteIntro from '../components/next/SatelliteIntro';
 import ForgeHero from '../components/next/ForgeHero';
 import PinnedValues from '../components/next/PinnedValues';
 import RevealGrid from '../components/next/RevealGrid';
@@ -38,7 +38,7 @@ export default function HomeNext() {
 
   return (
     <div className="bg-[hsl(0,0%,5%)]">
-      <CosmicIntro />
+      <SatelliteIntro />
       <ForgeHero />
 
       <Marquee
