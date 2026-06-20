@@ -189,3 +189,11 @@
   pointer-events: none;
   z-index: 9999;
 }
+
+/* Lenis momentum smooth-scroll — only active while a Lenis page is mounted
+   (the .lenis classes are added/removed by Lenis itself). */
+html.lenis,
+html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }

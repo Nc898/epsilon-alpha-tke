@@ -8,6 +8,7 @@ import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import Layout from './components/Layout';
 import Home from './pages/Home';
+import HomeNext from './pages/HomeNext';
 import Philanthropy from './pages/Philanthropy';
 import Alumni from './pages/Alumni';
 import Recruitment from './pages/Recruitment';
@@ -61,6 +62,7 @@ const AuthenticatedApp = () => {
       <Route path="/reset-password" element={<ResetPassword />} />
       <Route element={<Layout />}>
         <Route path="/" element={<Home />} />
+        <Route path="/home-next" element={<HomeNext />} />
         <Route path="/philanthropy" element={<Philanthropy />} />
         <Route path="/alumni" element={<Alumni />} />
         <Route path="/recruitment" element={<Recruitment />} />
