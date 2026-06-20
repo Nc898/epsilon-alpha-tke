@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion';
 import Reveal from '../Reveal';
+import ScrollBlur from './ScrollBlur';
 
 const PHOTOS = [
   '/assets/photos/q15.jpg',
@@ -56,11 +57,11 @@ export default function RevealGrid() {
           </p>
         </Reveal>
 
-        <div className="columns-2 lg:columns-3 gap-4 sm:gap-5">
+        <ScrollBlur max={7} className="columns-2 lg:columns-3 gap-4 sm:gap-5">
           {PHOTOS.map((src) => (
             <PhotoCard key={src} src={src} />
           ))}
-        </div>
+        </ScrollBlur>
       </div>
     </section>
   );
