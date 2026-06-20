@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, ArrowUpRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import IntroLoader from '../components/next/IntroLoader';
-import KineticHero from '../components/next/KineticHero';
+import ForgeHero from '../components/next/ForgeHero';
 import PinnedValues from '../components/next/PinnedValues';
 import RevealGrid from '../components/next/RevealGrid';
 import Marquee from '../components/Marquee';
@@ -39,7 +39,7 @@ export default function HomeNext() {
   return (
     <div className="bg-[hsl(0,0%,5%)]">
       <IntroLoader />
-      <KineticHero />
+      <ForgeHero />
 
       <Marquee
         phrases={[
