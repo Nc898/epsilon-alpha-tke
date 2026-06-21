@@ -48,12 +48,12 @@ function LeaderCard({ person, index }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-40px' }}
       transition={{ duration: 0.4, delay: (index % 5) * 0.05 }}
-      className={`group bg-card border rounded-2xl p-6 flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl ${
+      className={`group bg-card border rounded-2xl p-6 sm:p-8 flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl ${
         person.lead ? 'border-primary/40 shadow-sm' : 'border-border'
       }`}
     >
       <div
-        className={`w-20 h-20 rounded-full mb-4 flex items-center justify-center font-heading font-bold text-xl text-primary bg-primary/10 ring-2 ring-offset-2 ring-offset-card ${
+        className={`w-24 h-24 sm:w-32 sm:h-32 rounded-full mb-5 flex items-center justify-center font-heading font-bold text-2xl sm:text-3xl text-primary bg-primary/10 ring-2 ring-offset-2 ring-offset-card ${
           person.lead ? 'ring-primary' : 'ring-primary/30'
         }`}
       >
@@ -71,7 +71,7 @@ function LeaderCard({ person, index }) {
         {person.role}
       </span>
 
-      <h3 className="font-heading font-bold text-foreground text-lg leading-tight relative after:absolute after:left-1/2 after:-translate-x-1/2 after:-bottom-1 after:h-0.5 after:w-0 after:bg-primary after:transition-all after:duration-300 group-hover:after:w-3/4">
+      <h3 className="font-heading font-bold text-foreground text-lg sm:text-xl leading-tight relative after:absolute after:left-1/2 after:-translate-x-1/2 after:-bottom-1 after:h-0.5 after:w-0 after:bg-primary after:transition-all after:duration-300 group-hover:after:w-3/4">
         {person.name}
       </h3>
     </motion.div>
@@ -113,7 +113,7 @@ function GeneralMemberCard({ member, index }) {
       transition={{ duration: 0.35, delay: (index % 6) * 0.04 }}
       className="group bg-card border border-border rounded-2xl p-5 flex flex-col items-center text-center hover:-translate-y-1 hover:shadow-lg transition-all"
     >
-      <div className="w-16 h-16 rounded-full mb-3 flex items-center justify-center bg-primary/10 ring-1 ring-border overflow-hidden">
+      <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full mb-3 flex items-center justify-center bg-primary/10 ring-1 ring-border overflow-hidden">
         {member.photo ? (
           <div className="duotone-wrap w-full h-full">
             <img src={member.photo} alt={member.name} className="duotone w-full h-full object-cover" />
