@@ -8,7 +8,7 @@ export const NEWS_ITEMS = [
     icon: Flag,
     tag: 'Registration Open',
     title: 'TKE for St. Jude Car Show — Foundry Classics',
-    body: "Sunday, July 26 at City Foundry STL. $20 entry benefits St. Jude Children's Research Hospital. Rain or shine — rain date August 2.",
+    body: "Sunday, July 26 at City Foundry STL. Entry is $30 for all vehicles and benefits St. Jude Children's Research Hospital. There is no rain date — this is a rain-or-shine car show and will proceed in the rain unless severe weather requires TKE and City Foundry STL to postpone or cancel the event.",
     cta: { label: 'Sign Up Your Car', to: '/carshow' },
   },
 ];
