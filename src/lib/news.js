@@ -4,6 +4,14 @@ import { Flag } from 'lucide-react';
 // slide-out NewsDrawer (a teaser) and the dedicated /news page (the full list).
 export const NEWS_ITEMS = [
   {
+    id: 'exotics-car-show-2026',
+    icon: Flag,
+    tag: 'Applications Open',
+    title: 'Exotics at the Foundry — 30-Car Showcase',
+    body: "Friday, August 28 from 5:30–7:30 PM at City Foundry STL. Complimentary applications are open for a curated field of 30 exotic vehicles, with check-in at Colibri Real Estate from 5:00–5:30 PM. Cars will be protected by stanchions throughout the show. A $30 donation to St. Jude is encouraged but never required.",
+    cta: { label: 'Apply to Display', to: '/exotics-car-show' },
+  },
+  {
     id: 'carshow-2026',
     icon: Flag,
     tag: 'Registration Open',

@@ -30,3 +30,6 @@ dist-ssr
 
 .env
 .vite
+
+# Local AI/tooling binaries; never commit.
+.codex-local/

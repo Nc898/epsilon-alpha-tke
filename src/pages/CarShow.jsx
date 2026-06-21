@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import {
   Calendar, Clock, MapPin, Heart, Car, Flag, CloudRain, ArrowRight,
   Phone, Mail, CalendarPlus, Navigation, Trophy, Users, AlertTriangle, ShieldCheck,
@@ -354,52 +353,65 @@ export default function CarShow() {
         </div>
       </section>
 
-      {/* ── Sponsorship ── */}
+      {/* ── Potential Sponsor Program ── */}
       <section className="py-20 sm:py-24 bg-[hsl(0,0%,7%)] text-white overflow-hidden rounded-t-[2.5rem]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          <Reveal className="mx-auto max-w-3xl text-center">
+            <p className="text-accent font-semibold text-sm tracking-widest uppercase mb-3">A no-cost introduction for local organizations</p>
+            <h2 className="font-heading text-3xl sm:text-5xl font-bold leading-tight">
+              Become a <span className="text-primary">Potential Sponsor</span>
+            </h2>
+            <p className="mt-5 text-white/70 leading-relaxed">
+              There is no sponsorship fee for the July Classics &amp; Imports show. This program lets businesses and automotive organizations see what a student-led TKE event can deliver, meet our community, and begin a relationship that can grow into paid sponsorships at future shows.
+            </p>
+          </Reveal>
+
+          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              { icon: Users, title: 'Set up a table', body: 'Create a simple, approved presence where guests can meet your organization and learn what you do.' },
+              { icon: Trophy, title: 'Receive recognition', body: 'Potential sponsors receive social-media recognition and logo placement in our rotating philanthropy-page partner showcase.' },
+              { icon: Heart, title: 'Give merchandise away', body: 'Branded merchandise, samples, and guest giveaways are welcome. Merchandise may not be sold at this event.' },
+              { icon: Car, title: 'Bring display cars', body: `Cars are welcome, but each vehicle must use the standard registration: $${CAR_SHOW.earlyBirdPrice} through ${CAR_SHOW.earlyBirdEndsLabel}, then $${CAR_SHOW.regularPrice} beginning ${CAR_SHOW.regularStartsLabel}.` },
+            ].map((item, index) => (
+              <Reveal key={item.title} delay={index * 0.06}>
+                <div className="h-full rounded-2xl border border-white/10 bg-white/[0.04] p-6">
+                  <item.icon className="h-6 w-6 text-primary" />
+                  <h3 className="mt-4 font-heading text-xl font-bold">{item.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-white/55">{item.body}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+
+          <div className="mt-8 grid gap-6 lg:grid-cols-[1.25fr_0.75fr] lg:items-center">
             <Reveal>
-              <p className="text-accent font-semibold text-sm tracking-widest uppercase mb-3">Partner With Us</p>
-              <h2 className="font-heading text-3xl sm:text-4xl font-bold mb-5 leading-tight">
-                Sponsor the <span className="text-primary">show</span>
-              </h2>
-              <p className="text-white/75 leading-relaxed mb-6">
-                Businesses, dealerships, automotive organizations, community partners, and individuals are
-                invited to sponsor the car show. Sponsorship can include promotional visibility, business
-                recognition, event-day engagement, and exposure to local car owners, enthusiasts, and the
-                St. Louis community.
-              </p>
-              <div className="flex flex-wrap gap-3">
-                <a href={`mailto:${CAR_SHOW.contactEmail}?subject=Car%20Show%20Sponsorship%20Inquiry`}>
-                  <Button size="lg" className="rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold gap-2 h-12 px-7">
-                    <Mail className="h-4 w-4" /> Sponsorship Inquiry
-                  </Button>
-                </a>
-                <Link to="/philanthropy">
-                  <Button size="lg" variant="outline" className="rounded-full border-white/25 text-white hover:bg-white/10 font-semibold gap-2 h-12 px-7">
-                    <Trophy className="h-4 w-4" /> View Sponsor Tiers
-                  </Button>
-                </Link>
+              <div className="rounded-2xl border border-accent/25 bg-accent/10 p-7">
+                <h3 className="font-heading text-2xl font-bold">Program rules at a glance</h3>
+                <ul className="mt-4 space-y-3 text-sm text-white/70">
+                  <li className="flex gap-3"><ShieldCheck className="mt-0.5 h-5 w-5 flex-shrink-0 text-primary" /> Participation and setup must be approved by Anthony before show day.</li>
+                  <li className="flex gap-3"><ShieldCheck className="mt-0.5 h-5 w-5 flex-shrink-0 text-primary" /> Free merchandise and giveaways are permitted; selling merchandise is not.</li>
+                  <li className="flex gap-3"><ShieldCheck className="mt-0.5 h-5 w-5 flex-shrink-0 text-primary" /> Every display vehicle requires its own paid registration, including vehicles brought by a Potential Sponsor.</li>
+                  <li className="flex gap-3"><ShieldCheck className="mt-0.5 h-5 w-5 flex-shrink-0 text-primary" /> This July program is separate from the paid August-and-October sponsorship package.</li>
+                </ul>
               </div>
             </Reveal>
 
-            <Reveal delay={0.12}>
-              <div className="bg-white/[0.04] border border-white/10 rounded-2xl p-7 sm:p-8">
-                <p className="text-xs uppercase tracking-widest text-white/50 font-semibold mb-4">Questions & Sponsorship</p>
-                <p className="font-heading text-2xl font-bold mb-1">{CAR_SHOW.contactName}</p>
-                <p className="text-white/60 text-sm mb-6">Car Show Organizer</p>
-                <div className="space-y-3">
-                  <a href={CAR_SHOW.contactPhoneHref} className="flex items-center gap-3 text-white/85 hover:text-primary transition-colors">
-                    <Phone className="h-5 w-5 text-primary" /> {CAR_SHOW.contactPhone}
-                  </a>
-                  <a href={`mailto:${CAR_SHOW.contactEmail}`} className="flex items-center gap-3 text-white/85 hover:text-primary transition-colors break-all">
-                    <Mail className="h-5 w-5 text-primary" /> {CAR_SHOW.contactEmail}
-                  </a>
-                </div>
-                <p className="text-white/45 text-sm mt-7 leading-relaxed border-t border-white/10 pt-5">
-                  Thank you for displaying your vehicle, supporting our fundraising mission, and helping make
-                  a difference for the children and families of St. Jude.
-                </p>
+            <Reveal delay={0.08}>
+              <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-7">
+                <p className="text-xs uppercase tracking-widest text-white/50 font-semibold">Start the conversation</p>
+                <p className="mt-3 font-heading text-2xl font-bold">{CAR_SHOW.contactName}</p>
+                <p className="text-white/55 text-sm">Car Show Organizer</p>
+                <a href={CAR_SHOW.contactPhoneHref} className="mt-5 flex items-center gap-3 text-white/85 hover:text-primary transition-colors">
+                  <Phone className="h-5 w-5 text-primary" /> {CAR_SHOW.contactPhone}
+                </a>
+                <a href={`mailto:${CAR_SHOW.contactEmail}?subject=Classics%20Car%20Show%20Potential%20Sponsor`} className="mt-3 flex items-center gap-3 break-all text-white/85 hover:text-primary transition-colors">
+                  <Mail className="h-5 w-5 flex-shrink-0 text-primary" /> {CAR_SHOW.contactEmail}
+                </a>
+                <a href={`mailto:${CAR_SHOW.contactEmail}?subject=Classics%20Car%20Show%20Potential%20Sponsor`}>
+                  <Button size="lg" className="mt-6 w-full rounded-full bg-primary font-semibold text-primary-foreground hover:bg-primary/90">
+                    Contact Anthony to participate
+                  </Button>
+                </a>
               </div>
             </Reveal>
           </div>

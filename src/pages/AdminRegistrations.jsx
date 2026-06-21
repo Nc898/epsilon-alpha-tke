@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { Loader2, Lock, Download, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -15,6 +15,9 @@ function dollars(cents) {
 const STATUS_STYLES = {
   paid: 'bg-green-100 text-green-800 border-green-200',
   pending: 'bg-amber-100 text-amber-800 border-amber-200',
+  approved: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+  waitlisted: 'bg-blue-100 text-blue-800 border-blue-200',
+  declined: 'bg-rose-100 text-rose-800 border-rose-200',
   refunded: 'bg-gray-100 text-gray-600 border-gray-200',
   checked_in: 'bg-gray-100 text-gray-600 border-gray-200',
 };
@@ -35,11 +38,12 @@ function csvEscape(value) {
 }
 
 function exportCsv(rows) {
-  const headers = ['Name', 'Email', 'Phone', 'Car Year', 'Car Make', 'Car Model', 'Class', 'Status', 'Amount Paid', 'Donation', 'Event', 'Registered At'];
+  const headers = ['Name', 'Email', 'Phone', 'Car Year', 'Car Make', 'Car Model', 'Color', 'Instagram', 'Application Notes', 'Class', 'Status', 'Amount Paid', 'Donation', 'Event', 'Registered At'];
   const lines = [headers.join(',')];
   for (const r of rows) {
     lines.push([
-      r.name, r.email, r.phone, r.car_year, r.car_make, r.car_model, r.car_class,
+      r.name, r.email, r.phone, r.car_year, r.car_make, r.car_model,
+      r.car_color, r.instagram, r.application_notes, r.car_class,
       r.status,
       ((r.amount_paid_cents ?? 0) / 100).toFixed(2),
       ((r.donation_cents ?? 0) / 100).toFixed(2),
@@ -107,6 +111,8 @@ function StatTile({ label, value }) {
 export default function AdminRegistrations() {
   const [key, setKey] = useState(() => sessionStorage.getItem(KEY_STORAGE) || '');
   const [authError, setAuthError] = useState('');
+  const [decisionMessage, setDecisionMessage] = useState('');
+  const queryClient = useQueryClient();
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['admin_registrations', key],
@@ -130,6 +136,24 @@ export default function AdminRegistrations() {
     sessionStorage.setItem(KEY_STORAGE, value);
     setKey(value);
   };
+
+  const decisionMutation = useMutation({
+    mutationFn: async ({ id, status }) => {
+      const res = await fetch('/api/registrations', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', 'x-admin-key': key },
+        body: JSON.stringify({ id, status }),
+      });
+      const result = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(result.error || 'Could not update application');
+      return result;
+    },
+    onSuccess: (result) => {
+      setDecisionMessage(result.email_warning ? 'Status saved; applicant email may be delayed.' : 'Status saved and applicant notified.');
+      queryClient.invalidateQueries({ queryKey: ['admin_registrations', key] });
+    },
+    onError: (error) => setDecisionMessage(error.message || 'Could not update application.'),
+  });
 
   const signOut = () => {
     sessionStorage.removeItem(KEY_STORAGE);
@@ -176,12 +200,20 @@ export default function AdminRegistrations() {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-2 lg:grid-cols-6 gap-4 mb-8">
           <StatTile label="Paid registrations" value={totals.paid} />
-          <StatTile label="Pending" value={totals.pending} />
+          <StatTile label="Applications" value={totals.pending} />
+          <StatTile label="Exotics approved" value={totals.approved ?? 0} />
+          <StatTile label="Waitlisted" value={totals.waitlisted ?? 0} />
           <StatTile label="Gross" value={dollars(totals.gross_cents)} />
           <StatTile label="St. Jude donations" value={dollars(totals.donation_cents)} />
         </div>
+
+        {decisionMessage && (
+          <p role="status" className="mb-4 rounded-xl border border-border bg-muted/50 px-4 py-3 text-sm text-muted-foreground">
+            {decisionMessage}
+          </p>
+        )}
 
         <div className="bg-card border border-border rounded-xl shadow-sm overflow-hidden">
           {registrations.length === 0 ? (
@@ -208,7 +240,25 @@ export default function AdminRegistrations() {
                         {[r.car_year, r.car_make, r.car_model].filter(Boolean).join(' ')}
                       </td>
                       <td className="px-4 py-3 text-muted-foreground capitalize whitespace-nowrap">{r.car_class}</td>
-                      <td className="px-4 py-3 whitespace-nowrap"><StatusBadge status={r.status} /></td>
+                      <td className="px-4 py-3 whitespace-nowrap">
+                        {r.events?.slug === 'exotics-car-show-2026' ? (
+                          <select
+                            aria-label={`Application status for ${r.name}`}
+                            value={r.status}
+                            disabled={decisionMutation.isPending}
+                            onChange={(event) => decisionMutation.mutate({ id: r.id, status: event.target.value })}
+                            className="rounded-lg border border-border bg-background px-2.5 py-1.5 text-xs font-medium text-foreground"
+                          >
+                            <option value="pending">Pending</option>
+                            <option value="approved">Approved</option>
+                            <option value="waitlisted">Waitlisted</option>
+                            <option value="declined">Declined</option>
+                            <option value="checked_in">Checked in</option>
+                          </select>
+                        ) : (
+                          <StatusBadge status={r.status} />
+                        )}
+                      </td>
                       <td className="px-4 py-3 text-muted-foreground whitespace-nowrap">
                         {r.created_at ? format(new Date(r.created_at), 'MMM d, yyyy h:mm a') : '—'}
                       </td>

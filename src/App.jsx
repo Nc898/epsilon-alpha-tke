@@ -22,6 +22,7 @@ import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import EventSignup from './pages/EventSignup';
 import CarShow from './pages/CarShow';
+import ExoticsCarShow from './pages/ExoticsCarShow';
 import Donate from './pages/Donate';
 import AdminRegistrations from './pages/AdminRegistrations';
 import Gallery from './pages/Gallery';
@@ -74,6 +75,8 @@ const AuthenticatedApp = () => {
         <Route path="/events/:slug" element={<EventSignup />} />
         <Route path="/carshow" element={<CarShow />} />
         <Route path="/car-show" element={<CarShow />} />
+        <Route path="/exotics-car-show" element={<ExoticsCarShow />} />
+        <Route path="/events/exotics-car-show-2026" element={<ExoticsCarShow />} />
         <Route path="/donate" element={<Donate />} />
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/gallery/:slug" element={<GalleryAlbum />} />

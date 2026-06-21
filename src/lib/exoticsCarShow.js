@@ -1,0 +1,21 @@
+export const ST_JUDE_URL = 'https://fundraising.stjude.org/site/TR?fr_id=162451&pg=entry';
+export const ST_JUDE_TAX_URL = 'https://www.stjude.org/about-st-jude/faq/is-my-donation-tax-deductible.html';
+
+export const EXOTICS_SHOW = {
+  name: 'Exotics at the Foundry',
+  slug: 'exotics-car-show-2026',
+  dateISO: '2026-08-28',
+  dateLabel: 'Friday, August 28, 2026',
+  hoursLabel: '5:30–7:30 PM',
+  arrivalLabel: '5:00–5:30 PM',
+  capacity: 30,
+  venue: 'City Foundry STL',
+  meetingSpot: 'Colibri Real Estate',
+  beneficiary: "St. Jude Children's Research Hospital",
+  suggestedDonation: 30,
+  image: '/assets/photos/q17.jpg',
+  contactName: 'Anthony Fahim',
+  contactPhone: '314-374-5893',
+  contactPhoneHref: 'tel:+13143745893',
+  contactEmail: 'slutkestewardship@gmail.com',
+};
