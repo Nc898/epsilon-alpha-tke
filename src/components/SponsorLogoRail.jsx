@@ -2,7 +2,7 @@ import { Building2 } from 'lucide-react';
 
 function SponsorLogo({ sponsor, duplicate = false }) {
   const content = sponsor.logo ? (
-    <img src={sponsor.logo} alt={duplicate ? '' : sponsor.name} className="max-h-12 max-w-[170px] object-contain" />
+    <img src={sponsor.logo} alt={duplicate ? '' : sponsor.name} loading="lazy" decoding="async" className="max-h-12 max-w-[170px] object-contain" />
   ) : (
     <div className="flex items-center gap-2 text-muted-foreground">
       <Building2 className="h-5 w-5" />

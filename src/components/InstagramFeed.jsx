@@ -86,6 +86,8 @@ export default function InstagramFeed({ title = 'Latest from Instagram' }) {
                       src={t.imageUrl}
                       alt={t.caption ? t.caption.slice(0, 80) : 'Instagram post'}
                       loading="lazy"
+                      decoding="async"
+                      loading="lazy"
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     />
                     {t.isVideo && (

@@ -5,6 +5,17 @@ import { createAxiosClient } from '@base44/sdk/dist/utils/axios-client';
 
 const AuthContext = createContext();
 
+// Don't let a slow/unreachable app-state request hold the whole site behind the
+// loading spinner. After this long, give up and render the (public) site.
+const APP_STATE_TIMEOUT_MS = 6000;
+const withTimeout = (promise, ms) =>
+  Promise.race([
+    promise,
+    new Promise((_, reject) =>
+      setTimeout(() => reject(Object.assign(new Error('Request timed out'), { isTimeout: true })), ms)
+    ),
+  ]);
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -35,7 +46,10 @@ export const AuthProvider = ({ children }) => {
       });
       
       try {
-        const publicSettings = await appClient.get(`/prod/public-settings/by-id/${appParams.appId}`);
+        const publicSettings = await withTimeout(
+          appClient.get(`/prod/public-settings/by-id/${appParams.appId}`),
+          APP_STATE_TIMEOUT_MS
+        );
         setAppPublicSettings(publicSettings);
         
         // If we got the app public settings successfully, check if user is authenticated
@@ -48,8 +62,11 @@ export const AuthProvider = ({ children }) => {
         }
         setIsLoadingPublicSettings(false);
       } catch (appError) {
-        console.error('App state check failed:', appError);
-        
+        // The public app-state endpoint is optional for this public site; a
+        // failure (offline/legacy backend/timeout) is handled gracefully below
+        // by still rendering, so log it as a warning rather than an error.
+        console.warn('App state check unavailable:', appError?.message || appError);
+
         // Handle app-level errors
         if (appError.status === 403 && appError.data?.extra_data?.reason) {
           const reason = appError.data.extra_data.reason;

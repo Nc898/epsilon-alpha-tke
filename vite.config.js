@@ -16,5 +16,19 @@ export default defineConfig({
       visualEditAgent: true
     }),
     react(),
-  ]
+  ],
+  build: {
+    rollupOptions: {
+      output: {
+        // Isolate heavy leaf libraries into their own long-lived cacheable
+        // chunks so routes that don't use them never pay for them. (maplibre is
+        // already a separate chunk via dynamic import.)
+        manualChunks(id) {
+          if (!id.includes('node_modules')) return;
+          if (id.includes('/three/') || id.includes('/three-')) return 'three';
+          if (id.includes('/recharts/') || id.includes('/d3-') || id.includes('/victory-')) return 'charts';
+        },
+      },
+    },
+  },
 });

@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { motion, useReducedMotion } from 'framer-motion';
 import Navbar from './Navbar';
@@ -31,7 +32,11 @@ export default function Layout() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.25, ease: 'easeOut' }}
         >
-          <Outlet />
+          {/* Inner boundary: keeps the nav/footer mounted while a lazy page
+              chunk loads, so only the content area shows the fallback. */}
+          <Suspense fallback={<div className="min-h-[60vh]" aria-hidden="true" />}>
+            <Outlet />
+          </Suspense>
         </motion.div>
       </main>
       <Footer />

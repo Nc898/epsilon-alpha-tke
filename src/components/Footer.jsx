@@ -46,6 +46,8 @@ export default function Footer() {
               src="/assets/tke-lockup-dark.png"
               alt="Tau Kappa Epsilon — Epsilon Alpha Chapter"
               width="200"
+              loading="lazy"
+              decoding="async"
               className="w-[200px] h-auto mb-4"
             />
             <p className="text-sm leading-relaxed mb-4">

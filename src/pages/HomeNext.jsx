@@ -1,9 +1,7 @@
-import { useEffect } from 'react';
-import Lenis from 'lenis';
 import { Link } from 'react-router-dom';
 import { ArrowRight, ArrowUpRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import SatelliteIntro from '../components/next/SatelliteIntro';
+import BrotherhoodIntro from '../components/next/BrotherhoodIntro';
 import ForgeHero from '../components/next/ForgeHero';
 import PinnedValues from '../components/next/PinnedValues';
 import RevealGrid from '../components/next/RevealGrid';
@@ -13,32 +11,15 @@ import Reveal from '../components/Reveal';
 import Magnetic from '../components/Magnetic';
 
 /**
- * Experimental "textura-grade" interactive home, served at /home-next so the
- * live home stays untouched. Intro loader → 3D kinetic hero → kinetic marquee →
- * scroll-pinned values → reveal-on-scroll photo grid → St. Jude → CTA, all under
- * Lenis momentum smooth-scroll (disabled for reduced-motion users).
+ * Interactive home. Intro → 3D kinetic hero → kinetic marquee → scroll-pinned
+ * values → reveal-on-scroll photo grid → St. Jude → CTA. Smooth scroll is
+ * provided once globally by Layout's useLenis() (disabled for reduced motion);
+ * this page must not create its own Lenis or two RAF loops fight each other.
  */
 export default function HomeNext() {
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-    const lenis = new Lenis({ duration: 1.1, smoothWheel: true, wheelMultiplier: 0.9 });
-    let raf;
-    const loop = (time) => {
-      lenis.raf(time);
-      raf = requestAnimationFrame(loop);
-    };
-    raf = requestAnimationFrame(loop);
-    return () => {
-      cancelAnimationFrame(raf);
-      lenis.destroy();
-    };
-  }, []);
-
   return (
     <div className="bg-[hsl(0,0%,5%)]">
-      <SatelliteIntro />
+      <BrotherhoodIntro />
       <ForgeHero />
 
       <Marquee

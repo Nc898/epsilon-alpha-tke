@@ -59,7 +59,7 @@ function LeaderCard({ person, index }) {
       >
         {person.photo ? (
           <div className="duotone-wrap w-full h-full rounded-full overflow-hidden">
-            <img src={person.photo} alt={person.name} className="duotone w-full h-full object-cover" />
+            <img src={person.photo} alt={person.name} loading="lazy" decoding="async" className="duotone w-full h-full object-cover" />
           </div>
         ) : (
           initials(person.name)
@@ -116,7 +116,7 @@ function GeneralMemberCard({ member, index }) {
       <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full mb-3 flex items-center justify-center bg-primary/10 ring-1 ring-border overflow-hidden">
         {member.photo ? (
           <div className="duotone-wrap w-full h-full">
-            <img src={member.photo} alt={member.name} className="duotone w-full h-full object-cover" />
+            <img src={member.photo} alt={member.name} loading="lazy" decoding="async" className="duotone w-full h-full object-cover" />
           </div>
         ) : (
           <span className="font-heading font-bold text-primary/70">{initials(member.name || '?')}</span>
