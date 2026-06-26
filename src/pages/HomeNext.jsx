@@ -1,8 +1,9 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, ArrowUpRight } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import BrotherhoodIntro from '../components/next/BrotherhoodIntro';
-import ForgeHero from '../components/next/ForgeHero';
+import LivingBond from '../components/next/LivingBond';
+import HeroSection from '../components/HeroSection';
 import PinnedValues from '../components/next/PinnedValues';
 import RevealGrid from '../components/next/RevealGrid';
 import Marquee from '../components/Marquee';
@@ -11,16 +12,30 @@ import Reveal from '../components/Reveal';
 import Magnetic from '../components/Magnetic';
 
 /**
- * Interactive home. Intro → 3D kinetic hero → kinetic marquee → scroll-pinned
- * values → reveal-on-scroll photo grid → St. Jude → CTA. Smooth scroll is
- * provided once globally by Layout's useLenis() (disabled for reduced motion);
- * this page must not create its own Lenis or two RAF loops fight each other.
+ * Interactive home. "The Living Bond" cinematic entrance → rolling photo
+ * slideshow hero (HeroSection) → kinetic marquee → scroll-pinned values →
+ * reveal-on-scroll photo grid → St. Jude → CTA. Smooth scroll is provided once
+ * globally by Layout's useLenis() (disabled for reduced motion); this page must
+ * not create its own Lenis or two RAF loops fight each other. (ForgeHero and
+ * BrotherhoodIntro are kept in the repo as alternates.)
  */
 export default function HomeNext() {
+  const [replayToken, setReplayToken] = useState(0);
+
   return (
     <div className="bg-[hsl(0,0%,5%)]">
-      <BrotherhoodIntro />
-      <ForgeHero />
+      <LivingBond key={replayToken} replayToken={replayToken} />
+
+      {/* Discreet replay control for the entrance experience. */}
+      <button
+        onClick={() => setReplayToken((n) => n + 1)}
+        className="fixed bottom-4 left-4 z-40 flex items-center gap-1.5 rounded-full border border-white/15 bg-black/40 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/55 backdrop-blur-sm transition-colors hover:border-primary/50 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+        aria-label="Replay the intro experience"
+      >
+        <Sparkles className="h-3 w-3" /> Replay
+      </button>
+
+      <HeroSection />
 
       <Marquee
         phrases={[
