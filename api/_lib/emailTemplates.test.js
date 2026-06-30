@@ -18,6 +18,13 @@ describe('confirmationEmail', () => {
     expect(html.toLowerCase()).toContain('rain or shine');
     expect(html).toContain('August 2');
   });
+  it('omits the rain-date sentence (never "Invalid Date") when no rain_date is set', () => {
+    const noRain = confirmationEmail({ registration: reg, event: { ...event, rain_date: null } });
+    expect(noRain.html.toLowerCase()).toContain('rain or shine'); // compliance line still present
+    expect(noRain.html).not.toContain('Invalid Date');
+    expect(noRain.text).not.toContain('Invalid Date');
+    expect(noRain.html).not.toContain('rain date is');
+  });
   it('NEVER claims tax deductibility (ALSAC gate not cleared)', () => {
     for (const s of [subject, html, text]) {
       expect(s.toLowerCase()).not.toContain('tax');

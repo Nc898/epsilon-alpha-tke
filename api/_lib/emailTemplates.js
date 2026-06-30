@@ -33,6 +33,12 @@ function carSummary(registration) {
 }
 
 function rainPolicyLine(event) {
+  // The rain-or-shine line is mandatory on every communication (fail-safe R1).
+  // The rain-date sentence is only appended when a rain date is actually set —
+  // otherwise we'd render "our rain date is Invalid Date".
+  if (!event.rain_date) {
+    return `This event runs rain or shine.`;
+  }
   return `This event runs rain or shine. In case of severe weather, our rain date is ${formatDateShort(event.rain_date)}.`;
 }
 
