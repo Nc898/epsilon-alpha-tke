@@ -46,11 +46,14 @@ function buildLayout(W, H, count) {
     });
   }
   // First three: a clear triad at mid radius — the opening "first connections".
-  const triA = [-Math.PI / 2, Math.PI / 6, (Math.PI * 5) / 6];
+  // Inverted orientation (one below, two above) so it foreshadows the TKE mark.
+  const triA = [Math.PI / 2, -Math.PI / 6, -(Math.PI * 5) / 6];
   for (let i = 0; i < Math.min(3, count); i++) {
     memories[i] = { x: Math.cos(triA[i]) * W * 0.2, y: Math.sin(triA[i]) * H * 0.22, scale: 0.95, layer: 0 };
   }
-  // Spacing relaxation so the memories breathe instead of clumping.
+  // Spacing relaxation so the memories breathe instead of clumping. The triad
+  // is anchored (it pushes others but never moves) so the opening inverted
+  // triangle keeps its spread.
   const minD = base * 0.26 + 120;
   for (let pass = 0; pass < 6; pass++) {
     for (let i = 0; i < count; i++) for (let j = i + 1; j < count; j++) {
@@ -58,8 +61,8 @@ function buildLayout(W, H, count) {
       const d = Math.hypot(dx, dy) || 1;
       if (d < minD) {
         const push = (minD - d) / 2, ux = dx / d, uy = dy / d;
-        memories[i].x -= ux * push; memories[i].y -= uy * push;
-        memories[j].x += ux * push; memories[j].y += uy * push;
+        if (i >= 3) { memories[i].x -= ux * push; memories[i].y -= uy * push; }
+        if (j >= 3) { memories[j].x += ux * push; memories[j].y += uy * push; }
       }
     }
   }
@@ -68,17 +71,32 @@ function buildLayout(W, H, count) {
 
   // Inverted equilateral triangle (apex DOWN — like the TKE mark). Two vertices
   // across the top, one point at the bottom; photos line the three edges.
+  // Lifted slightly so the shape (whose mass sits high) reads centered on the
+  // page, with room for the copy below the apex.
   const side = base * 0.66;
   const h = (side * Math.sqrt(3)) / 2;
-  const V = { tl: { x: -side / 2, y: -h / 3 }, tr: { x: side / 2, y: -h / 3 }, apex: { x: 0, y: (2 / 3) * h } };
+  const lift = base * 0.06;
+  const V = {
+    tl: { x: -side / 2, y: -h / 3 - lift },
+    tr: { x: side / 2, y: -h / 3 - lift },
+    apex: { x: 0, y: (2 / 3) * h - lift },
+  };
   const edges = [[V.tl, V.tr], [V.tr, V.apex], [V.apex, V.tl]];
+  // Even distribution per edge, padded away from the vertices (which belong to
+  // the principle markers), each photo rotated to lie along its edge so the
+  // frames themselves draw the triangle.
+  const per = [Math.ceil(count / 3)];
+  per.push(Math.ceil((count - per[0]) / 2));
+  per.push(count - per[0] - per[1]);
+  const rots = [0, -60, 60]; // top edge level; slanted edges match their slope
   const tri = [];
-  for (let i = 0; i < count; i++) {
-    const f = (i / count) * 3;
-    const [p, q] = edges[Math.floor(f) % 3];
-    const local = f % 1;
-    tri.push({ x: p.x + (q.x - p.x) * local, y: p.y + (q.y - p.y) * local });
-  }
+  const pad = 0.075; // keep photos clear of the vertices (and of each other at the apex)
+  edges.forEach(([p, q], e) => {
+    for (let k = 0; k < per[e]; k++) {
+      const local = pad + (1 - 2 * pad) * ((k + 0.5) / per[e]);
+      tri.push({ x: p.x + (q.x - p.x) * local, y: p.y + (q.y - p.y) * local, rot: rots[e] });
+    }
+  });
 
   // Connect each photo to its two nearest neighbours → the living web.
   const pairs = [];
@@ -91,7 +109,7 @@ function buildLayout(W, H, count) {
   }
 
   const arch = { aw: base * 0.27, atop: -base * 0.2, ab: base * 0.27 };
-  return { memories, tri, V, edges, pairs, arch, base };
+  return { memories, tri, V, edges, pairs, arch, base, side };
 }
 
 export default function LivingBond({ replayToken = 0 }) {
@@ -103,8 +121,17 @@ export default function LivingBond({ replayToken = 0 }) {
     () => replayToken === 0 && typeof window !== 'undefined' && sessionStorage.getItem('tke-livingbond-seen') === '1',
     [replayToken]
   );
-  const [phase, setPhase] = useState('spark');
-  const phaseRef = useRef('spark');
+  // Dev-only: `?bond=<phase>` pins a beat with animations pre-settled, so a
+  // beat can be inspected even when the tab is hidden (rAF paused).
+  const forced = useMemo(() => {
+    if (!import.meta.env.DEV || typeof window === 'undefined') return null;
+    const p = new URLSearchParams(window.location.search).get('bond');
+    return p && SEQUENCE.includes(p) ? p : null;
+  }, []);
+  const dbg = !!forced;
+
+  const [phase, setPhase] = useState(forced || 'spark');
+  const phaseRef = useRef(forced || 'spark');
   const idxRef = useRef(0);
   const timerRef = useRef(null);
   const setP = (p) => { phaseRef.current = p; setPhase(p); };
@@ -133,6 +160,7 @@ export default function LivingBond({ replayToken = 0 }) {
   // ── timeline ──────────────────────────────────────────────────────
   useEffect(() => {
     if (done) return;
+    if (forced) return; // dev inspection — phase pinned, no timers
     // Reduced motion or a repeat visit → calm, short reveal, then hero.
     if (reduce || short) {
       setP('short');
@@ -228,7 +256,7 @@ export default function LivingBond({ replayToken = 0 }) {
       {/* center-origin stage */}
       <div className="absolute left-1/2 top-1/2" style={{ width: 0, height: 0 }}>
         {/* threads */}
-        <Threads layout={layout} phase={phase} W={dims.W} H={dims.H} sx={sx} sy={sy} cherry={CHERRY} />
+        <Threads layout={layout} phase={phase} W={dims.W} H={dims.H} sx={sx} sy={sy} cherry={CHERRY} dbg={dbg} />
 
         {/* photographs */}
         {photosMounted && layout.memories.map((pos, i) => (
@@ -243,21 +271,14 @@ export default function LivingBond({ replayToken = 0 }) {
             sx={sx}
             sy={sy}
             wave={wave}
+            dbg={dbg}
           />
         ))}
 
         {/* TKE wordmark filling the inverted triangle — the symbol revealed as
             built from the chapter's people. */}
         {(phase === 'triangle' || phase === 'principles') && (
-          <div className="absolute left-0 top-0 pointer-events-none"
-            style={{ transform: `translate(-50%, calc(-50% - ${Math.round(layout.base * 0.09)}px))` }}>
-            <motion.span aria-label="TKE" className="block font-heading font-bold text-white leading-none whitespace-nowrap"
-              style={{ fontSize: `${Math.round(layout.base * 0.2)}px`, letterSpacing: '0.04em', textShadow: '0 8px 36px rgba(0,0,0,0.75)' }}
-              initial={{ opacity: 0, scale: 0.9, y: 8 }} animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.65, ease: [0.16, 1, 0.3, 1] }}>
-              TKE
-            </motion.span>
-          </div>
+          <TkeWordmark layout={layout} dbg={dbg} />
         )}
       </div>
 
@@ -348,22 +369,26 @@ export default function LivingBond({ replayToken = 0 }) {
 }
 
 /* ── a single floating "memory" ─────────────────────────────────────── */
-function Memory({ index, mem, pos, tri, phase, size, sx, sy, wave }) {
+function Memory({ index, mem, pos, tri, phase, size, sx, sy, wave, dbg }) {
+  const inTriangle = phase === 'triangle' || phase === 'principles';
+  // Layered parallax while the constellation floats; damped to the thread
+  // layer's strength once the triangle forms, so photos stay on their edges.
   const mult = pos.layer === 0 ? 26 : pos.layer === 1 ? 15 : 8;
-  const px = useTransform(sx, (v) => v * mult);
-  const py = useTransform(sy, (v) => v * mult);
+  const multRef = useRef(mult);
+  multRef.current = inTriangle ? 10 : mult;
+  const px = useTransform(sx, (v) => v * multRef.current);
+  const py = useTransform(sy, (v) => v * multRef.current);
   const [hover, setHover] = useState(false);
 
-  const inTriangle = phase === 'triangle' || phase === 'principles';
   const visibleConnect = index < 3;
   const lit = phase === 'principles' && wave === mem.group;
 
   let target;
-  if (phase === 'spark') target = { x: 0, y: 0, scale: 0.5, opacity: 0 };
-  else if (phase === 'connect') target = visibleConnect ? { x: pos.x, y: pos.y, scale: pos.scale, opacity: 1 } : { x: 0, y: 0, scale: 0.5, opacity: 0 };
-  else if (phase === 'constellation' || phase === 'words') target = { x: pos.x, y: pos.y, scale: pos.scale, opacity: 1 };
-  else if (inTriangle) target = { x: tri.x, y: tri.y, scale: lit ? 0.6 : 0.46, opacity: 1 };
-  else target = { x: 0, y: 0, scale: 0.12, opacity: 0 }; // arch / portal
+  if (phase === 'spark') target = { x: 0, y: 0, scale: 0.5, opacity: 0, rotate: 0 };
+  else if (phase === 'connect') target = visibleConnect ? { x: pos.x, y: pos.y, scale: pos.scale, opacity: 1, rotate: 0 } : { x: 0, y: 0, scale: 0.5, opacity: 0, rotate: 0 };
+  else if (phase === 'constellation' || phase === 'words') target = { x: pos.x, y: pos.y, scale: pos.scale, opacity: 1, rotate: 0 };
+  else if (inTriangle) target = { x: tri.x, y: tri.y, scale: lit ? 0.58 : 0.46, opacity: 1, rotate: tri.rot };
+  else target = { x: 0, y: 0, scale: 0.12, opacity: 0, rotate: 0 }; // arch / portal
 
   const spring = inTriangle
     ? { type: 'spring', stiffness: 55, damping: 16, mass: 0.9 }
@@ -373,7 +398,7 @@ function Memory({ index, mem, pos, tri, phase, size, sx, sy, wave }) {
     <motion.div
       className="absolute"
       style={{ left: 0, top: 0, marginLeft: -size / 2, marginTop: -(size * 0.66) / 2, zIndex: pos.layer === 0 ? 30 : pos.layer === 1 ? 20 : 10 }}
-      initial={{ x: 0, y: 0, scale: 0.5, opacity: 0 }}
+      initial={dbg ? false : { x: 0, y: 0, scale: 0.5, opacity: 0, rotate: 0 }}
       animate={target}
       transition={spring}
     >
@@ -386,7 +411,9 @@ function Memory({ index, mem, pos, tri, phase, size, sx, sy, wave }) {
             width: size, height: size * 0.66, willChange: 'transform',
             boxShadow: lit || hover
               ? `0 10px 30px rgba(0,0,0,0.55), 0 0 0 1px rgba(214,42,30,0.6), 0 0 26px rgba(214,42,30,0.45)`
-              : '0 10px 30px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.12)',
+              : inTriangle
+                ? '0 10px 30px rgba(0,0,0,0.55), 0 0 0 2px rgba(255,255,255,0.3)'
+                : '0 10px 30px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.12)',
             transition: 'box-shadow 0.4s ease',
           }}
         >
@@ -407,8 +434,45 @@ function Memory({ index, mem, pos, tri, phase, size, sx, sy, wave }) {
   );
 }
 
+/* ── the TKE wordmark ───────────────────────────────────────────────── */
+/* Hand-traced SVG letterforms that echo the official TKE mark: heavy
+   collegiate letters with flared serifs, white with a dark keyline, on a
+   slight forward slant — no webfont added. Drawn on a 100-unit-high grid
+   (T=84, K=100, E=76 wide; 18-unit gaps → 296 total). */
+const TKE_PATHS = [
+  { d: 'M0 0H84V14L70 36L62 26H57V78L66 90V100H18V90L27 78V26H22L14 36L0 14Z', dx: 0 },
+  { d: 'M0 0H52L38 14V40L66 12L62 0H100L84 14L60 48L94 86L100 100H62L66 88L46 62L38 68V86L52 100H0L8 88V12Z', dx: 102 },
+  { d: 'M0 0H76V22L60 12H36V40H52L62 30V70L52 52H36V88H60L76 78V100H0L10 88V12Z', dx: 220 },
+];
+
+function TkeWordmark({ layout, dbg }) {
+  const { V, side } = layout;
+  // Sized to fill the upper band of the triangle edge-to-edge, like the logo.
+  const w = side * 0.68;
+  const h = (w * 100) / 296;
+  const top = V.tl.y + side * 0.08;
+  return (
+    <motion.div
+      className="absolute pointer-events-none"
+      style={{ left: -w / 2, top, width: w, height: h, zIndex: 40, filter: 'drop-shadow(0 10px 32px rgba(0,0,0,0.7))' }}
+      initial={dbg ? false : { opacity: 0, scale: 0.92, y: 10 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      transition={{ duration: 0.8, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
+    >
+      <svg viewBox="-16 -8 328 116" width="100%" height="100%" role="img" aria-label="TKE" className="overflow-visible">
+        <g transform="translate(6 0) skewX(-7)" fill="#fff" stroke="#141011" strokeWidth="5"
+          paintOrder="stroke" strokeLinejoin="miter" strokeMiterlimit="6">
+          {TKE_PATHS.map((p, i) => (
+            <path key={i} d={p.d} transform={`translate(${p.dx} 0)`} />
+          ))}
+        </g>
+      </svg>
+    </motion.div>
+  );
+}
+
 /* ── threads (SVG, center-origin) ───────────────────────────────────── */
-function Threads({ layout, phase, sx, sy, cherry }) {
+function Threads({ layout, phase, sx, sy, cherry, dbg }) {
   const px = useTransform(sx, (v) => v * 10);
   const py = useTransform(sy, (v) => v * 10);
   const { memories, edges, pairs, arch } = layout;
@@ -442,7 +506,7 @@ function Threads({ layout, phase, sx, sy, cherry }) {
       {/* triangle edges */}
       {tri && edges.map(([p, q], i) => (
         <motion.line key={`e${i}`} x1={p.x} y1={p.y} x2={q.x} y2={q.y} stroke={cherry} strokeWidth="1.6"
-          initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: 0.9 }}
+          initial={dbg ? false : { pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: 0.9 }}
           transition={{ duration: 0.9, delay: i * 0.18, ease: [0.16, 1, 0.3, 1] }}
           style={{ filter: `drop-shadow(0 0 4px ${cherry})` }} />
       ))}
