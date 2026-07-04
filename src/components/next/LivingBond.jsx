@@ -435,22 +435,23 @@ function Memory({ index, mem, pos, tri, phase, size, sx, sy, wave, dbg }) {
 }
 
 /* ── the TKE wordmark ───────────────────────────────────────────────── */
-/* Hand-traced SVG letterforms that echo the official TKE mark: heavy
-   collegiate letters with flared serifs, white with a dark keyline, on a
-   slight forward slant — no webfont added. Drawn on a 100-unit-high grid
-   (T=84, K=100, E=76 wide; 18-unit gaps → 296 total). */
+/* Hand-traced SVG letterforms that echo the official TKE mark: every stroke
+   terminal is a bifurcated "fishtail" (flares into two points with a V-notch),
+   the K dominates with wide kicked-out diagonals, letters sit nearly touching
+   on a strong forward slant — white with a dark keyline, no webfont added.
+   Drawn on a 100-unit-high grid. */
 const TKE_PATHS = [
-  { d: 'M0 0H84V14L70 36L62 26H57V78L66 90V100H18V90L27 78V26H22L14 36L0 14Z', dx: 0 },
-  { d: 'M0 0H52L38 14V40L66 12L62 0H100L84 14L60 48L94 86L100 100H62L66 88L46 62L38 68V86L52 100H0L8 88V12Z', dx: 102 },
-  { d: 'M0 0H76V22L60 12H36V40H52L62 30V70L52 52H36V88H60L76 78V100H0L10 88V12Z', dx: 220 },
+  { d: 'M0 -5L12 0L70 0L82 -5L76 10L82 25L70 20L52 20L52 80L60 100L41 91L22 100L30 80L30 20L12 20L0 25L6 10Z', dx: 0 },
+  { d: 'M-7 0L11 9L29 0L22 12L22 30L78 2L90 -5L80 9L87 20L36 44L86 78L98 74L86 88L95 100L30 66L22 66L22 88L29 100L11 91L-7 100L0 88L0 12Z', dx: 94 },
+  { d: 'M0 0L64 0L76 -5L70 9L76 23L64 18L20 18L20 42L52 42L62 37L57 50L62 63L52 58L20 58L20 82L64 82L76 77L70 91L76 105L64 100L0 100Z', dx: 200 },
 ];
 
 function TkeWordmark({ layout, dbg }) {
   const { V, side } = layout;
   // Sized to fill the upper band of the triangle edge-to-edge, like the logo.
   const w = side * 0.68;
-  const h = (w * 100) / 296;
-  const top = V.tl.y + side * 0.08;
+  const h = (w * 130) / 336; // viewBox aspect (margins included)
+  const top = V.tl.y + side * 0.065;
   return (
     <motion.div
       className="absolute pointer-events-none"
@@ -459,8 +460,8 @@ function TkeWordmark({ layout, dbg }) {
       animate={{ opacity: 1, scale: 1, y: 0 }}
       transition={{ duration: 0.8, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
     >
-      <svg viewBox="-16 -8 328 116" width="100%" height="100%" role="img" aria-label="TKE" className="overflow-visible">
-        <g transform="translate(6 0) skewX(-7)" fill="#fff" stroke="#141011" strokeWidth="5"
+      <svg viewBox="-28 -14 336 130" width="100%" height="100%" role="img" aria-label="TKE" className="overflow-visible">
+        <g transform="translate(12 0) skewX(-12)" fill="#fff" stroke="#141011" strokeWidth="5"
           paintOrder="stroke" strokeLinejoin="miter" strokeMiterlimit="6">
           {TKE_PATHS.map((p, i) => (
             <path key={i} d={p.d} transform={`translate(${p.dx} 0)`} />
