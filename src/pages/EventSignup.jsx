@@ -117,7 +117,7 @@ export default function EventSignup() {
     },
   });
 
-  const entryDollars = event ? entryCentsNow(event) / 100 : 20;
+  const entryDollars = event ? entryCentsNow(event) / 100 : CAR_SHOW.price;
   const earlyBird = isEarlyBird(event);
   const total = entryDollars;
 

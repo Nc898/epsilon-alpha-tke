@@ -9,29 +9,29 @@ import PageHero from '../components/PageHero';
 import Reveal from '../components/Reveal';
 import Magnetic from '../components/Magnetic';
 import ImageReveal from '../components/ImageReveal';
-import { CAR_SHOW, currentPrice, googleCalendarUrl } from '@/lib/carShow';
+import { CAR_SHOW, googleCalendarUrl } from '@/lib/carShow';
 
 const VEHICLE_TYPES = [
   'Restored American classics',
-  'Vintage cruisers',
+  'Vintage & antique cars',
   'European imports',
   'Japanese imports',
-  'Specialty builds',
-  'Unique enthusiast vehicles',
+  'Exotic cars',
+  'Specialty enthusiast builds',
 ];
 
 const ARRIVAL_STEPS = [
   {
-    title: 'Arrive by 10:30 AM',
-    body: 'All registered show vehicles must arrive no later than 10:30 AM so staff can stage the field before doors.',
+    title: 'Arrive before 11:00 AM',
+    body: 'Registered show vehicles meet behind Fresh Thyme Market near Colibri Real Estate before 11:00 AM so staff can stage the field.',
   },
   {
     title: 'Meet at the staging area',
     body: `Before entering the event area, drivers meet ${CAR_SHOW.meetingSpot}. Event staff will organize vehicles here.`,
   },
   {
-    title: 'Enter together',
-    body: 'All show cars enter the designated display area together once staff give the go-ahead.',
+    title: 'Enter at 11:00 AM sharp',
+    body: 'At 11:00 AM sharp, all staged show cars drive into the designated display area together.',
   },
   {
     title: 'Stay until 2:00 PM',
@@ -56,14 +56,12 @@ function RegisterButton({ size = 'lg', className = '' }) {
 }
 
 export default function CarShow() {
-  const earlyActive = currentPrice() === CAR_SHOW.earlyBirdPrice;
-
   return (
     <div className="pt-24">
       {/* ── Hero ── */}
       <PageHero
         eyebrow={`TKE for St. Jude · ${CAR_SHOW.dateLabel}`}
-        title="Classics & Imports Car Show"
+        title="All-Classics & Imports Car Show"
         accent="Car Show"
         watermark="ΤΚΕ"
         spin="stjude"
@@ -155,20 +153,12 @@ export default function CarShow() {
                 Reserve your <span className="text-primary">spot on the field</span>
               </h2>
 
-              {/* Price tiers */}
-              <div className="grid grid-cols-2 gap-4 mb-6 max-w-md">
-                <div className={`rounded-2xl border p-5 transition-all ${earlyActive ? 'border-primary bg-primary/10 ring-1 ring-primary/40' : 'border-white/15 opacity-60'}`}>
-                  <p className="text-xs uppercase tracking-widest text-white/60 font-semibold">Early-bird</p>
-                  <p className="font-heading text-4xl font-bold mt-1">${CAR_SHOW.earlyBirdPrice}</p>
-                  <p className="text-sm text-white/60 mt-1">through {CAR_SHOW.earlyBirdEndsLabel}</p>
-                  {earlyActive && <p className="text-[11px] font-bold text-accent uppercase tracking-wide mt-2">Available now</p>}
-                </div>
-                <div className={`rounded-2xl border p-5 transition-all ${!earlyActive ? 'border-primary bg-primary/10 ring-1 ring-primary/40' : 'border-white/15 opacity-60'}`}>
-                  <p className="text-xs uppercase tracking-widest text-white/60 font-semibold">Regular</p>
-                  <p className="font-heading text-4xl font-bold mt-1">${CAR_SHOW.regularPrice}</p>
-                  <p className="text-sm text-white/60 mt-1">from {CAR_SHOW.regularStartsLabel}</p>
-                  {!earlyActive && <p className="text-[11px] font-bold text-accent uppercase tracking-wide mt-2">Available now</p>}
-                </div>
+              {/* Flat vehicle price */}
+              <div className="mb-6 max-w-md rounded-2xl border border-primary bg-primary/10 p-5 ring-1 ring-primary/40">
+                <p className="text-xs uppercase tracking-widest text-white/60 font-semibold">Flat vehicle entry</p>
+                <p className="font-heading text-4xl font-bold mt-1">${CAR_SHOW.price}</p>
+                <p className="text-sm text-white/60 mt-1">per vehicle through the day of the event</p>
+                <p className="text-[11px] font-bold text-accent uppercase tracking-wide mt-2">No price increase</p>
               </div>
 
               <ul className="space-y-3 text-white/75 mb-8">
@@ -181,6 +171,10 @@ export default function CarShow() {
                   <span>Secure checkout powered by Stripe. A confirmation receipt is emailed instantly.</span>
                 </li>
                 <li className="flex items-start gap-3">
+                  <ShieldCheck className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                  <span><strong className="text-white">Transparency:</strong> TKE is insured for this event.</span>
+                </li>
+                <li className="flex items-start gap-3">
                   <AlertTriangle className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
                   <span>Registration fees are <strong className="text-white">nonrefundable</strong> due to weather unless the event is officially canceled by the organizers.</span>
                 </li>
@@ -188,7 +182,7 @@ export default function CarShow() {
 
               <RegisterButton className="h-14 px-10 text-base" />
               <p className="text-xs text-white/45 mt-4">
-                Registering charges the {earlyActive ? `$${CAR_SHOW.earlyBirdPrice} early-bird` : `$${CAR_SHOW.regularPrice}`} rate. 100% supports our St. Jude fundraising mission.
+                Registration is ${CAR_SHOW.price} per vehicle through July 26. 100% supports our St. Jude fundraising mission.
               </p>
             </Reveal>
 
@@ -222,8 +216,8 @@ export default function CarShow() {
               Classics <span className="text-primary">&</span> imports, side by side
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              Whether you own a restored American classic, a vintage cruiser, a European or Japanese
-              import, a specialty build, or another unique enthusiast vehicle, you're invited to register
+              Whether you own a restored American classic, a vintage or antique vehicle, a European or Japanese
+              import, an exotic, or another specialty enthusiast build, you're invited to register
               and display in support of St. Jude.
             </p>
           </Reveal>
@@ -353,25 +347,24 @@ export default function CarShow() {
         </div>
       </section>
 
-      {/* ── Potential Sponsor Program ── */}
+      {/* ── Series Sponsorship ── */}
       <section className="py-20 sm:py-24 bg-[hsl(0,0%,7%)] text-white overflow-hidden rounded-t-[2.5rem]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Reveal className="mx-auto max-w-3xl text-center">
-            <p className="text-accent font-semibold text-sm tracking-widest uppercase mb-3">A no-cost introduction for local organizations</p>
+            <p className="text-accent font-semibold text-sm tracking-widest uppercase mb-3">Participation and Official Sponsorship</p>
             <h2 className="font-heading text-3xl sm:text-5xl font-bold leading-tight">
-              Become a <span className="text-primary">Potential Sponsor</span>
+              Every registered vehicle <span className="text-primary">supports the mission</span>
             </h2>
             <p className="mt-5 text-white/70 leading-relaxed">
-              There is no sponsorship fee for the July Classics &amp; Imports show. This program lets businesses and automotive organizations see what a student-led TKE event can deliver, meet our community, and begin a relationship that can grow into paid sponsorships at future shows.
+              Every registered vehicle owner at the July 26 show will be recognized as a Participating Event Sponsor/Supporter. This acknowledges the owners who make the display possible while helping TKE raise support for St. Jude.
             </p>
           </Reveal>
 
-          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-12 grid gap-5 md:grid-cols-3">
             {[
-              { icon: Users, title: 'Set up a table', body: 'Create a simple, approved presence where guests can meet your organization and learn what you do.' },
-              { icon: Trophy, title: 'Receive recognition', body: 'Potential sponsors receive social-media recognition and logo placement in our rotating philanthropy-page partner showcase.' },
-              { icon: Heart, title: 'Give merchandise away', body: 'Branded merchandise, samples, and guest giveaways are welcome. Merchandise may not be sold at this event.' },
-              { icon: Car, title: 'Bring display cars', body: `Cars are welcome, but each vehicle must use the standard registration: $${CAR_SHOW.earlyBirdPrice} through ${CAR_SHOW.earlyBirdEndsLabel}, then $${CAR_SHOW.regularPrice} beginning ${CAR_SHOW.regularStartsLabel}.` },
+              { icon: Car, title: 'Participating Event Sponsor/Supporter', body: `Included with every $${CAR_SHOW.price} vehicle registration. Your participation is recognized as part of the July event’s success.` },
+              { icon: Trophy, title: 'Official Car Show Sponsor', body: 'Official Sponsors receive broader recognition across all three shows, including a spotlight on our Instagram and website.' },
+              { icon: Heart, title: 'Three shows. One cause.', body: 'The July Classics show, August Friday Night Lights, and Halloween show all benefit St. Jude Children’s Research Hospital.' },
             ].map((item, index) => (
               <Reveal key={item.title} delay={index * 0.06}>
                 <div className="h-full rounded-2xl border border-white/10 bg-white/[0.04] p-6">
@@ -386,13 +379,16 @@ export default function CarShow() {
           <div className="mt-8 grid gap-6 lg:grid-cols-[1.25fr_0.75fr] lg:items-center">
             <Reveal>
               <div className="rounded-2xl border border-accent/25 bg-accent/10 p-7">
-                <h3 className="font-heading text-2xl font-bold">Program rules at a glance</h3>
+                <h3 className="font-heading text-2xl font-bold">What Official Sponsorship adds</h3>
                 <ul className="mt-4 space-y-3 text-sm text-white/70">
-                  <li className="flex gap-3"><ShieldCheck className="mt-0.5 h-5 w-5 flex-shrink-0 text-primary" /> Participation and setup must be approved by Anthony before show day.</li>
-                  <li className="flex gap-3"><ShieldCheck className="mt-0.5 h-5 w-5 flex-shrink-0 text-primary" /> Free merchandise and giveaways are permitted; selling merchandise is not.</li>
-                  <li className="flex gap-3"><ShieldCheck className="mt-0.5 h-5 w-5 flex-shrink-0 text-primary" /> Every display vehicle requires its own paid registration, including vehicles brought by a Potential Sponsor.</li>
-                  <li className="flex gap-3"><ShieldCheck className="mt-0.5 h-5 w-5 flex-shrink-0 text-primary" /> This July program is separate from the paid August-and-October sponsorship package.</li>
+                  <li className="flex gap-3"><ShieldCheck className="mt-0.5 h-5 w-5 flex-shrink-0 text-primary" /> Recognition across the July, August, and Halloween car shows.</li>
+                  <li className="flex gap-3"><ShieldCheck className="mt-0.5 h-5 w-5 flex-shrink-0 text-primary" /> A dedicated spotlight on {CAR_SHOW.instagramHandle} and the TKE website.</li>
+                  <li className="flex gap-3"><ShieldCheck className="mt-0.5 h-5 w-5 flex-shrink-0 text-primary" /> Approved event signage, promotional materials, and activation opportunities.</li>
+                  <li className="flex gap-3"><ShieldCheck className="mt-0.5 h-5 w-5 flex-shrink-0 text-primary" /> Access to the full sponsorship packet through Anthony.</li>
                 </ul>
+                <p className="mt-5 border-t border-white/10 pt-5 text-xs leading-relaxed text-white/45">
+                  Participating Event Sponsor/Supporter recognition does not include business signage, promotional tables, or Official Sponsor benefits unless separately approved.
+                </p>
               </div>
             </Reveal>
 
@@ -404,12 +400,12 @@ export default function CarShow() {
                 <a href={CAR_SHOW.contactPhoneHref} className="mt-5 flex items-center gap-3 text-white/85 hover:text-primary transition-colors">
                   <Phone className="h-5 w-5 text-primary" /> {CAR_SHOW.contactPhone}
                 </a>
-                <a href={`mailto:${CAR_SHOW.contactEmail}?subject=Classics%20Car%20Show%20Potential%20Sponsor`} className="mt-3 flex items-center gap-3 break-all text-white/85 hover:text-primary transition-colors">
+                <a href={`mailto:${CAR_SHOW.contactEmail}?subject=Official%20Car%20Show%20Sponsorship%20Packet`} className="mt-3 flex items-center gap-3 break-all text-white/85 hover:text-primary transition-colors">
                   <Mail className="h-5 w-5 flex-shrink-0 text-primary" /> {CAR_SHOW.contactEmail}
                 </a>
-                <a href={`mailto:${CAR_SHOW.contactEmail}?subject=Classics%20Car%20Show%20Potential%20Sponsor`}>
+                <a href={`mailto:${CAR_SHOW.contactEmail}?subject=Official%20Car%20Show%20Sponsorship%20Packet`}>
                   <Button size="lg" className="mt-6 w-full rounded-full bg-primary font-semibold text-primary-foreground hover:bg-primary/90">
-                    Contact Anthony to participate
+                    Request the sponsorship packet
                   </Button>
                 </a>
               </div>
@@ -425,7 +421,7 @@ export default function CarShow() {
             <Flag className="h-9 w-9 text-primary mx-auto mb-4" />
             <h2 className="font-heading text-3xl sm:text-4xl font-bold mb-4">Ready to roll in?</h2>
             <p className="text-white/65 mb-8">
-              {CAR_SHOW.capacity} spots, first come first served. Lock in the {earlyActive ? `$${CAR_SHOW.earlyBirdPrice} early-bird rate before ${CAR_SHOW.earlyBirdEndsLabel}` : 'regular rate'}.
+              {CAR_SHOW.capacity} spots, first come first served. Registration remains ${CAR_SHOW.price} per vehicle through July 26.
             </p>
             <RegisterButton className="h-14 px-10 text-base" />
           </Reveal>

@@ -17,6 +17,10 @@ export function chicagoToday(now = new Date()) {
 // The entry price (in cents) that applies right now for the given event row.
 export function entryCentsNow(event, now = new Date()) {
   if (!event) return 0;
+  // The July 26 Classics & Imports show is permanently $30. This guard keeps
+  // checkout correct even if a deployment reaches Vercel before the database
+  // migration clears the former early-bird columns.
+  if (event.slug === 'car-show-2026') return 3000;
   const eb = event.early_bird_price_cents;
   const until = event.early_bird_until; // 'YYYY-MM-DD' or null
   if (eb != null && until && chicagoToday(now) <= until) return eb;
@@ -25,6 +29,7 @@ export function entryCentsNow(event, now = new Date()) {
 
 // True when the early-bird price is the one currently in effect.
 export function isEarlyBird(event, now = new Date()) {
+  if (event?.slug === 'car-show-2026') return false;
   return (
     !!event &&
     event.early_bird_price_cents != null &&

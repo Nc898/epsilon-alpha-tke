@@ -11,7 +11,6 @@ import {
   Heart,
   Loader2,
   Mail,
-  MapPin,
   Phone,
   ShieldCheck,
   Sparkles,
@@ -160,7 +159,7 @@ function ApplicationForm() {
       <label className="mt-6 flex cursor-pointer items-start gap-3 rounded-2xl border border-border bg-muted/40 p-4">
         <input type="checkbox" {...register('attendance_acknowledged')} className="mt-1 h-4 w-4 rounded border-border accent-[hsl(var(--primary))]" />
         <span className="text-sm leading-relaxed text-muted-foreground">
-          I understand this is an application, not an automatic confirmation. If selected, I can arrive at {EXOTICS_SHOW.meetingSpot} between {EXOTICS_SHOW.arrivalLabel} and follow TKE staging instructions.
+          I understand this is an application, not an automatic confirmation. If selected, I will follow the private arrival and staging instructions provided by TKE.
         </span>
       </label>
       <FieldError message={errors.attendance_acknowledged?.message} />
@@ -186,8 +185,8 @@ export default function ExoticsCarShow() {
     <div className="pt-24">
       <PageHero
         eyebrow={`TKE for St. Jude · ${EXOTICS_SHOW.dateLabel}`}
-        title="Exotics at the Foundry"
-        accent="Exotics"
+        title="Friday Night Lights"
+        accent="Friday"
         watermark="30"
         spin="stjude"
         lead="A private-feeling, public-facing showcase of exceptional cars—curated to 30 vehicles and benefiting St. Jude Children's Research Hospital."
@@ -216,7 +215,7 @@ export default function ExoticsCarShow() {
           {[
             { icon: Calendar, label: 'Date', value: EXOTICS_SHOW.dateLabel },
             { icon: Clock, label: 'Show hours', value: EXOTICS_SHOW.hoursLabel },
-            { icon: MapPin, label: 'Vehicle check-in', value: `${EXOTICS_SHOW.meetingSpot} · ${EXOTICS_SHOW.arrivalLabel}` },
+            { icon: Car, label: 'Entry', value: 'Free · registration required' },
             { icon: Users, label: 'Curated capacity', value: `${EXOTICS_SHOW.capacity} display vehicles` },
           ].map((fact, index) => (
             <Reveal key={fact.label} delay={index * 0.06}>
@@ -239,7 +238,7 @@ export default function ExoticsCarShow() {
           <div className="grid gap-5 md:grid-cols-3">
             {[
               { icon: Sparkles, title: 'Complimentary application', body: 'There is no display fee. A $30 St. Jude donation is encouraged but never required and never affects selection.' },
-              { icon: Car, title: 'Managed staging', body: `Approved vehicles meet at ${EXOTICS_SHOW.meetingSpot} from ${EXOTICS_SHOW.arrivalLabel}. TKE staff will coordinate the arrival and display order.` },
+              { icon: Car, title: 'Managed staging', body: 'Approved drivers receive private arrival instructions. TKE staff coordinate vehicle entry, staging, and display order.' },
               { icon: ShieldCheck, title: 'Stanchion protection', body: 'Each display vehicle will be surrounded with stanchions to create a clear guest boundary and help protect the field throughout the show.' },
             ].map((item, index) => (
               <Reveal key={item.title} delay={index * 0.08}>
@@ -285,9 +284,9 @@ export default function ExoticsCarShow() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal className="mx-auto mb-12 max-w-3xl text-center">
             <p className="text-sm font-semibold uppercase tracking-widest text-primary">Paid event sponsorship</p>
-            <h2 className="mt-3 font-heading text-4xl font-bold text-foreground sm:text-5xl">Sponsor two shows with one commitment</h2>
+            <h2 className="mt-3 font-heading text-4xl font-bold text-foreground sm:text-5xl">One Official Sponsorship. All three shows.</h2>
             <p className="mt-5 leading-relaxed text-muted-foreground">
-              A paid sponsorship begins with Exotics at the Foundry in August and continues through our all-inclusive car show planned for late October. The October location and final event details will be announced separately.
+              Official Car Show Sponsors receive recognition across the July All-Classics &amp; Imports show, Friday Night Lights in August, and our Halloween show. Final Halloween details will be announced separately.
             </p>
           </Reveal>
 
@@ -295,13 +294,13 @@ export default function ExoticsCarShow() {
             <Reveal>
               <div className="h-full rounded-3xl border border-primary/25 bg-[hsl(0,0%,7%)] p-7 text-white shadow-xl sm:p-9">
                 <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">Paid sponsor</p>
-                <h3 className="mt-3 font-heading text-3xl font-bold">Recognition and activation at both events</h3>
+                <h3 className="mt-3 font-heading text-3xl font-bold">Recognition and activation across the series</h3>
                 <p className="mt-4 leading-relaxed text-white/65">
-                  Sponsors may represent their organization with approved signage, a promotional table, brand materials, and coordinated event-day activation. Recognition applies to both the August Exotics showcase and the October all-inclusive show.
+                  Sponsors may represent their organization with approved signage, a promotional table, brand materials, and coordinated event-day activation. Recognition applies across all three 2026 charity car shows.
                 </p>
                 <ul className="mt-7 space-y-4 text-sm text-white/70">
-                  <li className="flex gap-3"><CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0 text-primary" /><span><strong className="text-white">Event signage:</strong> approved logo and brand placement at both shows.</span></li>
-                  <li className="flex gap-3"><CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0 text-primary" /><span><strong className="text-white">Digital recognition:</strong> social-media coverage and logo placement in the rotating philanthropy-page showcase.</span></li>
+                  <li className="flex gap-3"><CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0 text-primary" /><span><strong className="text-white">Series recognition:</strong> approved logo and brand placement across all three shows.</span></li>
+                  <li className="flex gap-3"><CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0 text-primary" /><span><strong className="text-white">Digital spotlight:</strong> dedicated Instagram coverage and logo placement in the rotating philanthropy-page showcase.</span></li>
                   <li className="flex gap-3"><CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0 text-primary" /><span><strong className="text-white">On-site presence:</strong> an approved table, promotional materials, or another activation coordinated with Anthony.</span></li>
                   <li className="flex gap-3"><CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0 text-primary" /><span><strong className="text-white">Automotive participation:</strong> sponsor vehicles and staging needs are coordinated directly with the event team.</span></li>
                 </ul>
@@ -350,7 +349,7 @@ export default function ExoticsCarShow() {
                 <a href={EXOTICS_SHOW.contactPhoneHref} className="mt-4 flex items-center gap-2 text-sm text-white/75 hover:text-white">
                   <Phone className="h-4 w-4 text-primary" /> {EXOTICS_SHOW.contactPhone}
                 </a>
-                <a href={`mailto:${EXOTICS_SHOW.contactEmail}?subject=Exotics%20Car%20Show%20Paid%20Sponsorship`} className="mt-3 flex items-center gap-2 break-all text-sm text-white/75 hover:text-white">
+                <a href={`mailto:${EXOTICS_SHOW.contactEmail}?subject=Official%20Three-Show%20Car%20Show%20Sponsorship`} className="mt-3 flex items-center gap-2 break-all text-sm text-white/75 hover:text-white">
                   <Mail className="h-4 w-4 flex-shrink-0 text-primary" /> {EXOTICS_SHOW.contactEmail}
                 </a>
               </div>

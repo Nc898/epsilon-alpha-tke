@@ -16,11 +16,11 @@ insert into public.events
    event_type, status, registration_open, entry_price_cents,
    capacity, rain_date, image_url)
 values
-  ('Exotics at the Foundry',
+  ('Friday Night Lights',
    'exotics-car-show-2026',
    '2026-08-28',
-   '5:30–7:30 PM',
-   'City Foundry STL — check in at Colibri Real Estate from 5:00–5:30 PM',
+   '5:00–7:00 PM',
+   'City Foundry STL — arrival instructions sent after approval',
    'A curated 30-car exotic display benefiting St. Jude Children''s Research Hospital. Complimentary application; approved display vehicles are protected by stanchions.',
    'philanthropy', 'upcoming', true, 0,
    30, null, '/assets/photos/q17.jpg')

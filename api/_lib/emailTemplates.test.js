@@ -4,6 +4,7 @@ import { confirmationEmail, reminderEmail } from './emailTemplates.js';
 const reg = { id: 'abc-123', name: 'Nick', car_year: '1969', car_make: 'Ford', car_model: 'Mustang' };
 const event = {
   title: 'TKE for St. Jude Car Show — Foundry Classics',
+  slug: 'car-show-2026',
   date: '2026-07-26', time: '11:00 AM – 2:00 PM',
   location: 'City Foundry STL', rain_date: '2026-08-02',
 };
@@ -33,6 +34,10 @@ describe('confirmationEmail', () => {
   });
   it('has a plain-text fallback', () => {
     expect(text.length).toBeGreaterThan(50);
+  });
+  it('includes insured-event and participating supporter disclosures', () => {
+    expect(html).toContain('TKE is insured for this event');
+    expect(text).toContain('Participating Event Sponsor/Supporter');
   });
 });
 

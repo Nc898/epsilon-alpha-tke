@@ -102,6 +102,11 @@ export function confirmationEmail({ registration, event }) {
   const subject = `You're registered — ${event.title}`;
   const car = carSummary(registration);
   const rainLine = rainPolicyLine(event);
+  const isJulyShow = event.slug === 'car-show-2026' || event.date === '2026-07-26';
+  const julyHtml = isJulyShow
+    ? `      <p style="margin:0 0 16px;"><strong>Transparency:</strong> TKE is insured for this event.</p>
+      <p style="margin:0 0 16px;">Your registered vehicle also receives recognition as a Participating Event Sponsor/Supporter for the July 26 show.</p>`
+    : '';
 
   const bodyHtml = `      <h1 style="font-family:${SERIF};font-size:26px;font-weight:normal;color:${BLACK};margin:0 0 8px;">You're registered!</h1>
       <p style="margin:0 0 16px;">Hi ${escapeHtml(registration.name)}, your spot at <strong>${escapeHtml(event.title)}</strong> is confirmed. We can't wait to see your <strong>${escapeHtml(car)}</strong> on the lot.</p>
@@ -109,6 +114,7 @@ ${confirmationBlockHtml(registration)}
       <h2 style="font-family:${SERIF};font-size:18px;font-weight:normal;color:${BLACK};margin:24px 0 4px;">Event Details</h2>
 ${eventDetailsHtml(event)}
       <p style="margin:0 0 16px;"><strong>Show this email at check-in.</strong></p>
+${julyHtml}
       <p style="margin:0 0 16px;color:#444444;">${escapeHtml(rainLine)}</p>`;
 
   const text = [
@@ -125,6 +131,7 @@ ${eventDetailsHtml(event)}
     `Location: ${event.location}`,
     ``,
     `Show this email at check-in.`,
+    ...(isJulyShow ? [``, `Transparency: TKE is insured for this event.`, `Your registered vehicle is recognized as a Participating Event Sponsor/Supporter.`] : []),
     ``,
     rainLine,
     ``,
@@ -145,6 +152,10 @@ export function reminderEmail({ registration, event, daysOut }) {
     : `One week until ${event.title}`;
   const car = carSummary(registration);
   const rainLine = rainPolicyLine(event);
+  const isJulyShow = event.slug === 'car-show-2026' || event.date === '2026-07-26';
+  const insuredHtml = isJulyShow
+    ? `      <p style="margin:0 0 12px;"><strong>Transparency:</strong> TKE is insured for this event.</p>`
+    : '';
 
   const intro = isTomorrow
     ? `It's almost showtime — <strong>${escapeHtml(event.title)}</strong> is <strong>tomorrow</strong>. Here are your final logistics.`
@@ -154,6 +165,7 @@ export function reminderEmail({ registration, event, daysOut }) {
     ? `      <h2 style="font-family:${SERIF};font-size:18px;font-weight:normal;color:${BLACK};margin:24px 0 8px;">Final Logistics</h2>
       <p style="margin:0 0 12px;">Arrive early for load-in so we can get your ${escapeHtml(car)} parked and polished before gates open. Show your confirmation email at check-in.</p>
       <h2 style="font-family:${SERIF};font-size:18px;font-weight:normal;color:${BLACK};margin:24px 0 8px;">Weather Call</h2>
+${insuredHtml}
       <p style="margin:0 0 12px;color:#444444;">${escapeHtml(rainLine)}</p>`
     : `      <h2 style="font-family:${SERIF};font-size:18px;font-weight:normal;color:${BLACK};margin:24px 0 8px;">Schedule</h2>
       <p style="margin:0 0 12px;">${escapeHtml(formatDate(event.date))}, ${escapeHtml(event.time)} at ${escapeHtml(event.location)}.</p>
@@ -161,6 +173,7 @@ export function reminderEmail({ registration, event, daysOut }) {
       <p style="margin:0 0 12px;">Plan to arrive before gates open — volunteers will direct you to your spot for the ${escapeHtml(car)}. Load-in details will be in your day-before email.</p>
       <h2 style="font-family:${SERIF};font-size:18px;font-weight:normal;color:${BLACK};margin:24px 0 8px;">Raffle</h2>
       <p style="margin:0 0 12px;">We've lined up some great raffle prizes — bring a few extra dollars and try your luck for a good cause.</p>
+${insuredHtml}
       <p style="margin:0 0 12px;color:#444444;">${escapeHtml(rainLine)}</p>`;
 
   const bodyHtml = `      <h1 style="font-family:${SERIF};font-size:26px;font-weight:normal;color:${BLACK};margin:0 0 8px;">${isTomorrow ? 'See you tomorrow!' : 'One week to go!'}</h1>
@@ -174,6 +187,7 @@ ${confirmationBlockHtml(registration)}`;
         `Arrive early for load-in so we can get your ${car} parked and polished before gates open. Show your confirmation email at check-in.`,
         ``,
         `Weather Call`,
+        ...(isJulyShow ? [`Transparency: TKE is insured for this event.`] : []),
         rainLine,
       ]
     : [
@@ -186,6 +200,7 @@ ${confirmationBlockHtml(registration)}`;
         `Raffle`,
         `We've lined up some great raffle prizes — bring a few extra dollars and try your luck for a good cause.`,
         ``,
+        ...(isJulyShow ? [`Transparency: TKE is insured for this event.`, ``] : []),
         rainLine,
       ];
 

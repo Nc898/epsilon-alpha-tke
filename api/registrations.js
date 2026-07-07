@@ -28,7 +28,7 @@ function decisionEmail(registration, status) {
     approved: {
       title: 'Your display spot is confirmed',
       body: `Your ${vehicle} has been selected for the 30-car field at ${EXOTICS_SHOW.name}.`,
-      next: `Meet the TKE staging team at ${EXOTICS_SHOW.meetingSpot} between ${EXOTICS_SHOW.arrivalLabel}. Detailed arrival guidance will be emailed before the show.`,
+      next: `Detailed arrival and staging guidance will be emailed before the show.`,
     },
     waitlisted: {
       title: 'You are on the display waitlist',

@@ -34,8 +34,8 @@ export default async function handler(req, res) {
       }
     }
 
-    // Authoritative price: honors the early-bird window server-side so the
-    // charge can't be tampered with from the client.
+    // Authoritative server-side price so the charge cannot be tampered with
+    // from the client. Handles flat and optional time-window event pricing.
     const entryCents = entryCentsNow(event);
     const donationCents = reg.donation_dollars * 100;
     const { data: row, error: insertErr } = await supabaseAdmin

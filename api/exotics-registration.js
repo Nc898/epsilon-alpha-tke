@@ -26,7 +26,7 @@ function applicantEmail(registration) {
           <table style="width:100%;margin:24px 0;border-collapse:collapse">
             <tr><td style="padding:7px 0;color:#777;width:100px">Date</td><td style="padding:7px 0"><strong>${esc(EXOTICS_SHOW.dateLabel)}</strong></td></tr>
             <tr><td style="padding:7px 0;color:#777">Show</td><td style="padding:7px 0">${esc(EXOTICS_SHOW.hoursLabel)}</td></tr>
-            <tr><td style="padding:7px 0;color:#777">Arrival</td><td style="padding:7px 0">${esc(EXOTICS_SHOW.arrivalLabel)} at ${esc(EXOTICS_SHOW.meetingSpot)}</td></tr>
+            <tr><td style="padding:7px 0;color:#777">Arrival</td><td style="padding:7px 0">${esc(EXOTICS_SHOW.arrivalLabel)}</td></tr>
           </table>
           <p>Approved vehicles will receive arrival and staging instructions by email. Display vehicles will be surrounded by stanchions during the show.</p>
           <p style="margin:24px 0"><a href="${ST_JUDE_URL}" style="display:inline-block;background:#AD2624;color:#fff;text-decoration:none;font-weight:700;padding:13px 20px;border-radius:999px">Make the suggested $${EXOTICS_SHOW.suggestedDonation} St. Jude donation</a></p>
@@ -40,7 +40,7 @@ function applicantEmail(registration) {
       `Submitting an application does not guarantee a display spot; our team will contact you separately after review.`,
       '',
       `${EXOTICS_SHOW.dateLabel} · ${EXOTICS_SHOW.hoursLabel}`,
-      `Arrival: ${EXOTICS_SHOW.arrivalLabel} at ${EXOTICS_SHOW.meetingSpot}`,
+      `Arrival: ${EXOTICS_SHOW.arrivalLabel}`,
       '',
       `Suggested $${EXOTICS_SHOW.suggestedDonation} St. Jude donation (never required): ${ST_JUDE_URL}`,
       '',
