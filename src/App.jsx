@@ -26,7 +26,9 @@ const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
 const ResetPassword = lazy(() => import('./pages/ResetPassword'));
 const EventSignup = lazy(() => import('./pages/EventSignup'));
 const CarShow = lazy(() => import('./pages/CarShow'));
-const ExoticsCarShow = lazy(() => import('./pages/ExoticsCarShow'));
+// HIDDEN — Exotics Car Show (Friday Night Lights) registration is paused.
+// Restore this import + the two routes below together to bring it back.
+// const ExoticsCarShow = lazy(() => import('./pages/ExoticsCarShow'));
 const Donate = lazy(() => import('./pages/Donate'));
 const AdminRegistrations = lazy(() => import('./pages/AdminRegistrations'));
 const Gallery = lazy(() => import('./pages/Gallery'));
@@ -83,8 +85,11 @@ const AuthenticatedApp = () => {
           <Route path="/events/:slug" element={<EventSignup />} />
           <Route path="/carshow" element={<CarShow />} />
           <Route path="/car-show" element={<CarShow />} />
-          <Route path="/exotics-car-show" element={<ExoticsCarShow />} />
-          <Route path="/events/exotics-car-show-2026" element={<ExoticsCarShow />} />
+          {/* HIDDEN — see ExoticsCarShow import above. /exotics-car-show falls to
+              the 404 page; /events/exotics-car-show-2026 falls to /events/:slug
+              (EventSignup), which shows its on-brand "Event not found" card. */}
+          {/* <Route path="/exotics-car-show" element={<ExoticsCarShow />} /> */}
+          {/* <Route path="/events/exotics-car-show-2026" element={<ExoticsCarShow />} /> */}
           <Route path="/donate" element={<Donate />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/gallery/:slug" element={<GalleryAlbum />} />

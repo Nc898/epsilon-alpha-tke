@@ -10,7 +10,10 @@ import Reveal from '../components/Reveal';
 import { Heart, Mail, ExternalLink, Car, Calendar, MapPin, ArrowRight, CheckCircle2, Handshake, Megaphone } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { CAR_SHOW } from '@/lib/carShow';
-import { EXOTICS_SHOW, ST_JUDE_URL } from '@/lib/exoticsCarShow';
+import { ST_JUDE_URL } from '@/lib/exoticsCarShow';
+// HIDDEN — EXOTICS_SHOW is unused while the Friday Night Lights promo card
+// below is commented out. Restore this import alongside that card.
+// import { EXOTICS_SHOW } from '@/lib/exoticsCarShow';
 
 export default function Philanthropy() {
   const { data: sponsors = [] } = useQuery({
@@ -122,6 +125,9 @@ export default function Philanthropy() {
             </div>
           </Reveal>
 
+          {/* HIDDEN — Friday Night Lights / Exotics Car Show promo card.
+              Restore alongside the EXOTICS_SHOW import above, the routes in
+              App.jsx, and the news.js entry.
           <Reveal delay={0.08}>
             <div className="relative mt-8 overflow-hidden rounded-[2rem] bg-[hsl(0,0%,7%)] text-white shadow-2xl">
               <div className="grid grid-cols-1 lg:grid-cols-2">
@@ -165,6 +171,7 @@ export default function Philanthropy() {
               </div>
             </div>
           </Reveal>
+          */}
 
           <Reveal delay={0.12}>
             <div className="relative mt-8 overflow-hidden rounded-[2rem] border border-border bg-card p-8 shadow-xl sm:p-10 lg:p-12">
@@ -253,9 +260,11 @@ export default function Philanthropy() {
                   <li className="flex gap-3"><CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-primary" /> Logo in the rotating website sponsor showcase</li>
                   <li className="flex gap-3"><CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-primary" /> Sponsor activation coordinated directly with Anthony</li>
                 </ul>
-                <Link to="/exotics-car-show">
+                {/* Was linked to the now-hidden /exotics-car-show page; points
+                    to the sponsor-inquiry channel instead. */}
+                <a href="mailto:slutkestewardship@gmail.com?subject=TKE%20Car%20Show%20Partnership">
                   <Button className="mt-7 rounded-full bg-primary font-semibold text-primary-foreground hover:bg-primary/90">View paid sponsorship details <ArrowRight className="ml-2 h-4 w-4" /></Button>
-                </Link>
+                </a>
               </div>
             </Reveal>
           </div>

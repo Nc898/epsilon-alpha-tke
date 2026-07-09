@@ -11,14 +11,16 @@ export const NEWS_ITEMS = [
     body: "The 2026 series begins with the All-Classics & Imports Car Show on July 26, continues with the 30-car Friday Night Lights exotics showcase on August 28, and concludes with a Halloween show—details coming soon. Official Car Show Sponsors receive recognition across all three events, plus an Instagram and website spotlight.",
     cta: { label: 'Explore the Series', to: '/philanthropy' },
   },
-  {
-    id: 'exotics-car-show-2026',
-    icon: Flag,
-    tag: 'Applications Open',
-    title: 'Friday Night Lights — 30-Car Exotics Showcase',
-    body: "Friday, August 28 from 5:00–7:00 PM at City Foundry STL. Entry is free, registration is required, and the exotics-only field is capped at 30 vehicles. Apply online or contact Anthony Fahim at 314-374-5893.",
-    cta: { label: 'Apply to Display', to: '/exotics-car-show' },
-  },
+  // HIDDEN — Exotics Car Show registration is paused; restore alongside the
+  // routes in App.jsx and the promo card in Philanthropy.jsx.
+  // {
+  //   id: 'exotics-car-show-2026',
+  //   icon: Flag,
+  //   tag: 'Applications Open',
+  //   title: 'Friday Night Lights — 30-Car Exotics Showcase',
+  //   body: "Friday, August 28 from 5:00–7:00 PM at City Foundry STL. Entry is free, registration is required, and the exotics-only field is capped at 30 vehicles. Apply online or contact Anthony Fahim at 314-374-5893.",
+  //   cta: { label: 'Apply to Display', to: '/exotics-car-show' },
+  // },
   {
     id: 'carshow-2026',
     icon: Flag,
