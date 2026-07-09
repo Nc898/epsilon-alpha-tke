@@ -59,8 +59,8 @@ export default function StJudeSection() {
                 </div>
               </ImageReveal>
               <div className="absolute -bottom-6 -left-6 bg-accent text-accent-foreground rounded-xl p-5 shadow-xl">
-                <p className="font-heading text-3xl font-bold">$50K</p>
-                <p className="text-sm font-medium">Annual Goal</p>
+                <p className="font-heading text-3xl font-bold">$30,104</p>
+                <p className="text-sm font-medium">Raised in 2025–26</p>
               </div>
             </div>
           </Reveal>

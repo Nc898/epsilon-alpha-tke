@@ -23,8 +23,12 @@ function CountUp({ to, format = (v) => Math.round(v).toLocaleString(), duration 
   return <span ref={ref}>{format(val)}</span>;
 }
 
-export default function FundraisingTracker({ raised = 12400, goal = 50000, isLoading = false, lastUpdated = null }) {
-  const pct = goal > 0 ? Math.min((raised / goal) * 100, 100) : 0;
+export default function FundraisingTracker({ raised = 12400, goal = 50000, isLoading = false, lastUpdated = null, periodLabel = null }) {
+  // When there is no goal (e.g. a completed fundraising year), the ring is a
+  // full celebratory circle and the dollar total sits in the center instead of
+  // a percent-of-goal.
+  const hasGoal = goal > 0;
+  const pct = hasGoal ? Math.min((raised / goal) * 100, 100) : 100;
   const r = 90;
   const circ = 2 * Math.PI * r;
   const offset = circ - (pct / 100) * circ;
@@ -60,10 +64,23 @@ export default function FundraisingTracker({ raised = 12400, goal = 50000, isLoa
               </svg>
               <div className="absolute inset-0 flex flex-col items-center justify-center">
                 <Heart className="h-6 w-6 text-primary mb-2" />
-                <p className="font-heading text-3xl sm:text-4xl font-bold text-foreground">
-                  <CountUp to={pct} format={(v) => `${Math.round(v)}%`} />
-                </p>
-                <p className="text-muted-foreground text-xs mt-1 uppercase tracking-wide">of goal</p>
+                {hasGoal ? (
+                  <>
+                    <p className="font-heading text-3xl sm:text-4xl font-bold text-foreground">
+                      <CountUp to={pct} format={(v) => `${Math.round(v)}%`} />
+                    </p>
+                    <p className="text-muted-foreground text-xs mt-1 uppercase tracking-wide">of goal</p>
+                  </>
+                ) : (
+                  <>
+                    <p className="font-heading text-2xl sm:text-3xl font-bold text-foreground">
+                      $<CountUp to={raised} />
+                    </p>
+                    {periodLabel && (
+                      <p className="text-muted-foreground text-xs mt-1 uppercase tracking-wide">{periodLabel}</p>
+                    )}
+                  </>
+                )}
               </div>
             </>
           )}
@@ -73,11 +90,19 @@ export default function FundraisingTracker({ raised = 12400, goal = 50000, isLoa
             <div className="h-6 w-40 bg-muted animate-pulse rounded mx-auto" />
           ) : (
             <>
-              <p className="text-foreground font-heading text-xl font-bold">
-                $<CountUp to={raised} />{' '}
-                <span className="text-muted-foreground font-body text-sm font-normal">/ ${goal.toLocaleString()}</span>
-              </p>
-              <p className="text-muted-foreground text-sm mt-1">raised for St. Jude Children's Research Hospital</p>
+              {hasGoal ? (
+                <p className="text-foreground font-heading text-xl font-bold">
+                  $<CountUp to={raised} />{' '}
+                  <span className="text-muted-foreground font-body text-sm font-normal">/ ${goal.toLocaleString()}</span>
+                </p>
+              ) : (
+                <p className="text-foreground font-heading text-xl font-bold">
+                  Raised for St. Jude Children&apos;s Research Hospital
+                </p>
+              )}
+              {hasGoal && (
+                <p className="text-muted-foreground text-sm mt-1">raised for St. Jude Children&apos;s Research Hospital</p>
+              )}
               {formattedLastUpdated && (
                 <p className="text-muted-foreground text-xs mt-2">Updated {formattedLastUpdated} CT</p>
               )}

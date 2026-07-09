@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { animate, useInView, useReducedMotion } from 'framer-motion';
-import { DollarSign, Users, Calendar, TrendingUp } from 'lucide-react';
+import { DollarSign, Users, Calendar } from 'lucide-react';
 import Reveal from './Reveal';
 
 function CountUp({ value, prefix = '', suffix = '' }) {
@@ -39,22 +39,20 @@ export default function ImpactStats() {
   });
 
   const stats = statsArr[0];
-  const raised = stats?.amount_raised ?? 12400;
+  // 2025–2026 fundraising year is complete — show the final total, no goal.
+  const raised = 30104;
   const donors = stats?.donor_count ?? 42;
-  const goal = stats?.goal ?? 50000;
-  const pct = goal > 0 ? Math.round((raised / goal) * 100) : 0;
 
   const STATS = [
-    { icon: DollarSign, value: raised > 0 ? raised : null, prefix: '$', label: 'Raised for St. Jude', accent: true },
+    { icon: DollarSign, value: raised, prefix: '$', label: 'Raised in 2025–26', accent: true },
     { icon: Users, value: donors > 0 ? donors : null, label: 'Total Donors' },
     { icon: Calendar, value: 12, label: 'Events Hosted' },
-    { icon: TrendingUp, value: pct > 0 ? pct : null, suffix: '%', label: 'Goal Progress' },
   ];
 
   return (
     <section className="py-16 bg-[hsl(240,10%,94%)] border-y border-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
           {STATS.map((s, i) => (
             <Reveal key={s.label} delay={i * 0.08} className="text-center">
               <div className={`w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4 ${

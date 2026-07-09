@@ -21,16 +21,16 @@ export default function Philanthropy() {
     queryFn: () => base44.entities.Sponsor.filter({ active: true }),
   });
 
-  const { data: statsArr = [], isLoading: statsLoading } = useQuery({
+  const { data: statsArr = [] } = useQuery({
     queryKey: ['fundraising-stats'],
     queryFn: () => base44.entities.FundraisingStats.list(),
     staleTime: 1000 * 60 * 30,
   });
 
   const fStats = statsArr[0];
-  const raised = fStats?.amount_raised ?? 12400;
-  const goal = fStats?.goal ?? 50000;
-  const lastUpdated = fStats?.last_updated ?? null;
+  // 2025–2026 fundraising year is complete — show the final total, no goal.
+  const YEAR_LABEL = '2025–2026';
+  const raised = 30104;
 
   return (
     <div className="pt-24">
@@ -65,7 +65,7 @@ export default function Philanthropy() {
       {/* Live stats marquee */}
       <Marquee
         phrases={[
-          `$${raised.toLocaleString()} raised`,
+          `$${raised.toLocaleString()} raised in ${YEAR_LABEL}`,
           `${fStats?.donor_count ?? 42} donors strong`,
           'Fighting childhood cancer',
           'TKE × St. Jude',
@@ -200,16 +200,16 @@ export default function Philanthropy() {
             <p className="text-accent font-semibold text-sm tracking-widest uppercase mb-3">Our Progress</p>
             <h2 className="font-heading text-3xl sm:text-4xl font-bold text-foreground">Fundraising Impact</h2>
             <p className="text-muted-foreground mt-3 max-w-xl mx-auto">
-              Live totals pulled directly from our{' '}
+              Our {YEAR_LABEL} total raised for{' '}
               <a href={ST_JUDE_URL} target="_blank" rel="noopener noreferrer"
                 className="text-primary underline underline-offset-2 hover:text-primary/80">
-                St. Jude fundraising page
+                St. Jude Children&apos;s Research Hospital
               </a>
-              , updated three times daily.
+              . Thank you to everyone who gave.
             </p>
           </Reveal>
           <div className="flex justify-center">
-            <FundraisingTracker raised={raised} goal={goal} isLoading={statsLoading} lastUpdated={lastUpdated} />
+            <FundraisingTracker raised={raised} goal={0} periodLabel={YEAR_LABEL} />
           </div>
         </div>
       </section>
