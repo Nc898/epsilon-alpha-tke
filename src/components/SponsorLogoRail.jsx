@@ -1,8 +1,12 @@
 import { Building2 } from 'lucide-react';
 
 function SponsorLogo({ sponsor, duplicate = false }) {
+  // Logos designed on a dark background get a dark tile and keep their color;
+  // everything else uses the light tile with the grayscale-until-hover effect.
+  const dark = sponsor.darkBg;
+  const imgClass = dark ? 'max-h-16 max-w-[210px] object-contain' : 'max-h-12 max-w-[170px] object-contain';
   const content = sponsor.logo ? (
-    <img src={sponsor.logo} alt={duplicate ? '' : sponsor.name} loading="lazy" decoding="async" className="max-h-12 max-w-[170px] object-contain" />
+    <img src={sponsor.logo} alt={duplicate ? '' : sponsor.name} loading="lazy" decoding="async" className={imgClass} />
   ) : (
     <div className="flex items-center gap-2 text-muted-foreground">
       <Building2 className="h-5 w-5" />
@@ -10,7 +14,11 @@ function SponsorLogo({ sponsor, duplicate = false }) {
     </div>
   );
 
-  const className = 'flex h-24 min-w-[220px] items-center justify-center rounded-2xl border border-border bg-card px-7 grayscale transition-all hover:border-primary/30 hover:grayscale-0';
+  const className = `flex h-24 min-w-[220px] items-center justify-center rounded-2xl border px-7 transition-all ${
+    dark
+      ? 'border-white/10 bg-[hsl(0,0%,8%)] hover:border-primary/40'
+      : 'border-border bg-card grayscale hover:border-primary/30 hover:grayscale-0'
+  }`;
 
   if (sponsor.website) {
     return (

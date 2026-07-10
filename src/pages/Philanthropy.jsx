@@ -10,16 +10,19 @@ import Reveal from '../components/Reveal';
 import { Heart, Mail, ExternalLink, Car, Calendar, MapPin, ArrowRight, CheckCircle2, Handshake, Megaphone } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { CAR_SHOW } from '@/lib/carShow';
+import { FEATURED_SPONSORS } from '@/lib/sponsors';
 import { ST_JUDE_URL } from '@/lib/exoticsCarShow';
 // HIDDEN — EXOTICS_SHOW is unused while the Friday Night Lights promo card
 // below is commented out. Restore this import alongside that card.
 // import { EXOTICS_SHOW } from '@/lib/exoticsCarShow';
 
 export default function Philanthropy() {
-  const { data: sponsors = [] } = useQuery({
+  const { data: remoteSponsors = [] } = useQuery({
     queryKey: ['sponsors'],
     queryFn: () => base44.entities.Sponsor.filter({ active: true }),
   });
+  // Featured (static) sponsors always show; any live Base44 sponsors follow.
+  const sponsors = [...FEATURED_SPONSORS, ...remoteSponsors];
 
   const { data: statsArr = [] } = useQuery({
     queryKey: ['fundraising-stats'],
