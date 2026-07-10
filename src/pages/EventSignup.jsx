@@ -62,8 +62,12 @@ function FieldError({ error }) {
   return <p className="text-destructive text-xs mt-1">{error.message}</p>;
 }
 
-export default function EventSignup() {
-  const { slug } = useParams();
+// `eventSlug` / `sponsor` are only passed by the sponsor-attributed wrapper
+// (src/pages/SponsorCarShowSignup.jsx). The direct /events/:slug route renders
+// with neither, and nothing about the direct experience changes.
+export default function EventSignup({ eventSlug = null, sponsor = null }) {
+  const { slug: routeSlug } = useParams();
+  const slug = eventSlug ?? routeSlug;
   const [searchParams, setSearchParams] = useSearchParams();
   const status = searchParams.get('status');
 
@@ -137,7 +141,14 @@ export default function EventSignup() {
       const res = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ event_slug: slug, registration: values }),
+        // Only the sponsor SLUG is sent — the server validates it against the
+        // approved list and derives the sponsor name itself, so attribution
+        // can't be forged or altered from the browser.
+        body: JSON.stringify({
+          event_slug: slug,
+          registration: values,
+          ...(sponsor ? { sponsor_slug: sponsor.slug } : {}),
+        }),
       });
       const data = await res.json().catch(() => ({}));
       // Seamless path: registration saved + a dynamic Stripe Checkout session.
@@ -331,6 +342,14 @@ export default function EventSignup() {
             )}
 
             <motion.div {...fadeUp(0.1)} className="bg-card border border-border rounded-xl p-6 sm:p-8 shadow-sm">
+              {sponsor && (
+                <p className="mb-5 rounded-lg border border-border bg-muted/50 px-4 py-3 text-xs leading-relaxed text-muted-foreground">
+                  {sponsor.acknowledgment ||
+                    `You are registering through the ${sponsor.name} community registration page.`}{' '}
+                  This event is organized by TKE Epsilon Alpha and benefits St.&nbsp;Jude
+                  Children&apos;s Research Hospital; payment is processed by TKE via Stripe.
+                </p>
+              )}
               <h2 className="font-heading text-xl font-bold text-foreground mb-1">Register your vehicle</h2>
               <p className="text-muted-foreground text-sm mb-6">
                 <span className="font-semibold text-foreground">Step 1 of 2.</span> Tell us about your

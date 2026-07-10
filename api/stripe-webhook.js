@@ -33,13 +33,46 @@ export default async function handler(req, res) {
   if (stripeEvent.type === 'checkout.session.completed') {
     try {
       const session = stripeEvent.data.object;
-      const regId = session.metadata?.registration_id;
+      const md = session.metadata ?? {};
+      const regId = md.registration_id;
       if (regId) {
-        const { data: reg } = await supabaseAdmin
+        // Payment truth comes from this signature-verified webhook — never
+        // from the success-page redirect. The update is idempotent: Stripe
+        // may deliver the event more than once, and re-applying the same
+        // values (keyed by our own registration_id) is harmless; the email
+        // send below is separately guarded by the unique email_log row.
+        const paidUpdate = {
+          status: 'paid',
+          amount_paid_cents: session.amount_total,
+          stripe_payment_intent_id:
+            typeof session.payment_intent === 'string'
+              ? session.payment_intent
+              : session.payment_intent?.id ?? null,
+        };
+        // Re-persist the sponsor attribution from Stripe metadata (set
+        // server-side at checkout from the approved list — not client input)
+        // so it survives even if the pending row predates the migration.
+        if (md.registration_source === 'sponsor' && md.sponsor_slug) {
+          paidUpdate.registration_source = 'sponsor';
+          paidUpdate.sponsor_name = md.sponsor_name ?? null;
+          paidUpdate.sponsor_slug = md.sponsor_slug;
+        }
+
+        let { data: reg, error: updateErr } = await supabaseAdmin
           .from('registrations')
-          .update({ status: 'paid', amount_paid_cents: session.amount_total })
+          .update(paidUpdate)
           .eq('id', regId)
           .select('*, events(*)').single();
+        if (updateErr) {
+          // Migration-lag safety: never let missing attribution columns block
+          // marking a verified payment as paid.
+          console.error('paid update with attribution failed, retrying legacy payload:', updateErr);
+          ({ data: reg } = await supabaseAdmin
+            .from('registrations')
+            .update({ status: 'paid', amount_paid_cents: session.amount_total })
+            .eq('id', regId)
+            .select('*, events(*)').single());
+        }
 
         // Confirmation email is best-effort: the paid registration is already
         // saved above. Only attempt a send when Resend is configured, so a

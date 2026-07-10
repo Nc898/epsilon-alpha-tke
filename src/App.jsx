@@ -25,6 +25,7 @@ const Register = lazy(() => import('./pages/Register'));
 const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
 const ResetPassword = lazy(() => import('./pages/ResetPassword'));
 const EventSignup = lazy(() => import('./pages/EventSignup'));
+const SponsorCarShowSignup = lazy(() => import('./pages/SponsorCarShowSignup'));
 const CarShow = lazy(() => import('./pages/CarShow'));
 // HIDDEN — Exotics Car Show (Friday Night Lights) registration is paused.
 // Restore this import + the two routes below together to bring it back.
@@ -85,6 +86,8 @@ const AuthenticatedApp = () => {
           <Route path="/events/:slug" element={<EventSignup />} />
           <Route path="/carshow" element={<CarShow />} />
           <Route path="/car-show" element={<CarShow />} />
+          {/* Sponsor-attributed car show registration (see src/lib/carShowSponsors.js) */}
+          <Route path="/carshow/register/:sponsorSlug" element={<SponsorCarShowSignup />} />
           {/* HIDDEN — see ExoticsCarShow import above. /exotics-car-show falls to
               the 404 page; /events/exotics-car-show-2026 falls to /events/:slug
               (EventSignup), which shows its on-brand "Event not found" card. */}

@@ -38,7 +38,13 @@ function csvEscape(value) {
 }
 
 function exportCsv(rows) {
-  const headers = ['Name', 'Email', 'Phone', 'Car Year', 'Car Make', 'Car Model', 'Color', 'Instagram', 'Application Notes', 'Class', 'Status', 'Amount Paid', 'Donation', 'Event', 'Registered At'];
+  const headers = [
+    'Name', 'Email', 'Phone', 'Car Year', 'Car Make', 'Car Model', 'Color', 'Instagram',
+    'Application Notes', 'Class', 'Status', 'Amount Paid', 'Donation', 'Event', 'Registered At',
+    // Sponsor attribution (payment_status mirrors Status; amount_paid mirrors Amount Paid)
+    'registration_source', 'sponsor_name', 'sponsor_slug', 'referral_page',
+    'payment_status', 'amount_paid', 'stripe_session_id', 'stripe_payment_intent_id',
+  ];
   const lines = [headers.join(',')];
   for (const r of rows) {
     lines.push([
@@ -48,6 +54,10 @@ function exportCsv(rows) {
       ((r.amount_paid_cents ?? 0) / 100).toFixed(2),
       ((r.donation_cents ?? 0) / 100).toFixed(2),
       r.events?.title, r.created_at,
+      r.registration_source ?? 'direct', r.sponsor_name, r.sponsor_slug, r.referral_page,
+      r.status,
+      ((r.amount_paid_cents ?? 0) / 100).toFixed(2),
+      r.stripe_session_id, r.stripe_payment_intent_id,
     ].map(csvEscape).join(','));
   }
   const blob = new Blob([lines.join('\n')], { type: 'text/csv;charset=utf-8' });
@@ -59,6 +69,22 @@ function exportCsv(rows) {
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
+}
+
+// "Direct" vs "Registered through <sponsor> sponsor link" — sponsor rows get a
+// tinted badge; the full sentence + referral URL live in the hover title.
+function SourceBadge({ registration }) {
+  if (registration.registration_source === 'sponsor' && registration.sponsor_name) {
+    return (
+      <span
+        title={`Registered through ${registration.sponsor_name} sponsor link${registration.referral_page ? ` — ${registration.referral_page}` : ''}`}
+        className="inline-flex items-center rounded-full border border-primary/25 bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary"
+      >
+        {registration.sponsor_name}
+      </span>
+    );
+  }
+  return <span className="text-muted-foreground text-xs">Direct</span>;
 }
 
 function KeyForm({ onSubmit, error }) {
@@ -112,6 +138,7 @@ export default function AdminRegistrations() {
   const [key, setKey] = useState(() => sessionStorage.getItem(KEY_STORAGE) || '');
   const [authError, setAuthError] = useState('');
   const [decisionMessage, setDecisionMessage] = useState('');
+  const [sourceFilter, setSourceFilter] = useState('all'); // 'all' | 'direct' | sponsor slug
   const queryClient = useQueryClient();
 
   const { data, isLoading, isError } = useQuery({
@@ -182,6 +209,37 @@ export default function AdminRegistrations() {
 
   const { registrations, totals } = data;
 
+  // Sponsor filter options come from the data itself (name keyed by slug).
+  const sponsorOptions = [...new Map(
+    registrations
+      .filter((r) => r.registration_source === 'sponsor' && r.sponsor_slug)
+      .map((r) => [r.sponsor_slug, r.sponsor_name || r.sponsor_slug])
+  ).entries()];
+
+  const filtered = registrations.filter((r) => {
+    if (sourceFilter === 'all') return true;
+    if (sourceFilter === 'direct') return (r.registration_source ?? 'direct') !== 'sponsor';
+    return r.sponsor_slug === sourceFilter;
+  });
+
+  // Per-source summary for the filtered view. Only verified paid money counts
+  // as collected (webhook-confirmed statuses, never the success redirect).
+  const summary = filtered.reduce(
+    (acc, r) => {
+      acc.total += 1;
+      if (r.status === 'paid' || r.status === 'checked_in') {
+        acc.paidCount += 1;
+        acc.collected_cents += r.amount_paid_cents ?? 0;
+      } else if (r.status === 'pending') acc.pending += 1;
+      else acc.other += 1; // refunded / declined / cancelled-equivalents
+      return acc;
+    },
+    { total: 0, paidCount: 0, pending: 0, other: 0, collected_cents: 0 }
+  );
+  const filterLabel = sourceFilter === 'direct'
+    ? 'Direct'
+    : sponsorOptions.find(([slug]) => slug === sourceFilter)?.[1] ?? '';
+
   return (
     <div className="pt-24 pb-16">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
@@ -191,7 +249,19 @@ export default function AdminRegistrations() {
             <p className="text-muted-foreground text-sm mt-1">Car show pre-registration dashboard</p>
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="outline" onClick={() => exportCsv(registrations)} className="gap-2">
+            <select
+              aria-label="Filter by registration source"
+              value={sourceFilter}
+              onChange={(e) => setSourceFilter(e.target.value)}
+              className="rounded-lg border border-border bg-background px-3 py-2 text-sm font-medium text-foreground"
+            >
+              <option value="all">All sources</option>
+              <option value="direct">Direct</option>
+              {sponsorOptions.map(([slug, name]) => (
+                <option key={slug} value={slug}>{name}</option>
+              ))}
+            </select>
+            <Button variant="outline" onClick={() => exportCsv(filtered)} className="gap-2">
               <Download className="h-4 w-4" /> Export CSV
             </Button>
             <Button variant="ghost" onClick={signOut} className="gap-2 text-muted-foreground">
@@ -209,6 +279,21 @@ export default function AdminRegistrations() {
           <StatTile label="St. Jude donations" value={dollars(totals.donation_cents)} />
         </div>
 
+        {sourceFilter !== 'all' && (
+          <div className="mb-8 rounded-xl border border-primary/20 bg-primary/5 p-5">
+            <p className="text-xs uppercase tracking-wider font-semibold text-primary mb-3">
+              {sourceFilter === 'direct' ? 'Direct registrations' : `Registered through ${filterLabel} sponsor link`}
+            </p>
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-4 text-sm">
+              <div><p className="text-muted-foreground text-xs">Total</p><p className="font-heading text-xl font-bold text-foreground">{summary.total}</p></div>
+              <div><p className="text-muted-foreground text-xs">Completed payments</p><p className="font-heading text-xl font-bold text-foreground">{summary.paidCount}</p></div>
+              <div><p className="text-muted-foreground text-xs">Pending</p><p className="font-heading text-xl font-bold text-foreground">{summary.pending}</p></div>
+              <div><p className="text-muted-foreground text-xs">Failed / cancelled / refunded</p><p className="font-heading text-xl font-bold text-foreground">{summary.other}</p></div>
+              <div><p className="text-muted-foreground text-xs">Collected (verified)</p><p className="font-heading text-xl font-bold text-foreground">{dollars(summary.collected_cents)}</p></div>
+            </div>
+          </div>
+        )}
+
         {decisionMessage && (
           <p role="status" className="mb-4 rounded-xl border border-border bg-muted/50 px-4 py-3 text-sm text-muted-foreground">
             {decisionMessage}
@@ -216,8 +301,10 @@ export default function AdminRegistrations() {
         )}
 
         <div className="bg-card border border-border rounded-xl shadow-sm overflow-hidden">
-          {registrations.length === 0 ? (
-            <p className="text-muted-foreground text-sm text-center py-12">No registrations yet.</p>
+          {filtered.length === 0 ? (
+            <p className="text-muted-foreground text-sm text-center py-12">
+              {sourceFilter === 'all' ? 'No registrations yet.' : 'No registrations for this source yet.'}
+            </p>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
@@ -227,12 +314,13 @@ export default function AdminRegistrations() {
                     <th className="font-medium text-muted-foreground px-4 py-3 whitespace-nowrap">Email</th>
                     <th className="font-medium text-muted-foreground px-4 py-3 whitespace-nowrap">Car</th>
                     <th className="font-medium text-muted-foreground px-4 py-3 whitespace-nowrap">Class</th>
+                    <th className="font-medium text-muted-foreground px-4 py-3 whitespace-nowrap">Source</th>
                     <th className="font-medium text-muted-foreground px-4 py-3 whitespace-nowrap">Status</th>
                     <th className="font-medium text-muted-foreground px-4 py-3 whitespace-nowrap">Registered</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {registrations.map((r) => (
+                  {filtered.map((r) => (
                     <tr key={r.id} className="border-b border-border last:border-b-0">
                       <td className="px-4 py-3 font-medium text-foreground whitespace-nowrap">{r.name}</td>
                       <td className="px-4 py-3 text-muted-foreground whitespace-nowrap">{r.email}</td>
@@ -240,6 +328,7 @@ export default function AdminRegistrations() {
                         {[r.car_year, r.car_make, r.car_model].filter(Boolean).join(' ')}
                       </td>
                       <td className="px-4 py-3 text-muted-foreground capitalize whitespace-nowrap">{r.car_class}</td>
+                      <td className="px-4 py-3 whitespace-nowrap"><SourceBadge registration={r} /></td>
                       <td className="px-4 py-3 whitespace-nowrap">
                         {r.events?.slug === 'exotics-car-show-2026' ? (
                           <select
