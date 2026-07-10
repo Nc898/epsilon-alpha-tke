@@ -20,12 +20,27 @@
 //                    the slug, so the slug must stay stable forever.
 //   active         — set false to turn the page off (visitors are sent to the
 //                    main /carshow page; the server refuses new attributions).
-//   logo           — optional logo path for future page use.
+//   logo           — one logo path shown on the registration page, e.g.
+//                    '/assets/sponsors/<slug>.png'.
+//   logos          — array of logo paths shown as a gentle rolling slideshow
+//                    (use instead of `logo` when a sponsor has more than one
+//                    brand). First entry appears first.
+//   logoBg         — 'light' (default) or 'dark' tile behind the logo(s).
 //   acknowledgment — override the default acknowledgment sentence.
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const CAR_SHOW_SPONSORS = [
   { name: 'Fastlane' },
+  {
+    // Jim Butler dealer group — one registration link, both brand logos
+    // rotate on the page (Maserati first, then Alfa Romeo).
+    name: 'Jim Butler Maserati & Alfa Romeo',
+    slug: 'jim-butler',
+    logos: [
+      '/assets/sponsors/jim-butler-maserati.png',
+      '/assets/sponsors/jim-butler-alfa-romeo.png',
+    ],
+  },
 ];
 
 // Generate a URL-safe slug from a sponsor name:
@@ -52,11 +67,15 @@ export function listSponsors() {
     if (!slug) throw new Error(`Sponsor "${s.name}" produces an empty slug — set an explicit slug.`);
     if (seen.has(slug)) throw new Error(`Duplicate sponsor slug "${slug}" — set an explicit slug to disambiguate.`);
     seen.add(slug);
+    // Normalize to a `logos` array so the page has one shape to render.
+    const logos = s.logos ?? (s.logo ? [s.logo] : []);
     return {
       name: s.name,
       slug,
       active: s.active !== false,
-      logo: s.logo ?? null,
+      logos,
+      logo: logos[0] ?? null,
+      logoBg: s.logoBg === 'dark' ? 'dark' : 'light',
       acknowledgment: s.acknowledgment ?? null,
     };
   });

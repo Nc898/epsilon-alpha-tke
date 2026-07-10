@@ -62,6 +62,43 @@ function FieldError({ error }) {
   return <p className="text-destructive text-xs mt-1">{error.message}</p>;
 }
 
+// Sponsor logo(s) shown on a sponsor registration page. One logo renders
+// static; multiple cross-fade as a gentle rolling slideshow (first logo first).
+// Purely a courtesy display — it never implies the sponsor runs the event.
+function SponsorLogos({ logos, name, bg }) {
+  const [i, setI] = useState(0);
+  useEffect(() => {
+    if (logos.length < 2) return undefined;
+    const id = setInterval(() => setI((n) => (n + 1) % logos.length), 3000);
+    return () => clearInterval(id);
+  }, [logos.length]);
+  if (!logos.length) return null;
+  const dark = bg === 'dark';
+  return (
+    <div
+      className={`mb-5 flex h-24 items-center justify-center rounded-xl border px-6 ${
+        dark ? 'border-white/10 bg-[hsl(0,0%,8%)]' : 'border-border bg-white'
+      }`}
+    >
+      <div className="relative h-14 w-full">
+        {logos.map((src, idx) => (
+          <motion.img
+            key={src}
+            src={src}
+            alt={`${name} logo`}
+            loading="lazy"
+            decoding="async"
+            className="absolute inset-0 m-auto max-h-14 max-w-[240px] object-contain"
+            initial={false}
+            animate={{ opacity: idx === i ? 1 : 0 }}
+            transition={{ duration: 0.6 }}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 // `eventSlug` / `sponsor` are only passed by the sponsor-attributed wrapper
 // (src/pages/SponsorCarShowSignup.jsx). The direct /events/:slug route renders
 // with neither, and nothing about the direct experience changes.
@@ -267,6 +304,24 @@ export default function EventSignup({ eventSlug = null, sponsor = null }) {
               </span>
             </div>
           )}
+
+          {/* Car-show specifics so no registrant is left guessing day-of. */}
+          {slug === CAR_SHOW.slug && (
+            <div className="mt-8 grid gap-3 sm:grid-cols-3 text-left max-w-2xl mx-auto">
+              <div className="rounded-xl border border-white/10 bg-white/5 px-4 py-3">
+                <p className="text-[11px] uppercase tracking-wider text-accent font-semibold mb-1">Show vehicles arrive</p>
+                <p className="text-sm text-white/90">{CAR_SHOW.arriveByLabel} · meet {CAR_SHOW.meetingSpot}</p>
+              </div>
+              <div className="rounded-xl border border-white/10 bg-white/5 px-4 py-3">
+                <p className="text-[11px] uppercase tracking-wider text-accent font-semibold mb-1">Your $30 entry</p>
+                <p className="text-sm text-white/90">One vehicle · {CAR_SHOW.insured ? 'insured, ' : ''}rain or shine · you&apos;re recognized as a Participating Supporter</p>
+              </div>
+              <div className="rounded-xl border border-white/10 bg-white/5 px-4 py-3">
+                <p className="text-[11px] uppercase tracking-wider text-accent font-semibold mb-1">Benefiting</p>
+                <p className="text-sm text-white/90">{CAR_SHOW.beneficiary}, organized by TKE Epsilon Alpha</p>
+              </div>
+            </div>
+          )}
         </motion.div>
       </section>
 
@@ -342,6 +397,9 @@ export default function EventSignup({ eventSlug = null, sponsor = null }) {
             )}
 
             <motion.div {...fadeUp(0.1)} className="bg-card border border-border rounded-xl p-6 sm:p-8 shadow-sm">
+              {sponsor && sponsor.logos?.length > 0 && (
+                <SponsorLogos logos={sponsor.logos} name={sponsor.name} bg={sponsor.logoBg} />
+              )}
               {sponsor && (
                 <p className="mb-5 rounded-lg border border-border bg-muted/50 px-4 py-3 text-xs leading-relaxed text-muted-foreground">
                   {sponsor.acknowledgment ||

@@ -43,7 +43,9 @@ alter table public.registrations add column if not exists stripe_payment_intent_
 create index if not exists registrations_sponsor_slug_idx on public.registrations (sponsor_slug);
 create index if not exists registrations_source_idx on public.registrations (registration_source);
 
--- Seed the first sponsor (slug must match sponsorSlug('Fastlane')).
+-- Seed sponsors (slug must match src/lib/carShowSponsors.js).
 insert into public.sponsors (name, slug)
-values ('Fastlane', 'fastlane')
+values
+  ('Fastlane', 'fastlane'),
+  ('Jim Butler Maserati & Alfa Romeo', 'jim-butler')
 on conflict (slug) do nothing;
