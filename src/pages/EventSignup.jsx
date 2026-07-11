@@ -62,25 +62,31 @@ function FieldError({ error }) {
   return <p className="text-destructive text-xs mt-1">{error.message}</p>;
 }
 
-// Sponsor logo(s) shown on a sponsor registration page. One logo renders
-// static; multiple cross-fade as a gentle rolling slideshow (first logo first).
-// Purely a courtesy display — it never implies the sponsor runs the event.
-function SponsorLogos({ logos, name, bg }) {
+// Sponsor logo(s) shown in the dark hero of a sponsor registration page. The
+// logos sit on a soft white halo that dissolves into the dark background (so
+// the dark-artwork logos stay readable without a hard white box), and multiple
+// brands cross-fade as a gentle rolling slideshow (first logo first). Purely a
+// courtesy display — it never implies the sponsor runs the event.
+function SponsorLogosHero({ logos, name }) {
   const [i, setI] = useState(0);
   useEffect(() => {
     if (logos.length < 2) return undefined;
-    const id = setInterval(() => setI((n) => (n + 1) % logos.length), 3000);
+    const id = setInterval(() => setI((n) => (n + 1) % logos.length), 3200);
     return () => clearInterval(id);
   }, [logos.length]);
   if (!logos.length) return null;
-  const dark = bg === 'dark';
   return (
-    <div
-      className={`mb-5 flex h-24 items-center justify-center rounded-xl border px-6 ${
-        dark ? 'border-white/10 bg-[hsl(0,0%,8%)]' : 'border-border bg-white'
-      }`}
-    >
-      <div className="relative h-14 w-full">
+    <div className="mt-10 flex flex-col items-center">
+      <p className="text-[11px] uppercase tracking-[0.25em] text-white/40 mb-4">
+        Community registration partner
+      </p>
+      <div className="relative flex h-20 w-full max-w-md items-center justify-center">
+        {/* soft white glow that feathers out into the black hero */}
+        <div
+          aria-hidden="true"
+          className="absolute inset-0"
+          style={{ background: 'radial-gradient(ellipse 66% 60% at center, rgba(255,255,255,0.9), rgba(255,255,255,0.55) 42%, rgba(255,255,255,0) 74%)' }}
+        />
         {logos.map((src, idx) => (
           <motion.img
             key={src}
@@ -88,10 +94,10 @@ function SponsorLogos({ logos, name, bg }) {
             alt={`${name} logo`}
             loading="lazy"
             decoding="async"
-            className="absolute inset-0 m-auto max-h-14 max-w-[240px] object-contain"
+            className="absolute inset-0 m-auto max-h-14 max-w-[260px] object-contain"
             initial={false}
             animate={{ opacity: idx === i ? 1 : 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.7 }}
           />
         ))}
       </div>
@@ -117,7 +123,20 @@ export default function EventSignup({ eventSlug = null, sponsor = null }) {
   const { data: event, isLoading, isError } = useQuery({
     queryKey: ['event', slug],
     queryFn: async () => {
-      if (!supabase) return null;
+      if (!supabase) {
+        // Local dev has no Supabase env, so the event fetch is a no-op in prod
+        // terms. Return a mock of the live car-show row for the car show slug so
+        // the hero/form can be worked on locally; prod always uses real data.
+        if (import.meta.env.DEV && slug === CAR_SHOW.slug) {
+          return {
+            id: 'dev-mock', slug: CAR_SHOW.slug, title: 'Classics & Imports Car Show',
+            date: CAR_SHOW.dateISO, time: CAR_SHOW.hoursLabel, location: `${CAR_SHOW.venue}, ${CAR_SHOW.address}`,
+            entry_price_cents: CAR_SHOW.price * 100, early_bird_price_cents: null, early_bird_until: null,
+            capacity: CAR_SHOW.capacity, registration_open: true, rain_date: null,
+          };
+        }
+        return null;
+      }
       const { data, error } = await supabase.from('events').select('*').eq('slug', slug).single();
       if (error) throw error;
       return data;
@@ -322,6 +341,10 @@ export default function EventSignup({ eventSlug = null, sponsor = null }) {
               </div>
             </div>
           )}
+
+          {sponsor && sponsor.logos?.length > 0 && (
+            <SponsorLogosHero logos={sponsor.logos} name={sponsor.name} />
+          )}
         </motion.div>
       </section>
 
@@ -397,9 +420,6 @@ export default function EventSignup({ eventSlug = null, sponsor = null }) {
             )}
 
             <motion.div {...fadeUp(0.1)} className="bg-card border border-border rounded-xl p-6 sm:p-8 shadow-sm">
-              {sponsor && sponsor.logos?.length > 0 && (
-                <SponsorLogos logos={sponsor.logos} name={sponsor.name} bg={sponsor.logoBg} />
-              )}
               {sponsor && (
                 <p className="mb-5 rounded-lg border border-border bg-muted/50 px-4 py-3 text-xs leading-relaxed text-muted-foreground">
                   {sponsor.acknowledgment ||
