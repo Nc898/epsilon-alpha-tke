@@ -26,6 +26,8 @@
 //                    (use instead of `logo` when a sponsor has more than one
 //                    brand). First entry appears first.
 //   logoBg         — 'light' (default) or 'dark' tile behind the logo(s).
+//   logoDisplay    — 'standard' (default) or 'immersive'. Immersive logos are
+//                    shown larger without the light halo, for transparent art.
 //   acknowledgment — override the default acknowledgment sentence.
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -44,6 +46,11 @@ export const CAR_SHOW_SPONSORS = [
   {
     name: 'Revved Up Wishes',
     logo: '/assets/sponsors/revved-up-wishes.png',
+  },
+  {
+    name: 'Cherry Garage',
+    logo: '/assets/sponsors/cherry-garage.png',
+    logoDisplay: 'immersive',
   },
 ];
 
@@ -80,6 +87,7 @@ export function listSponsors() {
       logos,
       logo: logos[0] ?? null,
       logoBg: s.logoBg === 'dark' ? 'dark' : 'light',
+      logoDisplay: s.logoDisplay === 'immersive' ? 'immersive' : 'standard',
       acknowledgment: s.acknowledgment ?? null,
     };
   });

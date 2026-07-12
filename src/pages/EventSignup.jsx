@@ -67,8 +67,9 @@ function FieldError({ error }) {
 // the dark-artwork logos stay readable without a hard white box), and multiple
 // brands cross-fade as a gentle rolling slideshow (first logo first). Purely a
 // courtesy display — it never implies the sponsor runs the event.
-function SponsorLogosHero({ logos, name }) {
+function SponsorLogosHero({ logos, name, display = 'standard' }) {
   const [i, setI] = useState(0);
+  const immersive = display === 'immersive';
   useEffect(() => {
     if (logos.length < 2) return undefined;
     const id = setInterval(() => setI((n) => (n + 1) % logos.length), 3200);
@@ -80,13 +81,14 @@ function SponsorLogosHero({ logos, name }) {
       <p className="text-[11px] uppercase tracking-[0.25em] text-white/40 mb-4">
         Community registration partner
       </p>
-      <div className="relative flex h-20 w-full max-w-md items-center justify-center">
-        {/* soft white glow that feathers out into the black hero */}
-        <div
-          aria-hidden="true"
-          className="absolute inset-0"
-          style={{ background: 'radial-gradient(ellipse 66% 60% at center, rgba(255,255,255,0.9), rgba(255,255,255,0.55) 42%, rgba(255,255,255,0) 74%)' }}
-        />
+      <div className={`relative flex w-full max-w-md items-center justify-center ${immersive ? 'h-40' : 'h-20'}`}>
+        {!immersive && (
+          <div
+            aria-hidden="true"
+            className="absolute inset-0"
+            style={{ background: 'radial-gradient(ellipse 66% 60% at center, rgba(255,255,255,0.9), rgba(255,255,255,0.55) 42%, rgba(255,255,255,0) 74%)' }}
+          />
+        )}
         {logos.map((src, idx) => (
           <motion.img
             key={src}
@@ -94,7 +96,11 @@ function SponsorLogosHero({ logos, name }) {
             alt={`${name} logo`}
             loading="lazy"
             decoding="async"
-            className="absolute inset-0 m-auto max-h-14 max-w-[260px] object-contain"
+            className={`absolute inset-0 m-auto object-contain ${
+              immersive
+                ? 'max-h-36 max-w-[340px] drop-shadow-[0_14px_24px_rgba(0,0,0,0.5)]'
+                : 'max-h-14 max-w-[260px]'
+            }`}
             initial={false}
             animate={{ opacity: idx === i ? 1 : 0 }}
             transition={{ duration: 0.7 }}
@@ -343,7 +349,7 @@ export default function EventSignup({ eventSlug = null, sponsor = null }) {
           )}
 
           {sponsor && sponsor.logos?.length > 0 && (
-            <SponsorLogosHero logos={sponsor.logos} name={sponsor.name} />
+            <SponsorLogosHero logos={sponsor.logos} name={sponsor.name} display={sponsor.logoDisplay} />
           )}
         </motion.div>
       </section>

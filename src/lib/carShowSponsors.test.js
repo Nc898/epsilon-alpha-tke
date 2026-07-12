@@ -40,6 +40,14 @@ describe('listSponsors', () => {
     expect(fastlane.slug).toBe('fastlane');
     expect(fastlane.active).toBe(true);
   });
+
+  it('includes Cherry Garage with its logo and expected slug', () => {
+    const cherryGarage = listSponsors().find((s) => s.name === 'Cherry Garage');
+    expect(cherryGarage).toBeTruthy();
+    expect(cherryGarage.slug).toBe('cherry-garage');
+    expect(cherryGarage.logo).toBe('/assets/sponsors/cherry-garage.png');
+    expect(cherryGarage.active).toBe(true);
+  });
 });
 
 describe('getSponsorBySlug', () => {
@@ -49,6 +57,7 @@ describe('getSponsorBySlug', () => {
 
   it('is case-insensitive on the incoming slug', () => {
     expect(getSponsorBySlug('FASTLANE')?.name).toBe('Fastlane');
+    expect(getSponsorBySlug('CHERRY-GARAGE')?.name).toBe('Cherry Garage');
   });
 
   it('returns null for invented, empty, or malicious slugs', () => {
