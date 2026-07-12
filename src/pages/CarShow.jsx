@@ -364,7 +364,7 @@ export default function CarShow() {
             {[
               { icon: Car, title: 'Participating Event Sponsor/Supporter', body: `Included with every $${CAR_SHOW.price} vehicle registration. Your participation is recognized as part of the July event’s success.` },
               { icon: Trophy, title: 'Official Car Show Sponsor', body: 'Official Sponsors receive broader recognition across all three shows, including a spotlight on our Instagram and website.' },
-              { icon: Heart, title: 'Three shows. One cause.', body: 'The July Classics show, August Friday Night Lights, and Halloween show all benefit St. Jude Children’s Research Hospital.' },
+              { icon: Heart, title: 'Three shows. One cause.', body: 'The July Classics show, September Friday Night Lights, and Halloween show all benefit St. Jude Children’s Research Hospital.' },
             ].map((item, index) => (
               <Reveal key={item.title} delay={index * 0.06}>
                 <div className="h-full rounded-2xl border border-white/10 bg-white/[0.04] p-6">
@@ -381,7 +381,7 @@ export default function CarShow() {
               <div className="rounded-2xl border border-accent/25 bg-accent/10 p-7">
                 <h3 className="font-heading text-2xl font-bold">What Official Sponsorship adds</h3>
                 <ul className="mt-4 space-y-3 text-sm text-white/70">
-                  <li className="flex gap-3"><ShieldCheck className="mt-0.5 h-5 w-5 flex-shrink-0 text-primary" /> Recognition across the July, August, and Halloween car shows.</li>
+                  <li className="flex gap-3"><ShieldCheck className="mt-0.5 h-5 w-5 flex-shrink-0 text-primary" /> Recognition across the July, September, and Halloween car shows.</li>
                   <li className="flex gap-3"><ShieldCheck className="mt-0.5 h-5 w-5 flex-shrink-0 text-primary" /> A dedicated spotlight on {CAR_SHOW.instagramHandle} and the TKE website.</li>
                   <li className="flex gap-3"><ShieldCheck className="mt-0.5 h-5 w-5 flex-shrink-0 text-primary" /> Approved event signage, promotional materials, and activation opportunities.</li>
                   <li className="flex gap-3"><ShieldCheck className="mt-0.5 h-5 w-5 flex-shrink-0 text-primary" /> Access to the full sponsorship packet through Anthony.</li>

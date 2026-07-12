@@ -79,17 +79,17 @@ const CHAPTER_EVENTS = [
     event_type: 'recruitment',
     status: 'upcoming',
   },
+  // SEPTEMBER
   {
-    id: 'evt-aug-28',
+    id: 'evt-sep-04',
     title: 'Friday Night Lights',
-    date: '2026-08-28',
+    date: '2026-09-04',
     time: '5:00 PM – 7:00 PM',
     location: 'City Foundry STL',
     description: 'Free, registration-required exotics showcase capped at 30 vehicles and benefiting St. Jude Children\'s Research Hospital.',
     event_type: 'philanthropy',
     status: 'upcoming',
   },
-  // SEPTEMBER
   {
     id: 'evt-sep-09',
     title: 'IFC Recruitment Meet & Greet',

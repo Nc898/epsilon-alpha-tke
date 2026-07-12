@@ -286,7 +286,7 @@ export default function ExoticsCarShow() {
             <p className="text-sm font-semibold uppercase tracking-widest text-primary">Paid event sponsorship</p>
             <h2 className="mt-3 font-heading text-4xl font-bold text-foreground sm:text-5xl">One Official Sponsorship. All three shows.</h2>
             <p className="mt-5 leading-relaxed text-muted-foreground">
-              Official Car Show Sponsors receive recognition across the July All-Classics &amp; Imports show, Friday Night Lights in August, and our Halloween show. Final Halloween details will be announced separately.
+              Official Car Show Sponsors receive recognition across the July All-Classics &amp; Imports show, Friday Night Lights in September, and our Halloween show. Final Halloween details will be announced separately.
             </p>
           </Reveal>
 
