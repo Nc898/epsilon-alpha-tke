@@ -41,6 +41,10 @@ export const CAR_SHOW_SPONSORS = [
       '/assets/sponsors/jim-butler-alfa-romeo.png',
     ],
   },
+  {
+    name: 'Revved Up Wishes',
+    logo: '/assets/sponsors/revved-up-wishes.png',
+  },
 ];
 
 // Generate a URL-safe slug from a sponsor name:

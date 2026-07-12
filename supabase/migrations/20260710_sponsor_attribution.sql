@@ -47,5 +47,6 @@ create index if not exists registrations_source_idx on public.registrations (reg
 insert into public.sponsors (name, slug)
 values
   ('Fastlane', 'fastlane'),
-  ('Jim Butler Maserati & Alfa Romeo', 'jim-butler')
+  ('Jim Butler Maserati & Alfa Romeo', 'jim-butler'),
+  ('Revved Up Wishes', 'revved-up-wishes')
 on conflict (slug) do nothing;
