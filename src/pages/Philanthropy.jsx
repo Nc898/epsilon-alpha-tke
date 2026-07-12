@@ -7,7 +7,7 @@ import Marquee from '../components/Marquee';
 import Magnetic from '../components/Magnetic';
 import { Button } from '@/components/ui/button';
 import Reveal from '../components/Reveal';
-import { Heart, Mail, ExternalLink, Car, Calendar, MapPin, ArrowRight, CheckCircle2, Handshake, Megaphone } from 'lucide-react';
+import { Heart, Mail, ExternalLink, Car, Calendar, MapPin, ArrowRight, CheckCircle2, Handshake, Megaphone, Download } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { CAR_SHOW } from '@/lib/carShow';
 import { FEATURED_SPONSORS } from '@/lib/sponsors';
@@ -276,6 +276,11 @@ export default function Philanthropy() {
             <a href="mailto:slutkestewardship@gmail.com?subject=TKE%20Car%20Show%20Partnership">
               <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold gap-2">
                 <Mail className="h-4 w-4" /> Discuss a partnership with Anthony
+              </Button>
+            </a>
+            <a href="/assets/docs/tke-sponsorship-packet.pdf" download target="_blank" rel="noopener noreferrer">
+              <Button size="lg" variant="outline" className="font-semibold gap-2">
+                <Download className="h-4 w-4" /> Download the sponsorship packet
               </Button>
             </a>
           </div>
