@@ -19,6 +19,10 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const CAR_CLASSES = ['classic', 'exotic', 'performance', 'other'];
+// At or below this many remaining spots, show the true count for real urgency;
+// above it, the exact number is hidden (a high "spots left" count reads as an
+// empty event and discourages registration).
+const LOW_SPOTS = 12;
 const ST_JUDE_URL = 'https://fundraising.stjude.org/site/TR?fr_id=162451&pg=entry';
 
 function formatEventDate(dateStr) {
@@ -287,6 +291,11 @@ export default function EventSignup({ eventSlug = null, sponsor = null }) {
     queryKey: ['registration_counts', event?.id],
     enabled: !!event?.id,
     queryFn: async () => {
+      if (!supabase) {
+        // Dev has no Supabase; pretend a couple spots are taken so the hero's
+        // urgency chip can be worked on locally. Prod uses the real view.
+        return import.meta.env.DEV ? [{ paid_count: 2 }] : null;
+      }
       const { data, error } = await supabase
         .from('registration_counts')
         .select('paid_count')
@@ -455,12 +464,23 @@ export default function EventSignup({ eventSlug = null, sponsor = null }) {
             </span>
           </div>
 
-          {event.capacity != null && counts != null && spotsLeft > 0 && (
+          {/* Urgency without an exact count: a low remaining live count reads as
+              "the event is empty" and discourages sign-ups, so the raw number is
+              hidden until it is genuinely low (LOW_SPOTS). Below that threshold
+              the true remaining count is shown for real scarcity. */}
+          {event.capacity != null && counts != null && !soldOut && (
             <div className="mt-6">
-              <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-sm text-white/90">
-                <Users className="h-4 w-4 text-accent" />
-                {spotsLeft} {spotsLeft === 1 ? 'spot' : 'spots'} left
-              </span>
+              {spotsLeft <= LOW_SPOTS ? (
+                <span className="inline-flex items-center gap-2 rounded-full border border-primary/50 bg-primary/20 px-4 py-1.5 text-sm font-semibold text-white">
+                  <Users className="h-4 w-4 text-accent" />
+                  Only {spotsLeft} {spotsLeft === 1 ? 'spot' : 'spots'} left
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-sm text-white/90">
+                  <Users className="h-4 w-4 text-accent" />
+                  Spots are limited — register early
+                </span>
+              )}
             </div>
           )}
 
