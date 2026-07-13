@@ -62,12 +62,113 @@ function FieldError({ error }) {
   return <p className="text-destructive text-xs mt-1">{error.message}</p>;
 }
 
+function VehicleSpinViewer({ feature }) {
+  const frames = feature.spinFrames?.length ? feature.spinFrames : [feature.image];
+  const [frame, setFrame] = useState(frames.length - 1);
+  const [dragging, setDragging] = useState(false);
+  const dragStart = useRef(null);
+
+  useEffect(() => {
+    frames.forEach((src) => {
+      const image = new window.Image();
+      image.src = src;
+    });
+  }, [frames]);
+
+  const rotate = (steps) => {
+    setFrame((current) => (current + steps + frames.length) % frames.length);
+  };
+
+  const onPointerDown = (event) => {
+    event.currentTarget.setPointerCapture(event.pointerId);
+    dragStart.current = { x: event.clientX, frame };
+    setDragging(true);
+  };
+
+  const onPointerMove = (event) => {
+    if (!dragStart.current) return;
+    const steps = Math.trunc((event.clientX - dragStart.current.x) / 36);
+    setFrame((dragStart.current.frame - steps + frames.length * 10) % frames.length);
+  };
+
+  const finishDrag = (event) => {
+    if (dragStart.current && event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+    dragStart.current = null;
+    setDragging(false);
+  };
+
+  const onKeyDown = (event) => {
+    if (event.key === 'ArrowLeft') {
+      event.preventDefault();
+      rotate(-1);
+    }
+    if (event.key === 'ArrowRight') {
+      event.preventDefault();
+      rotate(1);
+    }
+  };
+
+  const angleLabel = feature.spinLabels?.[frame] ?? `View ${frame + 1}`;
+
+  return (
+    <div className="relative z-10 w-full">
+      <div
+        role="group"
+        aria-label="Interactive 360-degree vehicle view. Drag horizontally or use the arrow keys to rotate."
+        tabIndex={0}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={finishDrag}
+        onPointerCancel={finishDrag}
+        onKeyDown={onKeyDown}
+        className={`relative mx-auto flex h-[260px] w-full max-w-[720px] touch-pan-y select-none items-center justify-center outline-none sm:h-[360px] ${
+          dragging ? 'cursor-grabbing' : 'cursor-grab'
+        } focus-visible:ring-2 focus-visible:ring-accent/70 focus-visible:ring-offset-4 focus-visible:ring-offset-black`}
+      >
+        <img
+          src={frames[frame]}
+          alt={`${feature.alt} — ${angleLabel}`}
+          draggable="false"
+          decoding="async"
+          className="pointer-events-none h-full w-full object-contain drop-shadow-[0_24px_24px_rgba(0,0,0,0.58)]"
+        />
+        <div aria-hidden="true" className="pointer-events-none absolute inset-x-[12%] bottom-[12%] h-8 rounded-full bg-black/35 blur-xl" />
+      </div>
+
+      <div className="mt-1 flex items-center justify-center gap-3">
+        <button
+          type="button"
+          onClick={() => rotate(-1)}
+          aria-label="Rotate vehicle left"
+          className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/[0.06] text-xl text-white/80 transition hover:border-accent/50 hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+        >
+          ‹
+        </button>
+        <div className="min-w-36 text-center">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">Drag to rotate · 360°</p>
+          <p aria-live="polite" className="mt-0.5 text-xs font-semibold text-accent/85">{angleLabel}</p>
+        </div>
+        <button
+          type="button"
+          onClick={() => rotate(1)}
+          aria-label="Rotate vehicle right"
+          className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/[0.06] text-xl text-white/80 transition hover:border-accent/50 hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+        >
+          ›
+        </button>
+      </div>
+    </div>
+  );
+}
+
 // Sponsor logo(s) shown in the dark hero of a sponsor registration page. The
 // logos sit on a soft white halo that dissolves into the dark background (so
 // the dark-artwork logos stay readable without a hard white box), and multiple
 // brands cross-fade as a gentle rolling slideshow (first logo first). Purely a
 // courtesy display — it never implies the sponsor runs the event.
-function SponsorLogosHero({ logos, name, display = 'standard' }) {
+function SponsorLogosHero({ logos, name, display = 'standard', feature = null }) {
   const [i, setI] = useState(0);
   const immersive = display === 'immersive';
   useEffect(() => {
@@ -76,6 +177,39 @@ function SponsorLogosHero({ logos, name, display = 'standard' }) {
     return () => clearInterval(id);
   }, [logos.length]);
   if (!logos.length) return null;
+
+  if (feature) {
+    return (
+      <div className="mt-10 flex flex-col items-center">
+        <p className="mb-4 text-[11px] uppercase tracking-[0.25em] text-white/40">
+          Community registration partner
+        </p>
+        <div className="relative isolate flex w-full max-w-3xl flex-col items-center overflow-visible px-2 pb-2 pt-1 [perspective:1200px]">
+          <div
+            aria-hidden="true"
+            className="absolute left-1/2 top-[46%] -z-10 h-44 w-[92%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(109,119,57,0.28),rgba(21,23,18,0.08)_48%,transparent_72%)] blur-xl"
+          />
+          <motion.img
+            src={logos[0]}
+            alt={`${name} logo`}
+            loading="lazy"
+            decoding="async"
+            className="relative z-20 mb-[-1.25rem] h-auto w-44 object-contain drop-shadow-[0_8px_18px_rgba(0,0,0,0.6)] sm:w-52"
+            initial={false}
+            animate={{ y: [0, -3, 0] }}
+            transition={{ duration: 4.8, repeat: Infinity, ease: 'easeInOut' }}
+          />
+          <VehicleSpinViewer feature={feature} />
+          <div className="relative z-20 mt-4 rounded-full border border-white/10 bg-black/35 px-5 py-2.5 text-center shadow-lg backdrop-blur-sm">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-accent/80">{feature.eyebrow}</p>
+            <p className="mt-0.5 font-heading text-sm font-bold text-white sm:text-base">{feature.title}</p>
+            <p className="mt-0.5 text-[11px] text-white/55 sm:text-xs">{feature.details}</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="mt-10 flex flex-col items-center">
       <p className="text-[11px] uppercase tracking-[0.25em] text-white/40 mb-4">
@@ -349,7 +483,12 @@ export default function EventSignup({ eventSlug = null, sponsor = null }) {
           )}
 
           {sponsor && sponsor.logos?.length > 0 && (
-            <SponsorLogosHero logos={sponsor.logos} name={sponsor.name} display={sponsor.logoDisplay} />
+            <SponsorLogosHero
+              logos={sponsor.logos}
+              name={sponsor.name}
+              display={sponsor.logoDisplay}
+              feature={sponsor.feature}
+            />
           )}
         </motion.div>
       </section>

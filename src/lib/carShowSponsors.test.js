@@ -48,6 +48,14 @@ describe('listSponsors', () => {
     expect(cherryGarage.logo).toBe('/assets/sponsors/cherry-garage.png');
     expect(cherryGarage.active).toBe(true);
   });
+
+  it('includes the Revved Up Wishes Sterrato showcase', () => {
+    const revvedUp = listSponsors().find((s) => s.name === 'Revved Up Wishes');
+    expect(revvedUp?.feature?.image).toBe('/assets/sponsors/revved-sterrato-spin/frame-08.png');
+    expect(revvedUp?.feature?.title).toBe('2024 Lamborghini Huracan Sterrato');
+    expect(revvedUp?.feature?.details).toContain('Verde Gea');
+    expect(revvedUp?.feature?.spinFrames).toHaveLength(8);
+  });
 });
 
 describe('getSponsorBySlug', () => {

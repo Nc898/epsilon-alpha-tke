@@ -28,6 +28,7 @@
 //   logoBg         — 'light' (default) or 'dark' tile behind the logo(s).
 //   logoDisplay    — 'standard' (default) or 'immersive'. Immersive logos are
 //                    shown larger without the light halo, for transparent art.
+//   feature        — optional dimensional showcase artwork and vehicle details.
 //   acknowledgment — override the default acknowledgment sentence.
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -46,6 +47,24 @@ export const CAR_SHOW_SPONSORS = [
   {
     name: 'Revved Up Wishes',
     logo: '/assets/sponsors/revved-up-wishes.png',
+    feature: {
+      image: '/assets/sponsors/revved-sterrato-spin/frame-08.png',
+      alt: '3D rendering of a 2024 Lamborghini Huracan Sterrato in Verde Gea',
+      spinFrames: [
+        '/assets/sponsors/revved-sterrato-spin/frame-01.png',
+        '/assets/sponsors/revved-sterrato-spin/frame-02.png',
+        '/assets/sponsors/revved-sterrato-spin/frame-03.png',
+        '/assets/sponsors/revved-sterrato-spin/frame-04.png',
+        '/assets/sponsors/revved-sterrato-spin/frame-05.png',
+        '/assets/sponsors/revved-sterrato-spin/frame-06.png',
+        '/assets/sponsors/revved-sterrato-spin/frame-07.png',
+        '/assets/sponsors/revved-sterrato-spin/frame-08.png',
+      ],
+      spinLabels: ['Front', 'Front right', 'Right side', 'Rear right', 'Rear', 'Rear left', 'Left side', 'Front left'],
+      eyebrow: 'Featured Revved Up Wishes vehicle',
+      title: '2024 Lamborghini Huracan Sterrato',
+      details: 'AWD 2D Coupe · Verde Gea · Off-Road Supercar',
+    },
   },
   {
     name: 'Cherry Garage',
@@ -88,6 +107,7 @@ export function listSponsors() {
       logo: logos[0] ?? null,
       logoBg: s.logoBg === 'dark' ? 'dark' : 'light',
       logoDisplay: s.logoDisplay === 'immersive' ? 'immersive' : 'standard',
+      feature: s.feature ?? null,
       acknowledgment: s.acknowledgment ?? null,
     };
   });
