@@ -36,13 +36,32 @@ export const CAR_SHOW_SPONSORS = [
   { name: 'Fastlane' },
   {
     // Jim Butler dealer group — one registration link, both brand logos
-    // rotate on the page (Maserati first, then Alfa Romeo).
+    // rotate on the page (Maserati first, then Alfa Romeo), with an
+    // interactive 8-angle spin of a white Maserati MC20 Cielo.
     name: 'Jim Butler Maserati & Alfa Romeo',
     slug: 'jim-butler',
     logos: [
       '/assets/sponsors/jim-butler-maserati.png',
       '/assets/sponsors/jim-butler-alfa-romeo.png',
     ],
+    feature: {
+      image: '/assets/sponsors/maserati-mc20-spin/frame-08.png',
+      alt: '3D rendering of a white 2024 Maserati MC20 Cielo',
+      spinFrames: [
+        '/assets/sponsors/maserati-mc20-spin/frame-01.png',
+        '/assets/sponsors/maserati-mc20-spin/frame-02.png',
+        '/assets/sponsors/maserati-mc20-spin/frame-03.png',
+        '/assets/sponsors/maserati-mc20-spin/frame-04.png',
+        '/assets/sponsors/maserati-mc20-spin/frame-05.png',
+        '/assets/sponsors/maserati-mc20-spin/frame-06.png',
+        '/assets/sponsors/maserati-mc20-spin/frame-07.png',
+        '/assets/sponsors/maserati-mc20-spin/frame-08.png',
+      ],
+      spinLabels: ['Front', 'Front right', 'Right side', 'Rear right', 'Rear', 'Rear left', 'Left side', 'Front left'],
+      eyebrow: 'Featured Jim Butler Maserati vehicle',
+      title: '2024 Maserati MC20 Cielo',
+      details: 'Twin-turbo V6 · Retractable-hardtop spider · Pearl white',
+    },
   },
   {
     name: 'Revved Up Wishes',

@@ -56,6 +56,14 @@ describe('listSponsors', () => {
     expect(revvedUp?.feature?.details).toContain('Verde Gea');
     expect(revvedUp?.feature?.spinFrames).toHaveLength(8);
   });
+
+  it('includes the Jim Butler Maserati MC20 spin showcase', () => {
+    const jimButler = listSponsors().find((s) => s.slug === 'jim-butler');
+    expect(jimButler?.feature?.title).toBe('2024 Maserati MC20 Cielo');
+    expect(jimButler?.feature?.spinFrames).toHaveLength(8);
+    expect(jimButler?.feature?.spinLabels).toHaveLength(8);
+    expect(jimButler?.feature?.spinFrames[0]).toBe('/assets/sponsors/maserati-mc20-spin/frame-01.png');
+  });
 });
 
 describe('getSponsorBySlug', () => {
