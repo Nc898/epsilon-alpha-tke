@@ -44,24 +44,44 @@ export const CAR_SHOW_SPONSORS = [
       '/assets/sponsors/jim-butler-maserati.png',
       '/assets/sponsors/jim-butler-alfa-romeo.png',
     ],
-    feature: {
-      image: '/assets/sponsors/maserati-mc20-spin/frame-08.png',
-      alt: '3D rendering of a white 2024 Maserati MC20 Cielo',
-      spinFrames: [
-        '/assets/sponsors/maserati-mc20-spin/frame-01.png',
-        '/assets/sponsors/maserati-mc20-spin/frame-02.png',
-        '/assets/sponsors/maserati-mc20-spin/frame-03.png',
-        '/assets/sponsors/maserati-mc20-spin/frame-04.png',
-        '/assets/sponsors/maserati-mc20-spin/frame-05.png',
-        '/assets/sponsors/maserati-mc20-spin/frame-06.png',
-        '/assets/sponsors/maserati-mc20-spin/frame-07.png',
-        '/assets/sponsors/maserati-mc20-spin/frame-08.png',
-      ],
-      spinLabels: ['Front', 'Front right', 'Right side', 'Rear right', 'Rear', 'Rear left', 'Left side', 'Front left'],
-      eyebrow: 'Featured Jim Butler Maserati vehicle',
-      title: '2024 Maserati MC20 Cielo',
-      details: 'Twin-turbo V6 · Retractable-hardtop spider · Pearl white',
-    },
+    features: [
+      {
+        image: '/assets/sponsors/maserati-mc20-spin/frame-08.png',
+        alt: '3D rendering of a white 2024 Maserati MC20 Cielo',
+        spinFrames: [
+          '/assets/sponsors/maserati-mc20-spin/frame-01.png',
+          '/assets/sponsors/maserati-mc20-spin/frame-02.png',
+          '/assets/sponsors/maserati-mc20-spin/frame-03.png',
+          '/assets/sponsors/maserati-mc20-spin/frame-04.png',
+          '/assets/sponsors/maserati-mc20-spin/frame-05.png',
+          '/assets/sponsors/maserati-mc20-spin/frame-06.png',
+          '/assets/sponsors/maserati-mc20-spin/frame-07.png',
+          '/assets/sponsors/maserati-mc20-spin/frame-08.png',
+        ],
+        spinLabels: ['Front', 'Front right', 'Right side', 'Rear right', 'Rear', 'Rear left', 'Left side', 'Front left'],
+        eyebrow: 'Featured Jim Butler Maserati',
+        title: '2024 Maserati MC20 Cielo',
+        details: 'Twin-turbo V6 · Retractable-hardtop spider · Pearl white',
+      },
+      {
+        image: '/assets/sponsors/maserati-grecale-spin/frame-08.png',
+        alt: '3D rendering of a Devil Orange 2024 Maserati Grecale Modena',
+        spinFrames: [
+          '/assets/sponsors/maserati-grecale-spin/frame-01.png',
+          '/assets/sponsors/maserati-grecale-spin/frame-02.png',
+          '/assets/sponsors/maserati-grecale-spin/frame-03.png',
+          '/assets/sponsors/maserati-grecale-spin/frame-04.png',
+          '/assets/sponsors/maserati-grecale-spin/frame-05.png',
+          '/assets/sponsors/maserati-grecale-spin/frame-06.png',
+          '/assets/sponsors/maserati-grecale-spin/frame-07.png',
+          '/assets/sponsors/maserati-grecale-spin/frame-08.png',
+        ],
+        spinLabels: ['Front', 'Front right', 'Right side', 'Rear right', 'Rear', 'Rear left', 'Left side', 'Front left'],
+        eyebrow: 'Featured Jim Butler Maserati',
+        title: '2024 Maserati Grecale Modena',
+        details: 'Twin-turbo V6 · Luxury SUV · Devil Orange',
+      },
+    ],
   },
   {
     name: 'Revved Up Wishes',
@@ -116,8 +136,9 @@ export function listSponsors() {
     if (!slug) throw new Error(`Sponsor "${s.name}" produces an empty slug — set an explicit slug.`);
     if (seen.has(slug)) throw new Error(`Duplicate sponsor slug "${slug}" — set an explicit slug to disambiguate.`);
     seen.add(slug);
-    // Normalize to a `logos` array so the page has one shape to render.
+    // Normalize to array shapes so the page has one shape to render.
     const logos = s.logos ?? (s.logo ? [s.logo] : []);
+    const features = s.features ?? (s.feature ? [s.feature] : []);
     return {
       name: s.name,
       slug,
@@ -126,7 +147,8 @@ export function listSponsors() {
       logo: logos[0] ?? null,
       logoBg: s.logoBg === 'dark' ? 'dark' : 'light',
       logoDisplay: s.logoDisplay === 'immersive' ? 'immersive' : 'standard',
-      feature: s.feature ?? null,
+      features,
+      feature: features[0] ?? null,
       acknowledgment: s.acknowledgment ?? null,
     };
   });

@@ -57,12 +57,15 @@ describe('listSponsors', () => {
     expect(revvedUp?.feature?.spinFrames).toHaveLength(8);
   });
 
-  it('includes the Jim Butler Maserati MC20 spin showcase', () => {
+  it('includes both Jim Butler Maserati spin showcases (MC20 + Grecale)', () => {
     const jimButler = listSponsors().find((s) => s.slug === 'jim-butler');
-    expect(jimButler?.feature?.title).toBe('2024 Maserati MC20 Cielo');
-    expect(jimButler?.feature?.spinFrames).toHaveLength(8);
-    expect(jimButler?.feature?.spinLabels).toHaveLength(8);
-    expect(jimButler?.feature?.spinFrames[0]).toBe('/assets/sponsors/maserati-mc20-spin/frame-01.png');
+    expect(jimButler?.features).toHaveLength(2);
+    expect(jimButler?.feature?.title).toBe('2024 Maserati MC20 Cielo'); // features[0]
+    expect(jimButler?.features[0].spinFrames).toHaveLength(8);
+    expect(jimButler?.features[0].spinFrames[0]).toBe('/assets/sponsors/maserati-mc20-spin/frame-01.png');
+    expect(jimButler?.features[1].title).toBe('2024 Maserati Grecale Modena');
+    expect(jimButler?.features[1].spinFrames).toHaveLength(8);
+    expect(jimButler?.features[1].spinFrames[0]).toBe('/assets/sponsors/maserati-grecale-spin/frame-01.png');
   });
 });
 

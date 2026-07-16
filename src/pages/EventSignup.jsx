@@ -172,7 +172,7 @@ function VehicleSpinViewer({ feature }) {
 // the dark-artwork logos stay readable without a hard white box), and multiple
 // brands cross-fade as a gentle rolling slideshow (first logo first). Purely a
 // courtesy display — it never implies the sponsor runs the event.
-function SponsorLogosHero({ logos, name, display = 'standard', feature = null }) {
+function SponsorLogosHero({ logos, name, display = 'standard', features = [] }) {
   const [i, setI] = useState(0);
   const immersive = display === 'immersive';
   useEffect(() => {
@@ -182,13 +182,14 @@ function SponsorLogosHero({ logos, name, display = 'standard', feature = null })
   }, [logos.length]);
   if (!logos.length) return null;
 
-  if (feature) {
+  if (features.length) {
+    const multi = features.length > 1;
     return (
       <div className="mt-10 flex flex-col items-center">
         <p className="mb-4 text-[11px] uppercase tracking-[0.25em] text-white/40">
           Community registration partner
         </p>
-        <div className="relative isolate flex w-full max-w-3xl flex-col items-center overflow-visible px-2 pb-2 pt-1 [perspective:1200px]">
+        <div className="relative isolate flex w-full max-w-5xl flex-col items-center overflow-visible px-2 pb-2 pt-1 [perspective:1200px]">
           <div
             aria-hidden="true"
             className="absolute left-1/2 top-[46%] -z-10 h-44 w-[92%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(109,119,57,0.28),rgba(21,23,18,0.08)_48%,transparent_72%)] blur-xl"
@@ -198,16 +199,22 @@ function SponsorLogosHero({ logos, name, display = 'standard', feature = null })
             alt={`${name} logo`}
             loading="lazy"
             decoding="async"
-            className="relative z-20 mb-[-1.25rem] h-auto w-44 object-contain drop-shadow-[0_8px_18px_rgba(0,0,0,0.6)] sm:w-52"
+            className={`relative z-20 h-auto w-44 object-contain drop-shadow-[0_8px_18px_rgba(0,0,0,0.6)] sm:w-52 ${multi ? 'mb-1' : 'mb-[-1.25rem]'}`}
             initial={false}
             animate={{ y: [0, -3, 0] }}
             transition={{ duration: 4.8, repeat: Infinity, ease: 'easeInOut' }}
           />
-          <VehicleSpinViewer feature={feature} />
-          <div className="relative z-20 mt-4 rounded-full border border-white/10 bg-black/35 px-5 py-2.5 text-center shadow-lg backdrop-blur-sm">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-accent/80">{feature.eyebrow}</p>
-            <p className="mt-0.5 font-heading text-sm font-bold text-white sm:text-base">{feature.title}</p>
-            <p className="mt-0.5 text-[11px] text-white/55 sm:text-xs">{feature.details}</p>
+          <div className={`grid w-full gap-x-4 gap-y-8 ${multi ? 'md:grid-cols-2' : 'grid-cols-1'}`}>
+            {features.map((f) => (
+              <div key={f.title} className="flex flex-col items-center">
+                <VehicleSpinViewer feature={f} />
+                <div className="relative z-20 mt-4 rounded-full border border-white/10 bg-black/35 px-5 py-2.5 text-center shadow-lg backdrop-blur-sm">
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-accent/80">{f.eyebrow}</p>
+                  <p className="mt-0.5 font-heading text-sm font-bold text-white sm:text-base">{f.title}</p>
+                  <p className="mt-0.5 text-[11px] text-white/55 sm:text-xs">{f.details}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -507,7 +514,7 @@ export default function EventSignup({ eventSlug = null, sponsor = null }) {
               logos={sponsor.logos}
               name={sponsor.name}
               display={sponsor.logoDisplay}
-              feature={sponsor.feature}
+              features={sponsor.features}
             />
           )}
         </motion.div>
