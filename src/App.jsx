@@ -26,6 +26,7 @@ const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
 const ResetPassword = lazy(() => import('./pages/ResetPassword'));
 const EventSignup = lazy(() => import('./pages/EventSignup'));
 const SponsorCarShowSignup = lazy(() => import('./pages/SponsorCarShowSignup'));
+const FreeCarShowSignup = lazy(() => import('./pages/FreeCarShowSignup'));
 const CarShow = lazy(() => import('./pages/CarShow'));
 const ExoticsCarShow = lazy(() => import('./pages/ExoticsCarShow'));
 const Donate = lazy(() => import('./pages/Donate'));
@@ -84,6 +85,9 @@ const AuthenticatedApp = () => {
           <Route path="/events/:slug" element={<EventSignup />} />
           <Route path="/carshow" element={<CarShow />} />
           <Route path="/car-show" element={<CarShow />} />
+          {/* Free/comp car show registration — unlisted, no payment. Static
+              path outranks the :sponsorSlug param below regardless of order. */}
+          <Route path="/carshow/register/free" element={<FreeCarShowSignup />} />
           {/* Sponsor-attributed car show registration (see src/lib/carShowSponsors.js) */}
           <Route path="/carshow/register/:sponsorSlug" element={<SponsorCarShowSignup />} />
           <Route path="/exotics-car-show" element={<ExoticsCarShow />} />

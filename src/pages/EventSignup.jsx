@@ -257,9 +257,11 @@ function SponsorLogosHero({ logos, name, display = 'standard', features = [] }) 
 }
 
 // `eventSlug` / `sponsor` are only passed by the sponsor-attributed wrapper
-// (src/pages/SponsorCarShowSignup.jsx). The direct /events/:slug route renders
-// with neither, and nothing about the direct experience changes.
-export default function EventSignup({ eventSlug = null, sponsor = null }) {
+// (src/pages/SponsorCarShowSignup.jsx). `free` is only passed by the unlisted
+// no-payment wrapper (src/pages/FreeCarShowSignup.jsx). The direct
+// /events/:slug route renders with none of these, and nothing about the
+// direct experience changes.
+export default function EventSignup({ eventSlug = null, sponsor = null, free = false }) {
   const { slug: routeSlug } = useParams();
   const slug = eventSlug ?? routeSlug;
   const [searchParams, setSearchParams] = useSearchParams();
@@ -268,6 +270,7 @@ export default function EventSignup({ eventSlug = null, sponsor = null }) {
   const [submitting, setSubmitting] = useState(false);
   const [redirecting, setRedirecting] = useState(false);
   const [soldOutFromApi, setSoldOutFromApi] = useState(false);
+  const [freeError, setFreeError] = useState('');
   const [cancelNoticeDismissed, setCancelNoticeDismissed] = useState(false);
   const confettiFired = useRef(false);
 
@@ -349,6 +352,36 @@ export default function EventSignup({ eventSlug = null, sponsor = null }) {
 
   const onSubmit = async (values) => {
     setSubmitting(true);
+
+    // Free/comp registrations never touch Stripe — one request confirms the
+    // spot immediately, then we go straight to the success view.
+    if (free) {
+      try {
+        const res = await fetch('/api/free-registration', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ registration: values }),
+        });
+        if (res.ok) {
+          setSubmitting(false);
+          setSearchParams({ status: 'success' });
+          return;
+        }
+        if (res.status === 409) {
+          setSoldOutFromApi(true);
+          setSubmitting(false);
+          return;
+        }
+        const data = await res.json().catch(() => ({}));
+        setFreeError(data.error || 'Something went wrong — please try again or contact us.');
+        setSubmitting(false);
+      } catch {
+        setFreeError('Network error — please try again.');
+        setSubmitting(false);
+      }
+      return;
+    }
+
     try {
       const res = await fetch('/api/checkout', {
         method: 'POST',
@@ -457,14 +490,23 @@ export default function EventSignup({ eventSlug = null, sponsor = null }) {
           </div>
 
           <div className="mt-5 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 text-sm">
-            <span className="inline-flex items-center gap-2 text-white font-semibold">
-              <Ticket className="h-4 w-4 text-accent" /> ${entryDollars} entry
-              {earlyBird && (
+            {free ? (
+              <span className="inline-flex items-center gap-2 text-white font-semibold">
+                <Ticket className="h-4 w-4 text-accent" /> Free entry
                 <span className="rounded-full bg-accent/20 text-accent text-[11px] font-bold uppercase tracking-wide px-2 py-0.5">
-                  Early-bird
+                  You&apos;ve been given a free ticket
                 </span>
-              )}
-            </span>
+              </span>
+            ) : (
+              <span className="inline-flex items-center gap-2 text-white font-semibold">
+                <Ticket className="h-4 w-4 text-accent" /> ${entryDollars} entry
+                {earlyBird && (
+                  <span className="rounded-full bg-accent/20 text-accent text-[11px] font-bold uppercase tracking-wide px-2 py-0.5">
+                    Early-bird
+                  </span>
+                )}
+              </span>
+            )}
             <span className="inline-flex items-center gap-2 text-white/70">
               <CloudRain className="h-4 w-4 text-accent" />
               Rain or shine{formattedRainDate ? ` — rain date ${formattedRainDate}` : ''}
@@ -499,7 +541,9 @@ export default function EventSignup({ eventSlug = null, sponsor = null }) {
                 <p className="text-sm text-white/90">{CAR_SHOW.arriveByLabel} · meet {CAR_SHOW.meetingSpot}</p>
               </div>
               <div className="rounded-xl border border-white/10 bg-white/5 px-4 py-3">
-                <p className="text-[11px] uppercase tracking-wider text-accent font-semibold mb-1">Your $30 entry</p>
+                <p className="text-[11px] uppercase tracking-wider text-accent font-semibold mb-1">
+                  {free ? 'Your free entry' : `Your $${CAR_SHOW.price} entry`}
+                </p>
                 <p className="text-sm text-white/90">One vehicle · {CAR_SHOW.insured ? 'insured, ' : ''}rain or shine · you&apos;re recognized as a Participating Supporter</p>
               </div>
               <div className="rounded-xl border border-white/10 bg-white/5 px-4 py-3">
@@ -600,11 +644,28 @@ export default function EventSignup({ eventSlug = null, sponsor = null }) {
                   Children&apos;s Research Hospital; payment is processed by TKE via Stripe.
                 </p>
               )}
+              {free && (
+                <p className="mb-5 rounded-lg border border-primary/25 bg-primary/5 px-4 py-3 text-xs leading-relaxed text-foreground">
+                  <span className="font-semibold">You&apos;ve been given a free ticket to this event</span> — no payment
+                  is required to complete your registration below.
+                </p>
+              )}
               <h2 className="font-heading text-xl font-bold text-foreground mb-1">Register your vehicle</h2>
               <p className="text-muted-foreground text-sm mb-6">
-                <span className="font-semibold text-foreground">Step 1 of 2.</span> Tell us about your
-                vehicle below — then you&apos;ll be sent to secure Stripe payment to lock in your spot.
+                {free ? (
+                  'Tell us about your vehicle below to claim your free registration — no payment required.'
+                ) : (
+                  <>
+                    <span className="font-semibold text-foreground">Step 1 of 2.</span> Tell us about your
+                    vehicle below — then you&apos;ll be sent to secure Stripe payment to lock in your spot.
+                  </>
+                )}
               </p>
+              {freeError && (
+                <p className="mb-5 rounded-lg border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive">
+                  {freeError}
+                </p>
+              )}
 
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
                 <div>
@@ -677,6 +738,8 @@ export default function EventSignup({ eventSlug = null, sponsor = null }) {
                     <>
                       <Loader2 className="h-4 w-4 animate-spin" /> Registering your vehicle…
                     </>
+                  ) : free ? (
+                    'Claim Your Free Registration'
                   ) : (
                     <>Register &amp; Continue to Payment — ${total}</>
                   )}

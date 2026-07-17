@@ -71,8 +71,9 @@ function exportCsv(rows) {
   URL.revokeObjectURL(url);
 }
 
-// "Direct" vs "Registered through <sponsor> sponsor link" — sponsor rows get a
-// tinted badge; the full sentence + referral URL live in the hover title.
+// "Direct" vs "Registered through <sponsor> sponsor link" vs the unlisted,
+// no-payment "Free Ticket" link — each gets a distinct badge; the full
+// sentence + referral URL (sponsor) live in the hover title.
 function SourceBadge({ registration }) {
   if (registration.registration_source === 'sponsor' && registration.sponsor_name) {
     return (
@@ -81,6 +82,16 @@ function SourceBadge({ registration }) {
         className="inline-flex items-center rounded-full border border-primary/25 bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary"
       >
         {registration.sponsor_name}
+      </span>
+    );
+  }
+  if (registration.registration_source === 'comp') {
+    return (
+      <span
+        title="Registered through the free-ticket link — no payment collected"
+        className="inline-flex items-center rounded-full border border-emerald-300 bg-emerald-100 px-2.5 py-0.5 text-xs font-medium text-emerald-800"
+      >
+        Free Ticket
       </span>
     );
   }
@@ -138,7 +149,7 @@ export default function AdminRegistrations() {
   const [key, setKey] = useState(() => sessionStorage.getItem(KEY_STORAGE) || '');
   const [authError, setAuthError] = useState('');
   const [decisionMessage, setDecisionMessage] = useState('');
-  const [sourceFilter, setSourceFilter] = useState('all'); // 'all' | 'direct' | sponsor slug
+  const [sourceFilter, setSourceFilter] = useState('all'); // 'all' | 'direct' | 'comp' | sponsor slug
   const queryClient = useQueryClient();
 
   const { data, isLoading, isError } = useQuery({
@@ -217,8 +228,10 @@ export default function AdminRegistrations() {
   ).entries()];
 
   const filtered = registrations.filter((r) => {
+    const source = r.registration_source ?? 'direct';
     if (sourceFilter === 'all') return true;
-    if (sourceFilter === 'direct') return (r.registration_source ?? 'direct') !== 'sponsor';
+    if (sourceFilter === 'direct') return source === 'direct';
+    if (sourceFilter === 'comp') return source === 'comp';
     return r.sponsor_slug === sourceFilter;
   });
 
@@ -238,7 +251,9 @@ export default function AdminRegistrations() {
   );
   const filterLabel = sourceFilter === 'direct'
     ? 'Direct'
-    : sponsorOptions.find(([slug]) => slug === sourceFilter)?.[1] ?? '';
+    : sourceFilter === 'comp'
+      ? 'Free Ticket'
+      : sponsorOptions.find(([slug]) => slug === sourceFilter)?.[1] ?? '';
 
   return (
     <div className="pt-24 pb-16">
@@ -257,6 +272,7 @@ export default function AdminRegistrations() {
             >
               <option value="all">All sources</option>
               <option value="direct">Direct</option>
+              <option value="comp">Free Ticket</option>
               {sponsorOptions.map(([slug, name]) => (
                 <option key={slug} value={slug}>{name}</option>
               ))}
@@ -282,7 +298,11 @@ export default function AdminRegistrations() {
         {sourceFilter !== 'all' && (
           <div className="mb-8 rounded-xl border border-primary/20 bg-primary/5 p-5">
             <p className="text-xs uppercase tracking-wider font-semibold text-primary mb-3">
-              {sourceFilter === 'direct' ? 'Direct registrations' : `Registered through ${filterLabel} sponsor link`}
+              {sourceFilter === 'direct'
+                ? 'Direct registrations'
+                : sourceFilter === 'comp'
+                  ? 'Registered through the free-ticket link'
+                  : `Registered through ${filterLabel} sponsor link`}
             </p>
             <div className="grid grid-cols-2 sm:grid-cols-5 gap-4 text-sm">
               <div><p className="text-muted-foreground text-xs">Total</p><p className="font-heading text-xl font-bold text-foreground">{summary.total}</p></div>
