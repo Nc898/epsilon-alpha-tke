@@ -110,6 +110,11 @@ export const CAR_SHOW_SPONSORS = [
     logo: '/assets/sponsors/cherry-garage.png',
     logoDisplay: 'immersive',
   },
+  {
+    name: 'Reid Vann Luxury Imports Specialists',
+    slug: 'reid-vann',
+    logo: '/assets/sponsors/reid-vann.png',
+  },
 ];
 
 // Generate a URL-safe slug from a sponsor name:
