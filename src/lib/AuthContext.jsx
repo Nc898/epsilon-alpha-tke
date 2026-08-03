@@ -33,7 +33,18 @@ export const AuthProvider = ({ children }) => {
     try {
       setIsLoadingPublicSettings(true);
       setAuthError(null);
-      
+
+      // No Base44 app configured (VITE_BASE44_APP_ID unset) — the request would
+      // resolve to .../by-id/undefined and 404. Skip the round trip entirely
+      // rather than spend it to learn nothing; this site is public either way.
+      if (!appParams.appId) {
+        setIsLoadingPublicSettings(false);
+        setIsLoadingAuth(false);
+        setIsAuthenticated(false);
+        setAuthChecked(true);
+        return;
+      }
+
       // First, check app public settings (with token if available)
       // This will tell us if auth is required, user not registered, etc.
       const appClient = createAxiosClient({

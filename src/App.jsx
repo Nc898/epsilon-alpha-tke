@@ -44,12 +44,14 @@ const Spinner = () => (
 );
 
 const AuthenticatedApp = () => {
-  const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
+  const { authError, navigateToLogin } = useAuth();
 
-  // Show loading spinner while checking app public settings or auth
-  if (isLoadingPublicSettings || isLoadingAuth) {
-    return <Spinner />;
-  }
+  // NOTE: deliberately NOT gated on isLoadingPublicSettings/isLoadingAuth.
+  // Every route here is public, so holding the whole site behind a full-screen
+  // spinner until a Base44 round trip finished only delayed first paint (and up
+  // to APP_STATE_TIMEOUT_MS on a slow backend). Auth now resolves in the
+  // background; anything that actually needs a user checks auth for itself
+  // (ProtectedRoute, or the admin pages' own passcode gate).
 
   // Handle authentication errors
   if (authError) {

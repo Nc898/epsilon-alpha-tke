@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 
 const Logo3D = lazy(() => import('./Logo3D'));
@@ -34,14 +34,44 @@ export default function PageHero({ eyebrow, title, accent, watermark = 'ΤΚΕ',
   const reduce = useReducedMotion();
   const spinCfg = SPIN_CONFIG[spin] ?? null;
 
-  // 3D only on fine-pointer devices without reduced motion — phones get the
-  // static logo image instead.
-  const [interactive] = useState(
-    () =>
-      typeof window !== 'undefined' &&
-      window.matchMedia('(pointer: fine)').matches &&
-      !window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  );
+  // The spinning logo is pure decoration (aria-hidden) and its container is
+  // `hidden lg:block`, so below 1024px it renders nothing at all. Gate the
+  // three.js chunk (~124KB gzipped) on the SAME breakpoint the CSS uses —
+  // otherwise a narrow desktop window downloads all of it to show nothing.
+  // Phones and reduced-motion users keep the static logo image.
+  //
+  // Loading is deferred to idle so WebGL never competes with the hero's own
+  // first paint, and re-evaluated on change so resizing across `lg` still works.
+  const [interactive, setInteractive] = useState(false);
+
+  useEffect(() => {
+    if (!spinCfg) return undefined;
+
+    const fine = window.matchMedia('(pointer: fine)');
+    const calm = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const wide = window.matchMedia('(min-width: 1024px)'); // Tailwind `lg`
+
+    const idle = window.requestIdleCallback ?? ((fn) => setTimeout(fn, 200));
+    const cancelIdle = window.cancelIdleCallback ?? clearTimeout;
+    let handle;
+
+    const sync = () => {
+      if (!(fine.matches && wide.matches && !calm.matches)) {
+        setInteractive(false);
+        return;
+      }
+      handle = idle(() => setInteractive(true));
+    };
+
+    sync();
+    wide.addEventListener('change', sync);
+    calm.addEventListener('change', sync);
+    return () => {
+      wide.removeEventListener('change', sync);
+      calm.removeEventListener('change', sync);
+      if (handle !== undefined) cancelIdle(handle);
+    };
+  }, [spinCfg]);
 
   const accentWords = new Set((accent ?? '').split(/\s+/).filter(Boolean));
   const words = title.split(/\s+/).map((text) => ({ text, accent: accentWords.has(text) }));
