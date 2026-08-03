@@ -19,12 +19,15 @@ export const NEWS_ITEMS = [
     body: "Friday, September 4 from 5:00–7:00 PM at City Foundry STL. Entry is free, registration is required, and the exotics-only field is capped at 30 vehicles. Apply online or contact Anthony Fahim at 314-374-5893.",
     cta: { label: 'Apply to Display', to: '/exotics-car-show' },
   },
-  {
-    id: 'carshow-2026',
-    icon: Flag,
-    tag: 'Registration Open',
-    title: 'All-Classics & Imports Car Show — July 26',
-    body: "Sunday, July 26 from 11:00 AM–2:00 PM at City Foundry STL. Entry is $30 per vehicle, and TKE is insured for the event. Every registered vehicle owner is recognized as a Participating Event Sponsor/Supporter. Official Sponsors receive recognition across all three shows.",
-    cta: { label: 'Sign Up Your Car', to: '/carshow' },
-  },
+  // ── HIDDEN — July 26 registration item, archived 2026-07-30 (event has
+  //    passed; its CTA pointed at the now-removed /carshow route). Restore
+  //    with the App.jsx HIDDEN block.
+  // {
+  //   id: 'carshow-2026',
+  //   icon: Flag,
+  //   tag: 'Registration Open',
+  //   title: 'All-Classics & Imports Car Show — July 26',
+  //   body: "Sunday, July 26 from 11:00 AM–2:00 PM at City Foundry STL. Entry is $30 per vehicle, and TKE is insured for the event. Every registered vehicle owner is recognized as a Participating Event Sponsor/Supporter. Official Sponsors receive recognition across all three shows.",
+  //   cta: { label: 'Sign Up Your Car', to: '/carshow' },
+  // },
 ];

@@ -141,7 +141,9 @@ export default function KineticHero() {
             </Link>
           </Magnetic>
           <Magnetic className="w-full sm:w-auto">
-            <Link to="/carshow" className="contents">
+            {/* Was /carshow — repointed 2026-07-30 when the July 26 show was
+                archived. Restore to /carshow with the App.jsx HIDDEN block. */}
+            <Link to="/philanthropy" className="contents">
               <Button size="lg" variant="outline" className="w-full sm:w-auto rounded-full border-white/30 text-white hover:bg-white/10 font-semibold px-8 h-14 text-base gap-2 transition-transform hover:scale-[1.02] active:scale-[0.98]">
                 <Heart className="h-5 w-5" /> Support St. Jude
               </Button>

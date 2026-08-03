@@ -25,9 +25,10 @@ const Register = lazy(() => import('./pages/Register'));
 const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
 const ResetPassword = lazy(() => import('./pages/ResetPassword'));
 const EventSignup = lazy(() => import('./pages/EventSignup'));
-const SponsorCarShowSignup = lazy(() => import('./pages/SponsorCarShowSignup'));
-const FreeCarShowSignup = lazy(() => import('./pages/FreeCarShowSignup'));
-const CarShow = lazy(() => import('./pages/CarShow'));
+// HIDDEN — July 26 car show, archived 2026-07-30 (see routes below).
+// const SponsorCarShowSignup = lazy(() => import('./pages/SponsorCarShowSignup'));
+// const FreeCarShowSignup = lazy(() => import('./pages/FreeCarShowSignup'));
+// const CarShow = lazy(() => import('./pages/CarShow'));
 const ExoticsCarShow = lazy(() => import('./pages/ExoticsCarShow'));
 const Donate = lazy(() => import('./pages/Donate'));
 const AdminRegistrations = lazy(() => import('./pages/AdminRegistrations'));
@@ -85,13 +86,19 @@ const AuthenticatedApp = () => {
           <Route path="/contact" element={<Contact />} />
           <Route path="/news" element={<News />} />
           <Route path="/events/:slug" element={<EventSignup />} />
+          {/* ── HIDDEN — July 26, 2026 All-Classics & Imports Car Show (archived
+              2026-07-30, event has passed). Restore this whole block together
+              with the matching HIDDEN blocks in Philanthropy.jsx, ForgeHero.jsx,
+              KineticHero.jsx, news.js and ChapterCalendar.jsx.
+              The Sept 4 Exotics show below is a SEPARATE live event — leave it.
           <Route path="/carshow" element={<CarShow />} />
           <Route path="/car-show" element={<CarShow />} />
-          {/* Free/comp car show registration — unlisted, no payment. Static
-              path outranks the :sponsorSlug param below regardless of order. */}
           <Route path="/carshow/register/free" element={<FreeCarShowSignup />} />
-          {/* Sponsor-attributed car show registration (see src/lib/carShowSponsors.js) */}
           <Route path="/carshow/register/:sponsorSlug" element={<SponsorCarShowSignup />} />
+          ── */}
+          {/* Static path outranks the generic /events/:slug above, so the
+              archived July show 404s instead of rendering its signup form. */}
+          <Route path="/events/car-show-2026" element={<PageNotFound />} />
           <Route path="/exotics-car-show" element={<ExoticsCarShow />} />
           <Route path="/events/exotics-car-show-2026" element={<ExoticsCarShow />} />
           <Route path="/donate" element={<Donate />} />

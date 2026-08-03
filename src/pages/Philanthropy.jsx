@@ -7,9 +7,10 @@ import Marquee from '../components/Marquee';
 import Magnetic from '../components/Magnetic';
 import { Button } from '@/components/ui/button';
 import Reveal from '../components/Reveal';
-import { Heart, Mail, ExternalLink, Car, Calendar, MapPin, ArrowRight, CheckCircle2, Handshake, Megaphone, Download } from 'lucide-react';
+// `Handshake` and `CAR_SHOW` are only used by the HIDDEN July 26 blocks below —
+// restore both imports when restoring those blocks (archived 2026-07-30).
+import { Heart, Mail, ExternalLink, Car, Calendar, MapPin, ArrowRight, CheckCircle2, Megaphone, Download } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { CAR_SHOW } from '@/lib/carShow';
 import { FEATURED_SPONSORS } from '@/lib/sponsors';
 import { EXOTICS_SHOW, ST_JUDE_URL } from '@/lib/exoticsCarShow';
 
@@ -50,11 +51,14 @@ export default function Philanthropy() {
             </Button>
           </a>
         </Magnetic>
+        {/* ── HIDDEN — July 26 car show archived 2026-07-30. Restore with the
+            App.jsx HIDDEN block.
         <Link to="/carshow">
           <Button size="lg" variant="outline" className="rounded-full border-white/30 text-white hover:bg-white/10 font-semibold gap-2 h-14 px-8 text-base transition-transform hover:scale-[1.02] active:scale-[0.98]">
             <Car className="h-5 w-5" /> Register for the Car Show
           </Button>
         </Link>
+        ── */}
         <a href={ST_JUDE_URL} target="_blank" rel="noopener noreferrer">
           <Button size="lg" variant="outline" className="rounded-full border-white/30 text-white hover:bg-white/10 font-semibold gap-2 h-14 px-8 text-base transition-transform hover:scale-[1.02] active:scale-[0.98]">
             <ExternalLink className="h-4 w-4" /> View Our Fundraising Page
@@ -80,6 +84,10 @@ export default function Philanthropy() {
             <h2 className="font-heading text-3xl sm:text-4xl font-bold text-foreground">Three shows. One mission.</h2>
             <p className="mt-3 text-muted-foreground">A full season of automotive events benefiting St. Jude Children&apos;s Research Hospital.</p>
           </Reveal>
+          {/* ── HIDDEN — the whole July 26 "Featured Event" promo card, archived
+              2026-07-30 (event has passed). Restore this Reveal block together
+              with the App.jsx HIDDEN block. The Sept 4 Exotics card that
+              follows is a SEPARATE live event — leave it alone.
           <Reveal>
             <div className="relative overflow-hidden rounded-[2rem] bg-[hsl(0,0%,7%)] text-white shadow-2xl">
               <div className="grid grid-cols-1 lg:grid-cols-2">
@@ -124,6 +132,7 @@ export default function Philanthropy() {
               </div>
             </div>
           </Reveal>
+          ── END HIDDEN July 26 card ── */}
 
           <Reveal delay={0.08}>
             <div className="relative mt-8 overflow-hidden rounded-[2rem] bg-[hsl(0,0%,7%)] text-white shadow-2xl">
@@ -221,7 +230,14 @@ export default function Philanthropy() {
             </p>
           </Reveal>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Grid was lg:grid-cols-2; the July "Participating Supporter" card
+              below is hidden (archived 2026-07-30), so the remaining Official
+              Sponsorship card centers instead of sitting in a half-width
+              column. Restore both together. */}
+          <div className="grid grid-cols-1 gap-6 max-w-2xl mx-auto">
+            {/* ── HIDDEN — July 26 registration tier card, archived 2026-07-30.
+                Restore with the App.jsx HIDDEN block (and put back
+                `lg:grid-cols-2` above).
             <Reveal>
               <div className="h-full rounded-3xl border border-border bg-card p-7 sm:p-9">
                 <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary"><Handshake className="h-6 w-6" /></div>
@@ -241,6 +257,7 @@ export default function Philanthropy() {
                 </Link>
               </div>
             </Reveal>
+            ── END HIDDEN July tier card ── */}
 
             <Reveal delay={0.08}>
               <div className="h-full rounded-3xl border border-primary/25 bg-[hsl(0,0%,7%)] p-7 text-white shadow-xl sm:p-9">
