@@ -53,7 +53,7 @@ export default function StJudeSection() {
             <div className="relative">
               <ImageReveal className="rounded-2xl shadow-2xl">
                 <div className="duotone-wrap">
-                  <img src="/assets/photos/p21.jpg" alt="TKE brothers at the St. Jude Walk"
+                  <img src="/assets/photos/p21.webp" alt="TKE brothers at the St. Jude Walk"
                     loading="lazy" decoding="async"
                     className="duotone w-full object-cover aspect-[4/3]" />
                 </div>

@@ -29,7 +29,7 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 const PHOTOS = [
   'p07', 'p09', 'p13', 'p15', 'p17', 'p18', 'p19', 'p21', 'p26', 'p27', 'p28',
   'q02', 'q05', 'q06', 'q07', 'q15', 'q16', 'q17', 'q22', 'q26', 'q31', 'q33', 'q34',
-].map((n) => `/assets/photos/thumb/${n}.jpg`);
+].map((n) => `/assets/photos/thumb/${n}.webp`);
 
 const GOLD = '#D9B450';
 const ESRI = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';

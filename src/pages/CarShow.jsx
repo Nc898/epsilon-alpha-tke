@@ -70,7 +70,7 @@ export default function CarShow() {
           <ImageReveal className="rounded-2xl shadow-2xl">
             <div className="duotone-wrap">
               <img
-                src="/assets/photos/q17.jpg"
+                src="/assets/photos/q17.webp"
                 alt="TKE car show at City Foundry STL"
                 className="duotone w-full object-cover aspect-[16/9]"
               />
@@ -191,7 +191,7 @@ export default function CarShow() {
                 <ImageReveal className="rounded-2xl shadow-2xl">
                   <div className="duotone-wrap">
                     <img
-                      src="/assets/photos/p26.jpg"
+                      src="/assets/photos/p26.webp"
                       alt="Ferrari beneath the TKE Car Show for St. Jude banner"
                       className="duotone w-full object-cover aspect-[4/5]"
                     />
@@ -300,7 +300,7 @@ export default function CarShow() {
                 aria-label="Open full-size car show flyer"
               >
                 <img
-                  src="/assets/car-show-flyer-preview.jpg"
+                  src="/assets/car-show-flyer-preview.webp"
                   alt="TKE × City Foundry STL All-Classics & Imports Car Show flyer — Sunday, July 26, 2026, benefiting St. Jude"
                   className="w-full max-w-sm mx-auto rounded-2xl shadow-2xl ring-1 ring-border transition-transform duration-300 group-hover:scale-[1.02]"
                 />

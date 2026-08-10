@@ -157,7 +157,7 @@ export default function CosmicIntro() {
 
       {/* SLU gate arrival */}
       <motion.div style={{ opacity: photoO }} className="absolute inset-0 overflow-hidden">
-        <motion.img src="/assets/slu-gate.jpg" alt="" aria-hidden="true"
+        <motion.img src="/assets/slu-gate.webp" alt="" aria-hidden="true"
           style={{ scale: photoScale }} className="h-full w-full object-cover" />
         <div className="absolute inset-0" style={{ background: 'radial-gradient(circle at 50% 45%, transparent 35%, rgba(5,3,4,0.65))' }} />
       </motion.div>

@@ -93,7 +93,7 @@ export default function Philanthropy() {
               <div className="grid grid-cols-1 lg:grid-cols-2">
                 <div className="relative min-h-[260px] lg:min-h-full">
                   <div className="duotone-wrap absolute inset-0">
-                    <img src="/assets/photos/p26.jpg" alt="TKE Car Show for St. Jude"
+                    <img src="/assets/photos/p26.webp" alt="TKE Car Show for St. Jude"
                       className="duotone w-full h-full object-cover" />
                   </div>
                   <div className="absolute inset-0 bg-gradient-to-t from-[hsl(0,0%,7%)] via-transparent to-transparent lg:bg-gradient-to-r" />

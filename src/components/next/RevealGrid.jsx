@@ -4,15 +4,15 @@ import Reveal from '../Reveal';
 import ScrollBlur from './ScrollBlur';
 
 const PHOTOS = [
-  '/assets/photos/q15.jpg',
-  '/assets/photos/p07.jpg',
-  '/assets/photos/q06.jpg',
-  '/assets/photos/p17.jpg',
-  '/assets/photos/q34.jpg',
-  '/assets/photos/p13.jpg',
-  '/assets/photos/q26.jpg',
-  '/assets/photos/p21.jpg',
-  '/assets/photos/q31.jpg',
+  '/assets/photos/q15.webp',
+  '/assets/photos/p07.webp',
+  '/assets/photos/q06.webp',
+  '/assets/photos/p17.webp',
+  '/assets/photos/q34.webp',
+  '/assets/photos/p13.webp',
+  '/assets/photos/q26.webp',
+  '/assets/photos/p21.webp',
+  '/assets/photos/q31.webp',
 ];
 
 function PhotoCard({ src }) {

@@ -11,7 +11,7 @@ import * as THREE from 'three';
  * Slow spin + float bob + pointer tilt. Callers gate mounting to fine-pointer
  * devices without reduced motion and provide a static-image fallback.
  */
-export default function Logo3D({ shape = 'triangle', textureUrl = '/assets/tke-crest.png', className }) {
+export default function Logo3D({ shape = 'triangle', textureUrl = '/assets/tke-crest.webp', className }) {
   const mountRef = useRef(null);
 
   useEffect(() => {

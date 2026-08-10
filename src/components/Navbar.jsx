@@ -127,7 +127,7 @@ export default function Navbar() {
           className="absolute left-1/2 -translate-x-1/2 top-1.5 z-20"
         >
           <motion.img
-            src="/assets/tke-crest.png"
+            src="/assets/tke-crest.webp"
             alt="Tau Kappa Epsilon"
             initial={{ y: -110, opacity: 0 }}
             animate={{ y: 0, opacity: 1, height: scrolled ? 80 : 144 }}

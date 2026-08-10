@@ -43,7 +43,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           <div>
             <img
-              src="/assets/tke-lockup-dark.png"
+              src="/assets/tke-lockup-dark.webp"
               alt="Tau Kappa Epsilon — Epsilon Alpha Chapter"
               width="200"
               loading="lazy"

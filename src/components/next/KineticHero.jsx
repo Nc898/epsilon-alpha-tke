@@ -75,11 +75,11 @@ export default function KineticHero() {
         className="absolute z-0 w-[300px] h-[300px] sm:w-[440px] sm:h-[440px] lg:w-[560px] lg:h-[560px]"
       >
         {interactive ? (
-          <Suspense fallback={<img src="/assets/tke-crest.png" alt="" className="w-full h-full object-contain opacity-90" />}>
+          <Suspense fallback={<img src="/assets/tke-crest.webp" alt="" className="w-full h-full object-contain opacity-90" />}>
             <Logo3D shape="triangle" className="w-full h-full" />
           </Suspense>
         ) : (
-          <img src="/assets/tke-crest.png" alt="" className="w-full h-full object-contain opacity-90 drop-shadow-2xl" />
+          <img src="/assets/tke-crest.webp" alt="" className="w-full h-full object-contain opacity-90 drop-shadow-2xl" />
         )}
       </motion.div>
 

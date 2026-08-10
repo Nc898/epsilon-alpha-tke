@@ -14,7 +14,7 @@ export const FEATURED_SPONSORS = [
   {
     id: 'revved-up-wishes',
     name: 'Revved Up Wishes',
-    logo: '/assets/sponsors/revved-up-wishes.png',
+    logo: '/assets/sponsors/revved-up-wishes.webp',
     darkBg: true,
   },
 ];

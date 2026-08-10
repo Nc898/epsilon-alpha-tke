@@ -195,7 +195,7 @@ export default function SatelliteIntro() {
         {(phase === 'arriving' || phase === 'flash') && (
           <motion.div key="gate" className="absolute inset-0 overflow-hidden"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.9, ease: 'easeOut' }}>
-            <motion.img src="/assets/slu-gate.jpg" alt="" aria-hidden="true"
+            <motion.img src="/assets/slu-gate.webp" alt="" aria-hidden="true"
               initial={{ scale: 1.3 }} animate={{ scale: 1.06 }} transition={{ duration: 1.6, ease: 'easeOut' }}
               className="h-full w-full object-cover" />
             <div className="absolute inset-0" style={{ background: 'radial-gradient(circle at 50% 45%, transparent 35%, rgba(5,3,4,0.6))' }} />

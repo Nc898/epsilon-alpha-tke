@@ -114,7 +114,7 @@ export default function FundraisingTracker({ raised = 12400, goal = 50000, isLoa
         <ImageReveal className="rounded-2xl shadow-xl h-full">
           <div className="duotone-wrap h-full">
             <img
-              src="/assets/photos/q26.jpg"
+              src="/assets/photos/q26.webp"
               alt="TKE brother accepting a St. Jude award"
               className="duotone w-full h-full object-cover"
               style={{ height: '100%' }}

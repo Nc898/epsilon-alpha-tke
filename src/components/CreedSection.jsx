@@ -19,7 +19,7 @@ export default function CreedSection() {
   const crestFallback = (
     <div className="h-full flex items-center justify-center">
       <img
-        src="/assets/tke-crest.png"
+        src="/assets/tke-crest.webp"
         alt=""
         className="h-44 sm:h-60 w-auto object-contain drop-shadow-2xl"
       />

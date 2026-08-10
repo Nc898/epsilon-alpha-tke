@@ -6,11 +6,11 @@ import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion
 import Magnetic from './Magnetic';
 
 const HERO_IMAGES = [
-  '/assets/photos/q15.jpg', // brothers + Lamborghini + TKE flag at the car show
-  '/assets/photos/q17.jpg', // City Foundry STL — the car show in full swing
-  '/assets/photos/q34.jpg', // overhead — the whole chapter among the show cars
-  '/assets/photos/q16.jpg', // a row of show cars
-  '/assets/photos/p17.jpg', // St. Jude Fundraising Dinner
+  '/assets/photos/q15.webp', // brothers + Lamborghini + TKE flag at the car show
+  '/assets/photos/q17.webp', // City Foundry STL — the car show in full swing
+  '/assets/photos/q34.webp', // overhead — the whole chapter among the show cars
+  '/assets/photos/q16.webp', // a row of show cars
+  '/assets/photos/p17.webp', // St. Jude Fundraising Dinner
 ];
 
 const ACCENT_STYLE = { color: 'hsl(1 70% 52%)', textShadow: '0 2px 16px rgba(0,0,0,0.55)' };
@@ -94,6 +94,24 @@ export default function HeroSection() {
     return () => clearInterval(t);
   }, []);
 
+  // All five slides are stacked and crossfaded via opacity, so every one used to
+  // download on mount (~1.7MB) even though only one is ever visible. Attach the
+  // background-image only to slides that have been reached, plus the NEXT one so
+  // it is fully decoded before its 1500ms crossfade begins. Once a slide has
+  // loaded it stays in the set, so looping back is instant and the visual
+  // behaviour is identical.
+  const [primed, setPrimed] = useState(() => new Set([0, 1 % HERO_IMAGES.length]));
+  useEffect(() => {
+    setPrimed((prev) => {
+      const next = (idx + 1) % HERO_IMAGES.length;
+      if (prev.has(idx) && prev.has(next)) return prev;
+      const merged = new Set(prev);
+      merged.add(idx);
+      merged.add(next);
+      return merged;
+    });
+  }, [idx]);
+
   const h1Style = { fontSize: 'clamp(2.75rem, 7.5vw, 6.5rem)', letterSpacing: '-0.02em', lineHeight: 1.05 };
 
   return (
@@ -104,7 +122,7 @@ export default function HeroSection() {
             className={`absolute inset-0 transition-opacity duration-[1500ms] ease-in-out bg-cover bg-center ${
               i === idx ? 'opacity-100' : 'opacity-0'
             }`}
-            style={{ backgroundImage: `url(${img})` }}
+            style={primed.has(i) ? { backgroundImage: `url(${img})` } : undefined}
           />
         ))}
       </motion.div>

@@ -13,7 +13,7 @@ export const EXOTICS_SHOW = {
   meetingSpot: 'City Foundry STL',
   beneficiary: "St. Jude Children's Research Hospital",
   suggestedDonation: 30,
-  image: '/assets/photos/q17.jpg',
+  image: '/assets/photos/q17.webp',
   contactName: 'Anthony Fahim',
   contactPhone: '314-374-5893',
   contactPhoneHref: 'tel:+13143745893',

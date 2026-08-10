@@ -63,7 +63,7 @@ export default function ForgeHero() {
       <motion.div style={reduce ? undefined : { x: typeX, y: typeY }} className="relative z-10 px-4 text-center">
         {/* glowing crest */}
         <motion.img
-          src="/assets/tke-crest.png"
+          src="/assets/tke-crest.webp"
           alt=""
           aria-hidden="true"
           style={reduce ? undefined : { x: crestX, y: crestY }}

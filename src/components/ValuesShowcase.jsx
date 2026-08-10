@@ -30,7 +30,7 @@ const VALUES = [
   },
 ];
 
-const GROUP_PHOTO = '/assets/tke-banquet.jpg';
+const GROUP_PHOTO = '/assets/tke-banquet.webp';
 const VALUES_HOLD_MS = 8000;
 const GROUP_HOLD_MS = 3000;
 

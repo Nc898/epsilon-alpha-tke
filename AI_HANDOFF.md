@@ -3,9 +3,17 @@
 Status: ready
 Owner: none
 Branch: `main`
-Last-known commit: `05c573c`
+Last-known commit: `0fb6df3`
 
 ## Latest result
+
+- 2026-07-30: **Performance round 2 — caching + images.** Measured live first: home was 35 requests / 3.0MB, of which 2.83MB (92%) was images.
+  (1) **Cache-Control.** Vercel's default `public, max-age=0, must-revalidate` was being served for EVERY asset, including content-hashed build output — ~35 conditional requests per page view for nothing. Added a `headers` block to `vercel.json`: hashed `/assets/*.(js|css)` → `max-age=31536000, immutable`; `public/` images → `max-age=604800` + `stale-while-revalidate=2592000`; `/assets/docs/**` → 1d + SWR. `index.html` deliberately left on the default so deploys still land immediately. Rationale + the "replacing an image can take a week to propagate" caveat are in `docs/caching.md` (JSON can't hold comments and Vercel rejects unknown keys like `"//"` inside a headers entry — do not re-add them, it fails the deploy).
+  (2) **Images 2,827KB → 1,098KB (61%).** New `scripts/optimize-images.py` (Pillow, already installed — no npm dep) writes `.webp` siblings at q82/method 6 and downscales four oversized originals in place: `tke-lockup-dark.png` was **4500px wide displayed at 200px** (kept PNG at 1200px because it is the `og:image`), plus tke-crest/tke-logo/stjude-logo → 512px. 58 refs across 24 files swapped to `.webp`. **Originals are intentionally kept** so a missed reference degrades instead of 404ing — dist ships both (32MB deploy, but users only fetch webp). Prune once prod has been clicked through.
+  (3) **HeroSection** stacked all 5 slides as background-images, so all 5 downloaded on mount (~1.7MB) though only one is visible. Now primes only the current + next slide (6s of lead time before its 1500ms crossfade), growing as it rotates. Visual behaviour identical.
+  ⚠️ Gotcha found: the `.jpg`→`.webp` sweep is regex-based and initially MISSED template literals — `chapterMemories.js` and `BrotherhoodIntro.jsx` build paths as `` `...${f}.jpg` ``. Both fixed; check template literals if adding images.
+  NOT done: **#3 from the audit (no SSR/prerender — `<div id="root">` ships empty)**. A real fix needs prerendering, which would bake a LivingBond animation frame into the HTML and change first paint — i.e. exactly the "don't change the UI" constraint. Deferred deliberately, needs a decision. Quantified adjacent win: `@base44/sdk`+axios (~25KB gz) sit in the entry chunk for a feature that is inert (no `VITE_BASE44_APP_ID`); a dynamic import in `AuthContext` would move it off the critical path.
+  Checks: lint clean, 50/50 tests, build exit 0. Browser-verified at 1280×800: zero broken images and zero `.jpg` fetched on home/philanthropy/exotics; hero primes 2 slides then grows; all 28 dist-referenced images resolve.
 
 - 2026-07-30: **Archived the July 26 car show** (event has passed) + **perf fixes**. Two commits.
   (A) Perf `05c573c`: `App.jsx` no longer gates the whole site behind a full-screen spinner until the Base44 public-settings request resolves — `VITE_BASE44_APP_ID` is unset so it 404'd on `.../by-id/undefined`, costing a round trip before first paint (up to the 6s timeout). `AuthContext` now skips that request entirely when no appId. `PageHero` gated the three.js chunk (~124KB gz) on `pointer: fine` while the logo's visibility is CSS `hidden lg:block` — a narrow desktop window downloaded 492KB to render nothing; now gated on the same 1024px breakpoint + deferred to idle.

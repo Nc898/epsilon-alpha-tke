@@ -20,22 +20,22 @@ import { INSTAGRAM_HANDLE, INSTAGRAM_URL } from '../lib/social';
 /* ── Photo wall (godly.website-style hero) ──────────────────────
    Add more photo URLs here as they come in — the wall cycles them. */
 const WALL_PHOTOS = [
-  '/assets/photos/q06.jpg', // Bugatti Chiron at the show
-  '/assets/photos/p07.jpg', // letterman jackets + TKE triangle at St. Jude
-  '/assets/photos/p13.jpg', // elf costumes
-  '/assets/photos/q02.jpg', // brother in a Lamborghini
-  '/assets/photos/p21.jpg', // St. Jude Walk
-  '/assets/photos/p09.jpg', // chapter game night
-  '/assets/photos/p26.jpg', // Ferrari + "TKE Car Show for St. Jude" banner
-  '/assets/photos/q22.jpg', // Mario at a costume night
-  '/assets/photos/q33.jpg', // TKE hearts Ronald McDonald House
-  '/assets/photos/p19.jpg', // late-night hangout
-  '/assets/photos/p18.jpg', // supercars at sunset
-  '/assets/photos/q07.jpg', // graduation
-  '/assets/photos/p28.jpg', // suiting up before a formal
-  '/assets/photos/q31.jpg', // western party
-  '/assets/photos/p27.jpg', // Halloween formal
-  '/assets/photos/q26.jpg', // accepting a St. Jude award
+  '/assets/photos/q06.webp', // Bugatti Chiron at the show
+  '/assets/photos/p07.webp', // letterman jackets + TKE triangle at St. Jude
+  '/assets/photos/p13.webp', // elf costumes
+  '/assets/photos/q02.webp', // brother in a Lamborghini
+  '/assets/photos/p21.webp', // St. Jude Walk
+  '/assets/photos/p09.webp', // chapter game night
+  '/assets/photos/p26.webp', // Ferrari + "TKE Car Show for St. Jude" banner
+  '/assets/photos/q22.webp', // Mario at a costume night
+  '/assets/photos/q33.webp', // TKE hearts Ronald McDonald House
+  '/assets/photos/p19.webp', // late-night hangout
+  '/assets/photos/p18.webp', // supercars at sunset
+  '/assets/photos/q07.webp', // graduation
+  '/assets/photos/p28.webp', // suiting up before a formal
+  '/assets/photos/q31.webp', // western party
+  '/assets/photos/p27.webp', // Halloween formal
+  '/assets/photos/q26.webp', // accepting a St. Jude award
 ];
 
 /* ── Rush events — Anthony fills in real title/date/time/location.

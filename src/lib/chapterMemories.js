@@ -3,7 +3,9 @@
  *
  * HOW TO MAINTAIN (for chapter leadership):
  *  - Add a real photo to /public/assets/photos/ (and a small copy in
- *    /public/assets/photos/thumb/ at ~512px — the intro uses the thumb).
+ *    /public/assets/photos/thumb/ at ~512px — the intro uses the thumb), then
+ *    run `python3 scripts/optimize-images.py` to generate the .webp the site
+ *    actually loads. The original .jpg stays as a fallback.
  *  - Add an entry below. Only `id`/`alt` are required.
  *  - `year` and `caption` are OPTIONAL and shown on hover only when set — nothing
  *    is fabricated, so leave them empty until you have the real details.
@@ -26,8 +28,8 @@ const GROUPS = ['love', 'charity', 'esteem'];
 
 export const MEMORIES = FILES.map((f, i) => ({
   id: f,
-  thumb: `/assets/photos/thumb/${f}.jpg`,
-  full: `/assets/photos/${f}.jpg`,
+  thumb: `/assets/photos/thumb/${f}.webp`,
+  full: `/assets/photos/${f}.webp`,
   year: null, // e.g. 2023 — shown on hover when set
   caption: '', // short caption — shown on hover when set
   alt: 'Tau Kappa Epsilon, Epsilon Alpha chapter moment',

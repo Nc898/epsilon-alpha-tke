@@ -4,8 +4,8 @@ import { motion, useReducedMotion } from 'framer-motion';
 const Logo3D = lazy(() => import('./Logo3D'));
 
 const SPIN_CONFIG = {
-  tke: { shape: 'triangle', textureUrl: '/assets/tke-crest.png', fallback: '/assets/tke-crest.png' },
-  stjude: { shape: 'disc', textureUrl: '/assets/stjude-logo.png', fallback: '/assets/stjude-logo.png' },
+  tke: { shape: 'triangle', textureUrl: '/assets/tke-crest.webp', fallback: '/assets/tke-crest.webp' },
+  stjude: { shape: 'disc', textureUrl: '/assets/stjude-logo.webp', fallback: '/assets/stjude-logo.webp' },
 };
 
 const wordContainer = {

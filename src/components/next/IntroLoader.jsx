@@ -60,7 +60,7 @@ export default function IntroLoader() {
           </span>
 
           <motion.img
-            src="/assets/tke-crest.png"
+            src="/assets/tke-crest.webp"
             alt=""
             className="relative h-20 sm:h-24 w-auto mb-8 drop-shadow-[0_8px_24px_rgba(0,0,0,0.6)]"
             initial={{ opacity: 0, scale: 0.82, y: 10 }}

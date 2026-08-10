@@ -45,13 +45,13 @@ describe('listSponsors', () => {
     const cherryGarage = listSponsors().find((s) => s.name === 'Cherry Garage');
     expect(cherryGarage).toBeTruthy();
     expect(cherryGarage.slug).toBe('cherry-garage');
-    expect(cherryGarage.logo).toBe('/assets/sponsors/cherry-garage.png');
+    expect(cherryGarage.logo).toBe('/assets/sponsors/cherry-garage.webp');
     expect(cherryGarage.active).toBe(true);
   });
 
   it('includes the Revved Up Wishes Sterrato showcase', () => {
     const revvedUp = listSponsors().find((s) => s.name === 'Revved Up Wishes');
-    expect(revvedUp?.feature?.image).toBe('/assets/sponsors/revved-sterrato-spin/frame-08.png');
+    expect(revvedUp?.feature?.image).toBe('/assets/sponsors/revved-sterrato-spin/frame-08.webp');
     expect(revvedUp?.feature?.title).toBe('2024 Lamborghini Huracan Sterrato');
     expect(revvedUp?.feature?.details).toContain('Verde Gea');
     expect(revvedUp?.feature?.spinFrames).toHaveLength(8);
@@ -62,10 +62,10 @@ describe('listSponsors', () => {
     expect(jimButler?.features).toHaveLength(2);
     expect(jimButler?.feature?.title).toBe('2024 Maserati MC20 Cielo'); // features[0]
     expect(jimButler?.features[0].spinFrames).toHaveLength(8);
-    expect(jimButler?.features[0].spinFrames[0]).toBe('/assets/sponsors/maserati-mc20-spin/frame-01.png');
+    expect(jimButler?.features[0].spinFrames[0]).toBe('/assets/sponsors/maserati-mc20-spin/frame-01.webp');
     expect(jimButler?.features[1].title).toBe('2024 Maserati Grecale Modena');
     expect(jimButler?.features[1].spinFrames).toHaveLength(8);
-    expect(jimButler?.features[1].spinFrames[0]).toBe('/assets/sponsors/maserati-grecale-spin/frame-01.png');
+    expect(jimButler?.features[1].spinFrames[0]).toBe('/assets/sponsors/maserati-grecale-spin/frame-01.webp');
   });
 });
 

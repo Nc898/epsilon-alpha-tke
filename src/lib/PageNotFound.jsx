@@ -33,7 +33,7 @@ export default function PageNotFound() {
 
             <div className="relative max-w-md w-full text-center space-y-7">
                 <img
-                    src="/assets/tke-crest.png"
+                    src="/assets/tke-crest.webp"
                     alt="Tau Kappa Epsilon crest"
                     className="h-24 w-auto object-contain mx-auto drop-shadow-2xl"
                 />
