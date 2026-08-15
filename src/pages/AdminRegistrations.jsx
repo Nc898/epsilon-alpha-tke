@@ -311,6 +311,17 @@ export default function AdminRegistrations() {
               <div><p className="text-muted-foreground text-xs">Failed / cancelled / refunded</p><p className="font-heading text-xl font-bold text-foreground">{summary.other}</p></div>
               <div><p className="text-muted-foreground text-xs">Collected (verified)</p><p className="font-heading text-xl font-bold text-foreground">{dollars(summary.collected_cents)}</p></div>
             </div>
+            {/* Sponsor package discount: $30 per COMPLETED registration through
+                this sponsor's link, applied to their sponsorship total only if
+                the sponsor requests it. Settled manually off-platform — this is
+                a tally, not an automatic Stripe credit. */}
+            {sourceFilter !== 'direct' && sourceFilter !== 'comp' && (
+              <p className="mt-4 border-t border-primary/15 pt-3 text-sm text-muted-foreground">
+                Sponsorship discount earned (if requested):{' '}
+                <span className="font-heading font-bold text-foreground">{dollars(summary.paidCount * 3000)}</span>
+                <span className="text-xs"> — $30 × {summary.paidCount} completed {summary.paidCount === 1 ? 'registration' : 'registrations'}, applied to this sponsor&apos;s event package, settled manually.</span>
+              </p>
+            )}
           </div>
         )}
 

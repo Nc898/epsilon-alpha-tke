@@ -4,11 +4,19 @@ import { Flag } from 'lucide-react';
 // slide-out NewsDrawer (a teaser) and the dedicated /news page (the full list).
 export const NEWS_ITEMS = [
   {
+    id: 'halloween-car-show-2026',
+    icon: Flag,
+    tag: 'Registration Open',
+    title: 'Halloween Car Show at Neiman Marcus — October 25',
+    body: "The 2026 series finale: Sunday, October 25 at Neiman Marcus, Plaza Frontenac. Sponsor vehicles load in at 9:30 AM, general registrations at 10:00 AM, and the show begins at 11:00 AM. Entry is $30 per vehicle, benefiting St. Jude. Car clubs and sponsors can request a custom registration link to invite their members and customers — and sponsor links earn $30 off the sponsor's event package per registered car, on request.",
+    cta: { label: 'Register Your Car', to: '/carshow' },
+  },
+  {
     id: 'car-show-series-2026',
     icon: Flag,
     tag: 'Three-Show Series',
     title: 'TKE Is Back — Three Charity Car Shows for St. Jude',
-    body: "The 2026 series begins with the All-Classics & Imports Car Show on July 26, continues with the 30-car Friday Night Lights exotics showcase on September 4, and concludes with a Halloween show—details coming soon. Official Car Show Sponsors receive recognition across all three events, plus an Instagram and website spotlight.",
+    body: "The 2026 series began with the All-Classics & Imports Car Show on July 26, continued with the 30-car Friday Night Lights exotics showcase on September 4, and concludes with the Halloween Car Show at Neiman Marcus on October 25. Official Car Show Sponsors receive recognition across all three events, plus an Instagram and website spotlight.",
     cta: { label: 'Explore the Series', to: '/philanthropy' },
   },
   {

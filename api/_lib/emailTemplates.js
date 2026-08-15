@@ -103,10 +103,14 @@ export function confirmationEmail({ registration, event }) {
   const car = carSummary(registration);
   const rainLine = rainPolicyLine(event);
   const isJulyShow = event.slug === 'car-show-2026' || event.date === '2026-07-26';
+  const isHalloweenShow = event.slug === 'halloween-car-show-2026';
   const julyHtml = isJulyShow
     ? `      <p style="margin:0 0 16px;"><strong>Transparency:</strong> TKE is insured for this event.</p>
       <p style="margin:0 0 16px;">Your registered vehicle also receives recognition as a Participating Event Sponsor/Supporter for the July 26 show.</p>`
-    : '';
+    : isHalloweenShow
+      ? `      <p style="margin:0 0 16px;"><strong>Load-in times:</strong> sponsor vehicles arrive at 9:30 AM, general registrations at 10:00 AM. The show begins at 11:00 AM.</p>
+      <p style="margin:0 0 16px;"><strong>Transparency:</strong> TKE is insured for this event.</p>`
+      : '';
 
   const bodyHtml = `      <h1 style="font-family:${SERIF};font-size:26px;font-weight:normal;color:${BLACK};margin:0 0 8px;">You're registered!</h1>
       <p style="margin:0 0 16px;">Hi ${escapeHtml(registration.name)}, your spot at <strong>${escapeHtml(event.title)}</strong> is confirmed. We can't wait to see your <strong>${escapeHtml(car)}</strong> on the lot.</p>
@@ -132,6 +136,7 @@ ${julyHtml}
     ``,
     `Show this email at check-in.`,
     ...(isJulyShow ? [``, `Transparency: TKE is insured for this event.`, `Your registered vehicle is recognized as a Participating Event Sponsor/Supporter.`] : []),
+    ...(isHalloweenShow ? [``, `Load-in times: sponsor vehicles 9:30 AM, general registrations 10:00 AM. Show begins 11:00 AM.`, `Transparency: TKE is insured for this event.`] : []),
     ``,
     rainLine,
     ``,

@@ -161,6 +161,16 @@ const CHAPTER_EVENTS = [
     event_type: 'philanthropy',
     status: 'upcoming',
   },
+  {
+    id: 'evt-oct-25',
+    title: 'Halloween Car Show at Neiman Marcus',
+    date: '2026-10-25',
+    time: 'Begins 11:00 AM',
+    location: 'Neiman Marcus, Plaza Frontenac',
+    description: 'The 2026 series finale benefiting St. Jude Children\'s Research Hospital. Sponsor vehicles load in at 9:30 AM, general registrations at 10:00 AM. $30 per vehicle — register at tkeslu.org/carshow.',
+    event_type: 'philanthropy',
+    status: 'upcoming',
+  },
   // NOVEMBER
   {
     id: 'evt-nov-06',

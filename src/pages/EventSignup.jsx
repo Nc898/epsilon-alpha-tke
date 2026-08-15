@@ -13,6 +13,14 @@ import { supabase } from '@/lib/supabaseClient';
 import { registrationSchema } from '@/lib/registrationSchema';
 import { entryCentsNow, isEarlyBird } from '@/lib/eventPricing';
 import { CAR_SHOW } from '@/lib/carShow';
+import { HALLOWEEN_SHOW } from '@/lib/halloweenShow';
+
+// Static per-show config, keyed by event slug — drives the dev mock, the
+// hosted-payment-link fallback, and the show-specific "good to know" strip.
+const SHOW_CONFIGS = {
+  [CAR_SHOW.slug]: CAR_SHOW,
+  [HALLOWEEN_SHOW.slug]: HALLOWEEN_SHOW,
+};
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -281,12 +289,13 @@ export default function EventSignup({ eventSlug = null, sponsor = null, free = f
         // Local dev has no Supabase env, so the event fetch is a no-op in prod
         // terms. Return a mock of the live car-show row for the car show slug so
         // the hero/form can be worked on locally; prod always uses real data.
-        if (import.meta.env.DEV && slug === CAR_SHOW.slug) {
+        const show = SHOW_CONFIGS[slug];
+        if (import.meta.env.DEV && show) {
           return {
-            id: 'dev-mock', slug: CAR_SHOW.slug, title: 'Classics & Imports Car Show',
-            date: CAR_SHOW.dateISO, time: CAR_SHOW.hoursLabel, location: `${CAR_SHOW.venue}, ${CAR_SHOW.address}`,
-            entry_price_cents: CAR_SHOW.price * 100, early_bird_price_cents: null, early_bird_until: null,
-            capacity: CAR_SHOW.capacity, registration_open: true, rain_date: null,
+            id: 'dev-mock', slug: show.slug, title: show.name,
+            date: show.dateISO, time: show.hoursLabel, location: `${show.venue}, ${show.address}`,
+            entry_price_cents: show.price * 100, early_bird_price_cents: null, early_bird_until: null,
+            capacity: show.capacity, registration_open: true, rain_date: null,
           };
         }
         return null;
@@ -408,13 +417,27 @@ export default function EventSignup({ eventSlug = null, sponsor = null, free = f
         return;
       }
       // Fallback: the registration is captured server-side before the Stripe
-      // session step, so if that step fails we still send them to the hosted
-      // Stripe payment link to complete payment rather than dead-ending. (Once
-      // STRIPE_SECRET_KEY/SITE_URL are correct this branch stops being hit.)
-      goToPayment(CAR_SHOW.registerUrl);
+      // session step, so if that step fails we still send them to THIS show's
+      // hosted Stripe payment link to complete payment rather than dead-ending.
+      // Guarded per show: an event with no hosted link (registerUrl null, e.g.
+      // the Halloween show) must never fall through to another show's link —
+      // that would charge into the wrong event's Stripe product.
+      const fallbackUrl = SHOW_CONFIGS[slug]?.registerUrl;
+      if (fallbackUrl) {
+        goToPayment(fallbackUrl);
+      } else {
+        setFreeError(data?.error || 'Something went wrong starting checkout. Please try again in a moment, or contact us and we’ll get you registered.');
+        setSubmitting(false);
+      }
     } catch {
-      // Network/server unreachable — still let them pay via the hosted link.
-      goToPayment(CAR_SHOW.registerUrl);
+      // Network/server unreachable — hosted link if this show has one.
+      const fallbackUrl = SHOW_CONFIGS[slug]?.registerUrl;
+      if (fallbackUrl) {
+        goToPayment(fallbackUrl);
+      } else {
+        setFreeError('We couldn’t reach the registration server. Please check your connection and try again.');
+        setSubmitting(false);
+      }
     }
   };
 
@@ -549,6 +572,29 @@ export default function EventSignup({ eventSlug = null, sponsor = null, free = f
               <div className="rounded-xl border border-white/10 bg-white/5 px-4 py-3">
                 <p className="text-[11px] uppercase tracking-wider text-accent font-semibold mb-1">Benefiting</p>
                 <p className="text-sm text-white/90">{CAR_SHOW.beneficiary}, organized by TKE Epsilon Alpha</p>
+              </div>
+            </div>
+          )}
+
+          {/* Halloween-show specifics — staggered load-in is the one thing
+              registrants must not miss day-of. */}
+          {slug === HALLOWEEN_SHOW.slug && (
+            <div className="mt-8 grid gap-3 sm:grid-cols-3 text-left max-w-2xl mx-auto">
+              <div className="rounded-xl border border-white/10 bg-white/5 px-4 py-3">
+                <p className="text-[11px] uppercase tracking-wider text-accent font-semibold mb-1">Load-in times</p>
+                <p className="text-sm text-white/90">
+                  Sponsor vehicles {HALLOWEEN_SHOW.sponsorLoadInLabel} · general registrations {HALLOWEEN_SHOW.generalLoadInLabel} · show begins {HALLOWEEN_SHOW.startLabel}
+                </p>
+              </div>
+              <div className="rounded-xl border border-white/10 bg-white/5 px-4 py-3">
+                <p className="text-[11px] uppercase tracking-wider text-accent font-semibold mb-1">
+                  {`Your $${HALLOWEEN_SHOW.price} entry`}
+                </p>
+                <p className="text-sm text-white/90">One vehicle · {HALLOWEEN_SHOW.insured ? 'insured · ' : ''}{HALLOWEEN_SHOW.venue}</p>
+              </div>
+              <div className="rounded-xl border border-white/10 bg-white/5 px-4 py-3">
+                <p className="text-[11px] uppercase tracking-wider text-accent font-semibold mb-1">Benefiting</p>
+                <p className="text-sm text-white/90">{HALLOWEEN_SHOW.beneficiary}, organized by TKE Epsilon Alpha</p>
               </div>
             </div>
           )}

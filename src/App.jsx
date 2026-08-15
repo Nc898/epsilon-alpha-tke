@@ -26,9 +26,11 @@ const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
 const ResetPassword = lazy(() => import('./pages/ResetPassword'));
 const EventSignup = lazy(() => import('./pages/EventSignup'));
 // HIDDEN — July 26 car show, archived 2026-07-30 (see routes below).
-// const SponsorCarShowSignup = lazy(() => import('./pages/SponsorCarShowSignup'));
 // const FreeCarShowSignup = lazy(() => import('./pages/FreeCarShowSignup'));
 // const CarShow = lazy(() => import('./pages/CarShow'));
+// SponsorCarShowSignup + /carshow now serve the OCTOBER show (halloweenShow.js).
+const SponsorCarShowSignup = lazy(() => import('./pages/SponsorCarShowSignup'));
+const HalloweenCarShow = lazy(() => import('./pages/HalloweenCarShow'));
 const ExoticsCarShow = lazy(() => import('./pages/ExoticsCarShow'));
 const Donate = lazy(() => import('./pages/Donate'));
 const AdminRegistrations = lazy(() => import('./pages/AdminRegistrations'));
@@ -87,15 +89,18 @@ const AuthenticatedApp = () => {
           <Route path="/news" element={<News />} />
           <Route path="/events/:slug" element={<EventSignup />} />
           {/* ── HIDDEN — July 26, 2026 All-Classics & Imports Car Show (archived
-              2026-07-30, event has passed). Restore this whole block together
-              with the matching HIDDEN blocks in Philanthropy.jsx, ForgeHero.jsx,
-              KineticHero.jsx, news.js and ChapterCalendar.jsx.
-              The Sept 4 Exotics show below is a SEPARATE live event — leave it.
-          <Route path="/carshow" element={<CarShow />} />
-          <Route path="/car-show" element={<CarShow />} />
+              2026-07-30, event has passed). /carshow was REUSED for the October
+              Halloween show on 2026-07-30, so restoring July's CarShow page
+              would need a different path. FreeCarShowSignup is hard-locked to
+              the July slug and stays retired.
           <Route path="/carshow/register/free" element={<FreeCarShowSignup />} />
-          <Route path="/carshow/register/:sponsorSlug" element={<SponsorCarShowSignup />} />
           ── */}
+          {/* October 25 Halloween Car Show at Neiman Marcus (halloweenShow.js).
+              The sponsor/club link route serves the October event; approved
+              slugs live in carShowSponsors.js (July's five are inactive). */}
+          <Route path="/carshow" element={<HalloweenCarShow />} />
+          <Route path="/car-show" element={<HalloweenCarShow />} />
+          <Route path="/carshow/register/:sponsorSlug" element={<SponsorCarShowSignup />} />
           {/* Static path outranks the generic /events/:slug above, so the
               archived July show 404s instead of rendering its signup form. */}
           <Route path="/events/car-show-2026" element={<PageNotFound />} />

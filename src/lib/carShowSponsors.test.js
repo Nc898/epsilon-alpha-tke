@@ -34,19 +34,30 @@ describe('listSponsors', () => {
     }
   });
 
-  it('includes Fastlane with the expected slug', () => {
+  it('keeps Fastlane with a stable slug but DEACTIVATED (July show archived)', () => {
     const fastlane = listSponsors().find((s) => s.name === 'Fastlane');
     expect(fastlane).toBeTruthy();
     expect(fastlane.slug).toBe('fastlane');
-    expect(fastlane.active).toBe(true);
+    // /carshow/register/* now serves the October show; July links must not
+    // attribute to it. Slugs stay forever for July's attribution history.
+    expect(fastlane.active).toBe(false);
   });
 
-  it('includes Cherry Garage with its logo and expected slug', () => {
+  it('keeps Cherry Garage (logo + slug) but deactivated with the July show', () => {
     const cherryGarage = listSponsors().find((s) => s.name === 'Cherry Garage');
     expect(cherryGarage).toBeTruthy();
     expect(cherryGarage.slug).toBe('cherry-garage');
     expect(cherryGarage.logo).toBe('/assets/sponsors/cherry-garage.webp');
-    expect(cherryGarage.active).toBe(true);
+    expect(cherryGarage.active).toBe(false);
+  });
+
+  it('deactivates ALL July sponsors so stale links cannot attribute to the October show', () => {
+    const julySlugs = ['fastlane', 'jim-butler', 'revved-up-wishes', 'cherry-garage', 'reid-vann'];
+    for (const slug of julySlugs) {
+      const s = getSponsorBySlug(slug);
+      expect(s, `july sponsor ${slug} must stay on the list (attribution history)`).toBeTruthy();
+      expect(s.active, `july sponsor ${slug} must be inactive`).toBe(false);
+    }
   });
 
   it('includes the Revved Up Wishes Sterrato showcase', () => {

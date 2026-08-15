@@ -33,13 +33,20 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const CAR_SHOW_SPONSORS = [
-  { name: 'Fastlane' },
+  // ── July 26, 2026 show sponsors — DEACTIVATED 2026-07-30 ─────────────────
+  // The /carshow/register/:slug route now serves the October 25 Halloween
+  // show. These five are kept (slugs must stay stable forever for July's
+  // attribution history) but inactive, so an old shared/printed July link
+  // cannot silently attribute a registration to the October event. If one of
+  // them sponsors the October show too, flip `active` back to true.
+  { name: 'Fastlane', active: false },
   {
     // Jim Butler dealer group — one registration link, both brand logos
     // rotate on the page (Maserati first, then Alfa Romeo), with an
     // interactive 8-angle spin of a white Maserati MC20 Cielo.
     name: 'Jim Butler Maserati & Alfa Romeo',
     slug: 'jim-butler',
+    active: false,
     logos: [
       '/assets/sponsors/jim-butler-maserati.webp',
       '/assets/sponsors/jim-butler-alfa-romeo.webp',
@@ -85,6 +92,7 @@ export const CAR_SHOW_SPONSORS = [
   },
   {
     name: 'Revved Up Wishes',
+    active: false,
     logo: '/assets/sponsors/revved-up-wishes.webp',
     feature: {
       image: '/assets/sponsors/revved-sterrato-spin/frame-08.webp',
@@ -107,14 +115,22 @@ export const CAR_SHOW_SPONSORS = [
   },
   {
     name: 'Cherry Garage',
+    active: false,
     logo: '/assets/sponsors/cherry-garage.webp',
     logoDisplay: 'immersive',
   },
   {
     name: 'Reid Vann Luxury Imports Specialists',
     slug: 'reid-vann',
+    active: false,
     logo: '/assets/sponsors/reid-vann.webp',
   },
+
+  // ── October 25, 2026 Halloween show (Neiman Marcus) ──────────────────────
+  // ★ ADD NEW CLUB/SPONSOR LINKS FOR THE OCTOBER SHOW HERE — one line each: ★
+  //   { name: 'Gateway Corvette Club' } → /carshow/register/gateway-corvette-club
+  // Sponsor links also drive the $30-per-car sponsorship discount tally shown
+  // in /admin (settled manually against the sponsor's package, on request).
 ];
 
 // Generate a URL-safe slug from a sponsor name:
