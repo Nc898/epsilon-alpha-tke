@@ -17,7 +17,7 @@ values
   ('Halloween Car Show at Neiman Marcus',
    'halloween-car-show-2026',
    '2026-10-25',
-   'Begins 11:00 AM',
+   '11:00 AM – 2:00 PM',
    'Neiman Marcus, Plaza Frontenac, 1701 S Lindbergh Blvd, Frontenac, MO 63131',
    'TKE × Neiman Marcus — the Halloween finale of the 2026 charity car show series, benefiting St. Jude Children''s Research Hospital. Sponsor vehicles load in at 9:30 AM, general registrations at 10:00 AM; the show begins at 11:00 AM.',
    'philanthropy', 'upcoming', true,

@@ -92,7 +92,7 @@ export default function HalloweenCarShow() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {[
               { icon: Calendar, label: 'Date', value: HALLOWEEN_SHOW.dateLabel },
-              { icon: Clock, label: 'Show Opens', value: HALLOWEEN_SHOW.hoursLabel },
+              { icon: Clock, label: 'Show Hours', value: HALLOWEEN_SHOW.hoursLabel },
               { icon: MapPin, label: HALLOWEEN_SHOW.venue, value: HALLOWEEN_SHOW.address, href: HALLOWEEN_SHOW.mapsUrl },
               { icon: Heart, label: 'Benefiting', value: HALLOWEEN_SHOW.beneficiary },
             ].map((f, i) => {

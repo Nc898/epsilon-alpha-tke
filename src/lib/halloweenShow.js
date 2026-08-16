@@ -17,10 +17,19 @@ export const HALLOWEEN_SHOW = {
   presenter: 'TKE × Neiman Marcus',
   beneficiary: "St. Jude Children's Research Hospital",
 
-  // No hosted Stripe Payment Link fallback yet — checkout uses the dynamic
-  // API. If a hosted link is created later, put it here and EventSignup's
-  // fallback path starts working automatically. MUST NOT reuse July's link.
-  registerUrl: null,
+  // Hosted Stripe Payment Link — the FALLBACK only. Normal checkout goes
+  // through api/checkout.js, which creates a dynamic session carrying
+  // registration_id metadata; this link is used solely when that step fails
+  // so a registrant can still pay instead of dead-ending.
+  //
+  // ⚠️ Payments made through this hosted link carry NO registration_id, so
+  // api/stripe-webhook.js cannot match them: the registration stays `pending`
+  // in /admin, no confirmation email is sent, and the sponsor's $30-per-car
+  // discount tally does not count it. Reconcile those by hand against the
+  // Stripe dashboard. (This is the same URL July used; it has been retitled
+  // in Stripe to "TKE x Neiman Marcus Car Show Registration" — anyone holding
+  // an old July link now pays into the October show.)
+  registerUrl: 'https://buy.stripe.com/00w7sLc0e0iuc499OU67S00',
 
   // Supabase event slug — the registration form lives at /events/<slug>.
   // Must match the seed SQL (supabase/migrations/20260730_halloween_car_show.sql).
@@ -29,11 +38,13 @@ export const HALLOWEEN_SHOW = {
   // Date / time (America/Chicago)
   dateISO: '2026-10-25',
   dateLabel: 'Sunday, October 25, 2026',
-  // Staggered load-in schedule. End time TBD — update hoursLabel when known.
+  // Staggered load-in schedule. Show hours confirmed from the Stripe Payment
+  // Link description ("Sunday, October 25 at Neiman Marcus, 11:00 AM–2:00 PM"),
+  // so checkout and the site agree.
   sponsorLoadInLabel: '9:30 AM',
   generalLoadInLabel: '10:00 AM',
   startLabel: '11:00 AM',
-  hoursLabel: 'Begins 11:00 AM',
+  hoursLabel: '11:00 AM – 2:00 PM',
 
   // Flat pricing, no capacity limit
   price: 30,
@@ -62,8 +73,7 @@ export const HALLOWEEN_SHOW = {
   sponsorDiscountPerCar: 30,
 };
 
-// "Add to Google Calendar" link. Oct 25 is CDT (UTC-5); 11:00 AM start.
-// End time TBD — blocked out to 2:00 PM as a placeholder until confirmed.
+// "Add to Google Calendar" link. Oct 25 is CDT (UTC-5); 11:00 AM – 2:00 PM.
 export function halloweenCalendarUrl() {
   const text = encodeURIComponent(`TKE ${HALLOWEEN_SHOW.name} at Neiman Marcus — for St. Jude`);
   const dates = '20261025T160000Z/20261025T190000Z';
