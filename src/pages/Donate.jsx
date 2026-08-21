@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion';
 import { Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { ST_JUDE_URL as STJUDE_URL } from '@/lib/stjude';
 
-const STJUDE_URL = 'https://fundraising.stjude.org/site/TR?fr_id=162451&pg=entry';
 
 export default function Donate() {
   return (

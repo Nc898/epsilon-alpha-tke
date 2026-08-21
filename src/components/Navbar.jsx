@@ -4,6 +4,7 @@ import { Menu, X, Heart, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getLenis } from '../lib/useLenis';
+import { ST_JUDE_URL as DONATE_URL } from '@/lib/stjude';
 
 const menuList = {
   hidden: {},
@@ -30,7 +31,6 @@ const RIGHT_LINKS = [
   { to: '/contact', label: 'Contact' },
 ];
 
-const DONATE_URL = 'https://fundraising.stjude.org/site/TR?fr_id=162451&pg=entry';
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);

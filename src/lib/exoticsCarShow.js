@@ -1,5 +1,7 @@
-export const ST_JUDE_URL = 'https://fundraising.stjude.org/site/TR?fr_id=162451&pg=entry';
-export const ST_JUDE_TAX_URL = 'https://www.stjude.org/about-st-jude/faq/is-my-donation-tax-deductible.html';
+// St. Jude links moved to src/lib/stjude.js (they were never exotics-specific
+// — the whole site uses them). Re-exported here so the unrouted ExoticsCarShow
+// page keeps compiling; new code should import from '@/lib/stjude' directly.
+export { ST_JUDE_URL, ST_JUDE_TAX_URL } from './stjude.js';
 
 export const EXOTICS_SHOW = {
   name: 'Friday Night Lights',

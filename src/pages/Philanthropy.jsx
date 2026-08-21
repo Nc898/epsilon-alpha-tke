@@ -9,13 +9,13 @@ import { Button } from '@/components/ui/button';
 import Reveal from '../components/Reveal';
 // `Handshake` and `CAR_SHOW` are only used by the HIDDEN July 26 blocks below —
 // restore both imports when restoring those blocks (archived 2026-07-30).
-import { Heart, Mail, ExternalLink, Car, Calendar, MapPin, ArrowRight, CheckCircle2, Megaphone, Download } from 'lucide-react';
+import { Heart, Mail, Phone, ExternalLink, Car, Calendar, MapPin, ArrowRight, CheckCircle2, Megaphone, Download } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { FEATURED_SPONSORS } from '@/lib/sponsors';
-// NOTE: ST_JUDE_URL/ST_JUDE_TAX_URL live in exoticsCarShow.js but are the
-// chapter's general St. Jude fundraising links, not exotics-specific — that
-// file stays even though the Sept 4 exotics show was cancelled (2026-07-30).
-import { ST_JUDE_URL } from '@/lib/exoticsCarShow';
+import {
+  ST_JUDE_URL, ST_JUDE_TAX_URL, FUNDRAISING_YEAR, LAST_YEAR,
+  ST_JUDE_CONTACT, CHAPTER_ST_JUDE_CONTACT,
+} from '@/lib/stjude';
 import { HALLOWEEN_SHOW } from '@/lib/halloweenShow';
 
 export default function Philanthropy() {
@@ -33,9 +33,11 @@ export default function Philanthropy() {
   });
 
   const fStats = statsArr[0];
-  // 2025–2026 fundraising year is complete — show the final total, no goal.
-  const YEAR_LABEL = '2025–2026';
-  const raised = 30104;
+  // The 2025–2026 fundraising year is complete — its final total renders as a
+  // recap further down. The active year (FUNDRAISING_YEAR) and current donate
+  // link come from src/lib/stjude.js.
+  const YEAR_LABEL = LAST_YEAR.label;
+  const raised = LAST_YEAR.raised;
 
   return (
     <div className="pt-24">
@@ -74,11 +76,68 @@ export default function Philanthropy() {
       <Marquee
         phrases={[
           `$${raised.toLocaleString()} raised in ${YEAR_LABEL}`,
+          `Now fundraising: ${FUNDRAISING_YEAR}`,
           `${fStats?.donor_count ?? 42} donors strong`,
           'Fighting childhood cancer',
           'TKE × St. Jude',
         ]}
       />
+
+      {/* ── Current fundraising year (2026–2027) ── */}
+      <section className="py-16 sm:py-20 bg-[hsl(0,0%,7%)] text-white overflow-hidden rounded-[2.5rem] mx-2 sm:mx-4 mt-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-10 lg:gap-14 items-center">
+            <Reveal>
+              <p className="text-accent font-semibold text-sm tracking-widest uppercase mb-3">Now Fundraising</p>
+              <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-5">
+                The <span className="text-primary">{FUNDRAISING_YEAR}</span> fundraising year is underway
+              </h2>
+              <p className="text-white/70 leading-relaxed mb-4">
+                Our {LAST_YEAR.label} campaign is in the books — we&apos;re now raising for the {FUNDRAISING_YEAR} year.
+                Every gift goes directly to St. Jude Children&apos;s Research Hospital through our official
+                fundraising page.
+              </p>
+              <p className="text-white/70 leading-relaxed mb-8">
+                Donations are{' '}
+                <a href={ST_JUDE_TAX_URL} target="_blank" rel="noopener noreferrer" className="font-semibold text-white underline decoration-primary/60 underline-offset-4 hover:decoration-primary">
+                  tax deductible
+                </a>{' '}
+                since they go directly to St. Jude — and when you include your address and details with your
+                donation, St. Jude will mail you an acknowledgment letter for your records.
+              </p>
+              <Magnetic>
+                <a href={ST_JUDE_URL} target="_blank" rel="noopener noreferrer">
+                  <Button size="lg" className="rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold gap-2 h-14 px-10 text-base transition-transform hover:scale-[1.02] active:scale-[0.98]">
+                    <Heart className="h-5 w-5" /> Donate to the {FUNDRAISING_YEAR} Campaign
+                  </Button>
+                </a>
+              </Magnetic>
+            </Reveal>
+
+            <Reveal delay={0.1}>
+              <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-7">
+                <p className="text-xs uppercase tracking-widest text-white/50 font-semibold">Questions? Start here</p>
+                <p className="mt-3 font-heading text-2xl font-bold">{CHAPTER_ST_JUDE_CONTACT.name}</p>
+                <p className="text-white/55 text-sm">Chapter contact — please reach out to Anthony first</p>
+                <a href={CHAPTER_ST_JUDE_CONTACT.phoneHref} className="mt-4 flex items-center gap-3 text-white/85 hover:text-primary transition-colors">
+                  <Phone className="h-5 w-5 text-primary" /> {CHAPTER_ST_JUDE_CONTACT.phone} <span className="text-white/45 text-xs">call / text</span>
+                </a>
+                <a href={`mailto:${CHAPTER_ST_JUDE_CONTACT.email}`} className="mt-2 flex items-center gap-3 break-all text-white/85 hover:text-primary transition-colors">
+                  <Mail className="h-5 w-5 flex-shrink-0 text-primary" /> {CHAPTER_ST_JUDE_CONTACT.email}
+                </a>
+                <div className="mt-6 border-t border-white/10 pt-5">
+                  <p className="text-xs uppercase tracking-widest text-white/50 font-semibold">Our St. Jude contact this year</p>
+                  <p className="mt-2 font-semibold text-white">{ST_JUDE_CONTACT.name}</p>
+                  <p className="text-white/55 text-sm">{ST_JUDE_CONTACT.office}</p>
+                  <a href={`mailto:${ST_JUDE_CONTACT.email}`} className="mt-1 inline-flex items-center gap-2 break-all text-sm text-white/75 hover:text-primary transition-colors">
+                    <Mail className="h-4 w-4 flex-shrink-0 text-primary" /> {ST_JUDE_CONTACT.email}
+                  </a>
+                </div>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
 
       {/* Featured Events */}
       <section className="py-16 sm:py-20 bg-background">
@@ -207,19 +266,16 @@ export default function Philanthropy() {
         </div>
       </section>
 
-      {/* Fundraising Progress */}
+      {/* 2025–2026 recap — completed year. All figures kept for the record;
+          the ONLY donate link on this page is the current-year one above. */}
       <section className="py-20 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Reveal className="text-center mb-12">
-            <p className="text-accent font-semibold text-sm tracking-widest uppercase mb-3">Our Progress</p>
-            <h2 className="font-heading text-3xl sm:text-4xl font-bold text-foreground">Fundraising Impact</h2>
+            <p className="text-accent font-semibold text-sm tracking-widest uppercase mb-3">{YEAR_LABEL} Recap</p>
+            <h2 className="font-heading text-3xl sm:text-4xl font-bold text-foreground">Last year&apos;s impact</h2>
             <p className="text-muted-foreground mt-3 max-w-xl mx-auto">
-              Our {YEAR_LABEL} total raised for{' '}
-              <a href={ST_JUDE_URL} target="_blank" rel="noopener noreferrer"
-                className="text-primary underline underline-offset-2 hover:text-primary/80">
-                St. Jude Children&apos;s Research Hospital
-              </a>
-              . Thank you to everyone who gave.
+              Our final {YEAR_LABEL} total raised for St. Jude Children&apos;s Research Hospital.
+              Thank you to everyone who gave — the {FUNDRAISING_YEAR} campaign is now underway above.
             </p>
           </Reveal>
           <div className="flex justify-center">

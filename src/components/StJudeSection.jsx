@@ -4,8 +4,8 @@ import { Heart, ExternalLink } from 'lucide-react';
 import Reveal from './Reveal';
 import ImageReveal from './ImageReveal';
 import Magnetic from './Magnetic';
+import { ST_JUDE_URL } from '@/lib/stjude';
 
-const ST_JUDE_URL = 'https://fundraising.stjude.org/site/TR?fr_id=162451&pg=entry';
 
 export default function StJudeSection() {
   return (

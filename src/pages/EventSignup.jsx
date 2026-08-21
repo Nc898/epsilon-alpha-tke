@@ -25,13 +25,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { ST_JUDE_URL } from '@/lib/stjude';
 
 const CAR_CLASSES = ['classic', 'exotic', 'performance', 'other'];
 // At or below this many remaining spots, show the true count for real urgency;
 // above it, the exact number is hidden (a high "spots left" count reads as an
 // empty event and discourages registration).
 const LOW_SPOTS = 12;
-const ST_JUDE_URL = 'https://fundraising.stjude.org/site/TR?fr_id=162451&pg=entry';
 
 function formatEventDate(dateStr) {
   if (!dateStr) return null;

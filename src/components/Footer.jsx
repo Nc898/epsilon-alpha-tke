@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { Heart, Phone, Mail, ArrowRight, Instagram } from 'lucide-react';
 import Reveal from './Reveal';
 import { INSTAGRAM_HANDLE, INSTAGRAM_URL } from '../lib/social';
+import { ST_JUDE_URL } from '@/lib/stjude';
 
 const LINKS = [
   { label: 'Home', to: '/' },
@@ -94,7 +95,7 @@ export default function Footer() {
             <Link to="/privacy" className="hover:text-accent transition-colors">Privacy Policy</Link>
             <Link to="/terms" className="hover:text-accent transition-colors">Terms of Service</Link>
           </div>
-          <a href="https://fundraising.stjude.org/site/TR?fr_id=162451&pg=entry" target="_blank" rel="noopener noreferrer"
+          <a href={ST_JUDE_URL} target="_blank" rel="noopener noreferrer"
             className="text-xs text-accent hover:text-accent/80 transition-colors font-semibold">
             Support St. Jude →
           </a>
