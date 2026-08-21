@@ -14,19 +14,14 @@ export const NEWS_ITEMS = [
   {
     id: 'car-show-series-2026',
     icon: Flag,
-    tag: 'Three-Show Series',
-    title: 'TKE Is Back — Three Charity Car Shows for St. Jude',
-    body: "The 2026 series began with the All-Classics & Imports Car Show on July 26, continued with the 30-car Friday Night Lights exotics showcase on September 4, and concludes with the Halloween Car Show at Neiman Marcus on October 25. Official Car Show Sponsors receive recognition across all three events, plus an Instagram and website spotlight.",
+    tag: 'Two-Show Series',
+    title: 'TKE Is Back — Two Charity Car Shows for St. Jude',
+    body: "The 2026 series began with the All-Classics & Imports Car Show on July 26 and concludes with the Halloween Car Show at Neiman Marcus on October 25. Official Car Show Sponsors receive recognition across both events, plus an Instagram and website spotlight.",
     cta: { label: 'Explore the Series', to: '/philanthropy' },
   },
-  {
-    id: 'exotics-car-show-2026',
-    icon: Flag,
-    tag: 'Applications Open',
-    title: 'Friday Night Lights — 30-Car Exotics Showcase',
-    body: "Friday, September 4 from 5:00–7:00 PM at City Foundry STL. Entry is free, registration is required, and the exotics-only field is capped at 30 vehicles. Apply online or contact Anthony Fahim at 314-374-5893.",
-    cta: { label: 'Apply to Display', to: '/exotics-car-show' },
-  },
+  // ── CANCELLED — the Sept 4 "Friday Night Lights" exotics showcase is not
+  //    happening; item removed 2026-07-30 along with its /exotics-car-show
+  //    route. The 2026 series is now July + October only.
   // ── HIDDEN — July 26 registration item, archived 2026-07-30 (event has
   //    passed; its CTA pointed at the now-removed /carshow route). Restore
   //    with the App.jsx HIDDEN block.

@@ -80,16 +80,8 @@ const CHAPTER_EVENTS = [
     status: 'upcoming',
   },
   // SEPTEMBER
-  {
-    id: 'evt-sep-04',
-    title: 'Friday Night Lights',
-    date: '2026-09-04',
-    time: '5:00 PM – 7:00 PM',
-    location: 'City Foundry STL',
-    description: 'Free, registration-required exotics showcase capped at 30 vehicles and benefiting St. Jude Children\'s Research Hospital.',
-    event_type: 'philanthropy',
-    status: 'upcoming',
-  },
+  // CANCELLED — 'evt-sep-04' Friday Night Lights exotics showcase removed
+  // 2026-07-30; the event is not happening. 2026 series is July + October.
   {
     id: 'evt-sep-09',
     title: 'IFC Recruitment Meet & Greet',

@@ -31,7 +31,9 @@ const EventSignup = lazy(() => import('./pages/EventSignup'));
 // SponsorCarShowSignup + /carshow now serve the OCTOBER show (halloweenShow.js).
 const SponsorCarShowSignup = lazy(() => import('./pages/SponsorCarShowSignup'));
 const HalloweenCarShow = lazy(() => import('./pages/HalloweenCarShow'));
-const ExoticsCarShow = lazy(() => import('./pages/ExoticsCarShow'));
+// CANCELLED — Sept 4 "Friday Night Lights" exotics showcase, removed 2026-07-30.
+// The event is not happening; the 2026 series is now July + October only.
+// const ExoticsCarShow = lazy(() => import('./pages/ExoticsCarShow'));
 const Donate = lazy(() => import('./pages/Donate'));
 const AdminRegistrations = lazy(() => import('./pages/AdminRegistrations'));
 const Gallery = lazy(() => import('./pages/Gallery'));
@@ -104,8 +106,15 @@ const AuthenticatedApp = () => {
           {/* Static path outranks the generic /events/:slug above, so the
               archived July show 404s instead of rendering its signup form. */}
           <Route path="/events/car-show-2026" element={<PageNotFound />} />
+          {/* ── CANCELLED — Sept 4 exotics showcase, removed 2026-07-30 ──
           <Route path="/exotics-car-show" element={<ExoticsCarShow />} />
-          <Route path="/events/exotics-car-show-2026" element={<ExoticsCarShow />} />
+          ── */}
+          {/* Static path outranks the generic /events/:slug above, so the
+              cancelled exotics show 404s instead of rendering its apply form
+              (its Supabase row may still exist until registration_open is
+              turned off). */}
+          <Route path="/exotics-car-show" element={<PageNotFound />} />
+          <Route path="/events/exotics-car-show-2026" element={<PageNotFound />} />
           <Route path="/donate" element={<Donate />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/gallery/:slug" element={<GalleryAlbum />} />

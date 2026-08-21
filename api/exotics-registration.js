@@ -85,6 +85,17 @@ function organizerEmail(registration) {
 }
 
 export default async function handler(req, res) {
+  // ── CANCELLED 2026-07-30 ──────────────────────────────────────────────────
+  // The Sept 4 "Friday Night Lights" exotics showcase is not happening. Its
+  // pages are removed from the site, but this endpoint stays reachable on its
+  // own URL, so it is hard-closed here: a stale tab, a cached page, or a direct
+  // POST can no longer create an application or send an acceptance email.
+  // The rest of the handler is intact — delete this block to reinstate.
+  return res.status(410).json({
+    error: 'The Friday Night Lights exotics showcase has been cancelled. Our next event is the Halloween Car Show at Neiman Marcus on October 25 — register at tkeslu.org/carshow.',
+  });
+
+  // eslint-disable-next-line no-unreachable
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   const parsed = exoticsRegistrationSchema.safeParse(req.body);

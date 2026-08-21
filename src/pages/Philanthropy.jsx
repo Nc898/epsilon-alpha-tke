@@ -12,7 +12,11 @@ import Reveal from '../components/Reveal';
 import { Heart, Mail, ExternalLink, Car, Calendar, MapPin, ArrowRight, CheckCircle2, Megaphone, Download } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { FEATURED_SPONSORS } from '@/lib/sponsors';
-import { EXOTICS_SHOW, ST_JUDE_URL } from '@/lib/exoticsCarShow';
+// NOTE: ST_JUDE_URL/ST_JUDE_TAX_URL live in exoticsCarShow.js but are the
+// chapter's general St. Jude fundraising links, not exotics-specific — that
+// file stays even though the Sept 4 exotics show was cancelled (2026-07-30).
+import { ST_JUDE_URL } from '@/lib/exoticsCarShow';
+import { HALLOWEEN_SHOW } from '@/lib/halloweenShow';
 
 export default function Philanthropy() {
   const { data: remoteSponsors = [] } = useQuery({
@@ -81,13 +85,14 @@ export default function Philanthropy() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Reveal className="mb-10 text-center">
             <p className="text-accent font-semibold text-sm tracking-widest uppercase mb-3">Upcoming Fundraisers</p>
-            <h2 className="font-heading text-3xl sm:text-4xl font-bold text-foreground">Three shows. One mission.</h2>
+            <h2 className="font-heading text-3xl sm:text-4xl font-bold text-foreground">Two shows. One mission.</h2>
             <p className="mt-3 text-muted-foreground">A full season of automotive events benefiting St. Jude Children&apos;s Research Hospital.</p>
           </Reveal>
           {/* ── HIDDEN — the whole July 26 "Featured Event" promo card, archived
               2026-07-30 (event has passed). Restore this Reveal block together
-              with the App.jsx HIDDEN block. The Sept 4 Exotics card that
-              follows is a SEPARATE live event — leave it alone.
+              with the App.jsx HIDDEN block. The card that follows is now the
+              October Halloween show (it replaced the cancelled Sept 4 exotics
+              card) — leave it alone.
           <Reveal>
             <div className="relative overflow-hidden rounded-[2rem] bg-[hsl(0,0%,7%)] text-white shadow-2xl">
               <div className="grid grid-cols-1 lg:grid-cols-2">
@@ -134,44 +139,48 @@ export default function Philanthropy() {
           </Reveal>
           ── END HIDDEN July 26 card ── */}
 
+          {/* Was the Sept 4 "Friday Night Lights" exotics card — that show was
+              CANCELLED 2026-07-30. Replaced with the October 25 Halloween show
+              so this section still has the season's live event (the July card
+              above is hidden). */}
           <Reveal delay={0.08}>
             <div className="relative mt-8 overflow-hidden rounded-[2rem] bg-[hsl(0,0%,7%)] text-white shadow-2xl">
               <div className="grid grid-cols-1 lg:grid-cols-2">
                 <div className="p-8 sm:p-10 lg:p-12 flex flex-col justify-center order-2 lg:order-1">
-                  <p className="text-accent font-semibold text-sm tracking-widest uppercase mb-3">Curated · Complimentary · 30 Cars</p>
+                  <p className="text-accent font-semibold text-sm tracking-widest uppercase mb-3">{HALLOWEEN_SHOW.presenter}</p>
                   <h3 className="font-heading text-3xl sm:text-4xl font-bold leading-tight mb-4">
-                    <span className="text-primary">Friday</span> Night Lights
+                    <span className="text-primary">Halloween</span> Car Show
                   </h3>
                   <div className="space-y-2 text-white/75 mb-6">
-                    <p className="flex items-center gap-3"><Calendar className="h-4 w-4 text-primary flex-shrink-0" /> {EXOTICS_SHOW.dateLabel} · {EXOTICS_SHOW.hoursLabel}</p>
-                    <p className="flex items-center gap-3"><MapPin className="h-4 w-4 text-primary flex-shrink-0" /> {EXOTICS_SHOW.venue}</p>
-                    <p className="flex items-center gap-3"><Heart className="h-4 w-4 text-primary flex-shrink-0" /> Benefiting {EXOTICS_SHOW.beneficiary}</p>
+                    <p className="flex items-center gap-3"><Calendar className="h-4 w-4 text-primary flex-shrink-0" /> {HALLOWEEN_SHOW.dateLabel} · {HALLOWEEN_SHOW.hoursLabel}</p>
+                    <p className="flex items-center gap-3"><MapPin className="h-4 w-4 text-primary flex-shrink-0" /> {HALLOWEEN_SHOW.venue}</p>
+                    <p className="flex items-center gap-3"><Heart className="h-4 w-4 text-primary flex-shrink-0" /> Benefiting {HALLOWEEN_SHOW.beneficiary}</p>
                   </div>
                   <p className="text-white/55 text-sm mb-7">
-                    Complimentary, application-based display. A ${EXOTICS_SHOW.suggestedDonation} St. Jude donation is encouraged but never required. Every vehicle is protected by stanchions during the show.
+                    ${HALLOWEEN_SHOW.price} per vehicle. Sponsor vehicles load in at {HALLOWEEN_SHOW.sponsorLoadInLabel}, general registrations at {HALLOWEEN_SHOW.generalLoadInLabel}. Car clubs and sponsors can request a custom registration link.
                   </p>
                   <div className="flex flex-wrap gap-3">
                     <Magnetic>
-                      <Link to="/exotics-car-show">
+                      <Link to={`/events/${HALLOWEEN_SHOW.slug}`}>
                         <Button size="lg" className="rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold gap-2 h-12 px-7 transition-transform hover:scale-[1.02] active:scale-[0.98]">
-                          <Car className="h-5 w-5" /> Apply to Display
+                          <Car className="h-5 w-5" /> Register Your Vehicle
                         </Button>
                       </Link>
                     </Magnetic>
-                    <a href={ST_JUDE_URL} target="_blank" rel="noopener noreferrer">
+                    <Link to="/carshow">
                       <Button size="lg" variant="outline" className="rounded-full border-white/25 text-white hover:bg-white/10 font-semibold gap-2 h-12 px-7 transition-transform hover:scale-[1.02] active:scale-[0.98]">
-                        Donate ${EXOTICS_SHOW.suggestedDonation} <ExternalLink className="h-4 w-4" />
+                        Event Details <ArrowRight className="h-4 w-4" />
                       </Button>
-                    </a>
+                    </Link>
                   </div>
                 </div>
                 <div className="relative min-h-[300px] lg:min-h-full order-1 lg:order-2">
                   <div className="duotone-wrap absolute inset-0">
-                    <img src={EXOTICS_SHOW.image} alt="Vehicles displayed at City Foundry STL" className="duotone w-full h-full object-cover" />
+                    <img src="/assets/photos/q34.webp" alt="TKE brothers among the show cars" className="duotone w-full h-full object-cover" />
                   </div>
                   <div className="absolute inset-0 bg-gradient-to-t from-[hsl(0,0%,7%)] via-transparent to-transparent lg:bg-gradient-to-l" />
                   <span className="absolute top-5 right-5 inline-flex items-center gap-2 bg-primary text-primary-foreground text-xs font-bold uppercase tracking-wide rounded-full px-4 py-1.5">
-                    <Car className="h-3.5 w-3.5" /> New Event
+                    <Car className="h-3.5 w-3.5" /> Next Event
                   </span>
                 </div>
               </div>
@@ -226,7 +235,7 @@ export default function Philanthropy() {
             <p className="text-accent font-semibold text-sm tracking-widest uppercase mb-3">Partner With Us</p>
             <h2 className="font-heading text-3xl sm:text-4xl font-bold text-foreground mb-4">Participation recognition or Official Sponsorship</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Every registered July vehicle owner is recognized as a Participating Event Sponsor/Supporter. Official Sponsors receive expanded visibility across all three shows.
+              Every registered July vehicle owner is recognized as a Participating Event Sponsor/Supporter. Official Sponsors receive expanded visibility across both shows.
             </p>
           </Reveal>
 
@@ -262,19 +271,21 @@ export default function Philanthropy() {
             <Reveal delay={0.08}>
               <div className="h-full rounded-3xl border border-primary/25 bg-[hsl(0,0%,7%)] p-7 text-white shadow-xl sm:p-9">
                 <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/15 text-primary"><Megaphone className="h-6 w-6" /></div>
-                <p className="mt-6 text-xs font-bold uppercase tracking-[0.2em] text-accent">All three shows · Official</p>
+                <p className="mt-6 text-xs font-bold uppercase tracking-[0.2em] text-accent">Both shows · Official</p>
                 <h3 className="mt-2 font-heading text-3xl font-bold">Official Car Show Sponsorship</h3>
                 <p className="mt-4 leading-relaxed text-white/65">
-                  One Official Sponsorship provides recognition across the July All-Classics &amp; Imports show, Friday Night Lights in September, and the Halloween show.
+                  One Official Sponsorship provides recognition across both 2026 shows — the July All-Classics &amp; Imports show and the Halloween Car Show at Neiman Marcus in October.
                 </p>
                 <ul className="mt-6 space-y-3 text-sm text-white/65">
                   <li className="flex gap-3"><CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-primary" /> On-site signage and promotional materials</li>
-                  <li className="flex gap-3"><CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-primary" /> Social-media recognition across all three events</li>
+                  <li className="flex gap-3"><CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-primary" /> Social-media recognition across both events</li>
                   <li className="flex gap-3"><CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-primary" /> Logo in the rotating website sponsor showcase</li>
                   <li className="flex gap-3"><CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-primary" /> Sponsor activation coordinated directly with Anthony</li>
                 </ul>
-                <Link to="/exotics-car-show">
-                  <Button className="mt-7 rounded-full bg-primary font-semibold text-primary-foreground hover:bg-primary/90">View paid sponsorship details <ArrowRight className="ml-2 h-4 w-4" /></Button>
+                {/* Was /exotics-car-show (cancelled 2026-07-30) — repointed to
+                    the live October show's page. */}
+                <Link to="/carshow">
+                  <Button className="mt-7 rounded-full bg-primary font-semibold text-primary-foreground hover:bg-primary/90">View sponsorship details <ArrowRight className="ml-2 h-4 w-4" /></Button>
                 </Link>
               </div>
             </Reveal>
