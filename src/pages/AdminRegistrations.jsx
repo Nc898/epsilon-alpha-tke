@@ -1,15 +1,23 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
-import { Loader2, Lock, Download, LogOut } from 'lucide-react';
+import { Loader2, Lock, Download, LogOut, CalendarDays } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
 const KEY_STORAGE = 'tke_admin_key';
+const EXOTICS_SLUG = 'exotics-car-show-2026';
 
 function dollars(cents) {
   return `$${((cents ?? 0) / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+}
+
+// Event dates are plain YYYY-MM-DD; pin to local noon so the calendar day
+// never shifts across a timezone boundary.
+function showDate(dateStr) {
+  if (!dateStr) return '';
+  return format(new Date(`${dateStr}T12:00:00`), 'MMM d, yyyy');
 }
 
 const STATUS_STYLES = {
@@ -37,14 +45,8 @@ function csvEscape(value) {
   return s;
 }
 
-function exportCsv(rows) {
-  const headers = [
-    'Name', 'Email', 'Phone', 'Car Year', 'Car Make', 'Car Model', 'Color', 'Instagram',
-    'Application Notes', 'Class', 'Status', 'Amount Paid', 'Donation', 'Event', 'Registered At',
-    // Sponsor attribution (payment_status mirrors Status; amount_paid mirrors Amount Paid)
-    'registration_source', 'sponsor_name', 'sponsor_slug', 'referral_page',
-    'payment_status', 'amount_paid', 'stripe_session_id', 'stripe_payment_intent_id',
-  ];
+function exportCsv(rows, filename) {
+  const headers = ['Name', 'Email', 'Phone', 'Car Year', 'Car Make', 'Car Model', 'Color', 'Instagram', 'Application Notes', 'Class', 'Status', 'Amount Paid', 'Donation', 'Event', 'Registered At'];
   const lines = [headers.join(',')];
   for (const r of rows) {
     lines.push([
@@ -54,48 +56,17 @@ function exportCsv(rows) {
       ((r.amount_paid_cents ?? 0) / 100).toFixed(2),
       ((r.donation_cents ?? 0) / 100).toFixed(2),
       r.events?.title, r.created_at,
-      r.registration_source ?? 'direct', r.sponsor_name, r.sponsor_slug, r.referral_page,
-      r.status,
-      ((r.amount_paid_cents ?? 0) / 100).toFixed(2),
-      r.stripe_session_id, r.stripe_payment_intent_id,
     ].map(csvEscape).join(','));
   }
   const blob = new Blob([lines.join('\n')], { type: 'text/csv;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = 'registrations.csv';
+  a.download = filename || 'registrations.csv';
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
-}
-
-// "Direct" vs "Registered through <sponsor> sponsor link" vs the unlisted,
-// no-payment "Free Ticket" link — each gets a distinct badge; the full
-// sentence + referral URL (sponsor) live in the hover title.
-function SourceBadge({ registration }) {
-  if (registration.registration_source === 'sponsor' && registration.sponsor_name) {
-    return (
-      <span
-        title={`Registered through ${registration.sponsor_name} sponsor link${registration.referral_page ? ` — ${registration.referral_page}` : ''}`}
-        className="inline-flex items-center rounded-full border border-primary/25 bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary"
-      >
-        {registration.sponsor_name}
-      </span>
-    );
-  }
-  if (registration.registration_source === 'comp') {
-    return (
-      <span
-        title="Registered through the free-ticket link — no payment collected"
-        className="inline-flex items-center rounded-full border border-emerald-300 bg-emerald-100 px-2.5 py-0.5 text-xs font-medium text-emerald-800"
-      >
-        Free Ticket
-      </span>
-    );
-  }
-  return <span className="text-muted-foreground text-xs">Direct</span>;
 }
 
 function KeyForm({ onSubmit, error }) {
@@ -145,11 +116,107 @@ function StatTile({ label, value }) {
   );
 }
 
+// Group the flat registration list by event and roll up per-show totals, then
+// decide which shows deserve a tab: any show that is still open for
+// registration (the current show, even with zero entries yet) or any show that
+// already captured at least one registration (a previous show's archive).
+function buildShows(events, registrations) {
+  const byEvent = new Map();
+  for (const r of registrations) {
+    if (!r.event_id) continue;
+    if (!byEvent.has(r.event_id)) byEvent.set(r.event_id, []);
+    byEvent.get(r.event_id).push(r);
+  }
+
+  return (events ?? [])
+    .map((event) => {
+      const rows = byEvent.get(event.id) ?? [];
+      const totals = { count: rows.length, paid: 0, pending: 0, approved: 0, waitlisted: 0, gross_cents: 0, donation_cents: 0 };
+      for (const r of rows) {
+        if (r.status === 'paid') {
+          totals.paid += 1;
+          totals.gross_cents += r.amount_paid_cents ?? 0;
+        } else if (r.status === 'pending') {
+          totals.pending += 1;
+        } else if (r.status === 'approved') {
+          totals.approved += 1;
+        } else if (r.status === 'waitlisted') {
+          totals.waitlisted += 1;
+        }
+        totals.donation_cents += r.donation_cents ?? 0;
+      }
+      return { event, rows, totals };
+    })
+    .filter((show) => show.event.registration_open || show.totals.count > 0);
+}
+
+function ShowTable({ rows, isExotics, decisionMutation }) {
+  if (rows.length === 0) {
+    return (
+      <div className="bg-card border border-border rounded-xl shadow-sm">
+        <p className="text-muted-foreground text-sm text-center py-12">No registrations yet.</p>
+      </div>
+    );
+  }
+  return (
+    <div className="bg-card border border-border rounded-xl shadow-sm overflow-hidden">
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b border-border bg-muted/50 text-left">
+              <th className="font-medium text-muted-foreground px-4 py-3 whitespace-nowrap">Name</th>
+              <th className="font-medium text-muted-foreground px-4 py-3 whitespace-nowrap">Email</th>
+              <th className="font-medium text-muted-foreground px-4 py-3 whitespace-nowrap">Car</th>
+              <th className="font-medium text-muted-foreground px-4 py-3 whitespace-nowrap">Class</th>
+              <th className="font-medium text-muted-foreground px-4 py-3 whitespace-nowrap">Status</th>
+              <th className="font-medium text-muted-foreground px-4 py-3 whitespace-nowrap">Registered</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((r) => (
+              <tr key={r.id} className="border-b border-border last:border-b-0">
+                <td className="px-4 py-3 font-medium text-foreground whitespace-nowrap">{r.name}</td>
+                <td className="px-4 py-3 text-muted-foreground whitespace-nowrap">{r.email}</td>
+                <td className="px-4 py-3 text-foreground whitespace-nowrap">
+                  {[r.car_year, r.car_make, r.car_model].filter(Boolean).join(' ')}
+                </td>
+                <td className="px-4 py-3 text-muted-foreground capitalize whitespace-nowrap">{r.car_class}</td>
+                <td className="px-4 py-3 whitespace-nowrap">
+                  {isExotics ? (
+                    <select
+                      aria-label={`Application status for ${r.name}`}
+                      value={r.status}
+                      disabled={decisionMutation.isPending}
+                      onChange={(event) => decisionMutation.mutate({ id: r.id, status: event.target.value })}
+                      className="rounded-lg border border-border bg-background px-2.5 py-1.5 text-xs font-medium text-foreground"
+                    >
+                      <option value="pending">Pending</option>
+                      <option value="approved">Approved</option>
+                      <option value="waitlisted">Waitlisted</option>
+                      <option value="declined">Declined</option>
+                      <option value="checked_in">Checked in</option>
+                    </select>
+                  ) : (
+                    <StatusBadge status={r.status} />
+                  )}
+                </td>
+                <td className="px-4 py-3 text-muted-foreground whitespace-nowrap">
+                  {r.created_at ? format(new Date(r.created_at), 'MMM d, yyyy h:mm a') : '—'}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
 export default function AdminRegistrations() {
   const [key, setKey] = useState(() => sessionStorage.getItem(KEY_STORAGE) || '');
   const [authError, setAuthError] = useState('');
   const [decisionMessage, setDecisionMessage] = useState('');
-  const [sourceFilter, setSourceFilter] = useState('all'); // 'all' | 'direct' | 'comp' | sponsor slug
+  const [activeSlug, setActiveSlug] = useState(null);
   const queryClient = useQueryClient();
 
   const { data, isLoading, isError } = useQuery({
@@ -199,6 +266,15 @@ export default function AdminRegistrations() {
     setAuthError('');
   };
 
+  const shows = useMemo(
+    () => (data ? buildShows(data.events, data.registrations) : []),
+    [data],
+  );
+
+  // Default to the newest show (events come back date-desc), which is the
+  // current/upcoming one. Fall back gracefully if the active show disappears.
+  const activeShow = shows.find((s) => s.event.slug === activeSlug) || shows[0] || null;
+
   if (!key) return <KeyForm onSubmit={handleKeySubmit} error={authError} />;
 
   if (isLoading) {
@@ -218,42 +294,8 @@ export default function AdminRegistrations() {
     );
   }
 
-  const { registrations, totals } = data;
-
-  // Sponsor filter options come from the data itself (name keyed by slug).
-  const sponsorOptions = [...new Map(
-    registrations
-      .filter((r) => r.registration_source === 'sponsor' && r.sponsor_slug)
-      .map((r) => [r.sponsor_slug, r.sponsor_name || r.sponsor_slug])
-  ).entries()];
-
-  const filtered = registrations.filter((r) => {
-    const source = r.registration_source ?? 'direct';
-    if (sourceFilter === 'all') return true;
-    if (sourceFilter === 'direct') return source === 'direct';
-    if (sourceFilter === 'comp') return source === 'comp';
-    return r.sponsor_slug === sourceFilter;
-  });
-
-  // Per-source summary for the filtered view. Only verified paid money counts
-  // as collected (webhook-confirmed statuses, never the success redirect).
-  const summary = filtered.reduce(
-    (acc, r) => {
-      acc.total += 1;
-      if (r.status === 'paid' || r.status === 'checked_in') {
-        acc.paidCount += 1;
-        acc.collected_cents += r.amount_paid_cents ?? 0;
-      } else if (r.status === 'pending') acc.pending += 1;
-      else acc.other += 1; // refunded / declined / cancelled-equivalents
-      return acc;
-    },
-    { total: 0, paidCount: 0, pending: 0, other: 0, collected_cents: 0 }
-  );
-  const filterLabel = sourceFilter === 'direct'
-    ? 'Direct'
-    : sourceFilter === 'comp'
-      ? 'Free Ticket'
-      : sponsorOptions.find(([slug]) => slug === sourceFilter)?.[1] ?? '';
+  const totals = activeShow?.totals;
+  const isExotics = activeShow?.event.slug === EXOTICS_SLUG;
 
   return (
     <div className="pt-24 pb-16">
@@ -261,23 +303,15 @@ export default function AdminRegistrations() {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
           <div>
             <h1 className="font-heading text-3xl font-bold text-foreground">Registrations</h1>
-            <p className="text-muted-foreground text-sm mt-1">Car show pre-registration dashboard</p>
+            <p className="text-muted-foreground text-sm mt-1">Car show registration dashboard — one tab per show</p>
           </div>
           <div className="flex items-center gap-2">
-            <select
-              aria-label="Filter by registration source"
-              value={sourceFilter}
-              onChange={(e) => setSourceFilter(e.target.value)}
-              className="rounded-lg border border-border bg-background px-3 py-2 text-sm font-medium text-foreground"
+            <Button
+              variant="outline"
+              disabled={!activeShow || activeShow.rows.length === 0}
+              onClick={() => exportCsv(activeShow.rows, `${activeShow.event.slug}-registrations.csv`)}
+              className="gap-2"
             >
-              <option value="all">All sources</option>
-              <option value="direct">Direct</option>
-              <option value="comp">Free Ticket</option>
-              {sponsorOptions.map(([slug, name]) => (
-                <option key={slug} value={slug}>{name}</option>
-              ))}
-            </select>
-            <Button variant="outline" onClick={() => exportCsv(filtered)} className="gap-2">
               <Download className="h-4 w-4" /> Export CSV
             </Button>
             <Button variant="ghost" onClick={signOut} className="gap-2 text-muted-foreground">
@@ -286,109 +320,73 @@ export default function AdminRegistrations() {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-6 gap-4 mb-8">
-          <StatTile label="Paid registrations" value={totals.paid} />
-          <StatTile label="Applications" value={totals.pending} />
-          <StatTile label="Exotics approved" value={totals.approved ?? 0} />
-          <StatTile label="Waitlisted" value={totals.waitlisted ?? 0} />
-          <StatTile label="Gross" value={dollars(totals.gross_cents)} />
-          <StatTile label="St. Jude donations" value={dollars(totals.donation_cents)} />
-        </div>
-
-        {sourceFilter !== 'all' && (
-          <div className="mb-8 rounded-xl border border-primary/20 bg-primary/5 p-5">
-            <p className="text-xs uppercase tracking-wider font-semibold text-primary mb-3">
-              {sourceFilter === 'direct'
-                ? 'Direct registrations'
-                : sourceFilter === 'comp'
-                  ? 'Registered through the free-ticket link'
-                  : `Registered through ${filterLabel} sponsor link`}
-            </p>
-            <div className="grid grid-cols-2 sm:grid-cols-5 gap-4 text-sm">
-              <div><p className="text-muted-foreground text-xs">Total</p><p className="font-heading text-xl font-bold text-foreground">{summary.total}</p></div>
-              <div><p className="text-muted-foreground text-xs">Completed payments</p><p className="font-heading text-xl font-bold text-foreground">{summary.paidCount}</p></div>
-              <div><p className="text-muted-foreground text-xs">Pending</p><p className="font-heading text-xl font-bold text-foreground">{summary.pending}</p></div>
-              <div><p className="text-muted-foreground text-xs">Failed / cancelled / refunded</p><p className="font-heading text-xl font-bold text-foreground">{summary.other}</p></div>
-              <div><p className="text-muted-foreground text-xs">Collected (verified)</p><p className="font-heading text-xl font-bold text-foreground">{dollars(summary.collected_cents)}</p></div>
+        {shows.length === 0 ? (
+          <div className="bg-card border border-border rounded-xl shadow-sm">
+            <p className="text-muted-foreground text-sm text-center py-12">No shows to display yet.</p>
+          </div>
+        ) : (
+          <>
+            {/* One tab per show — current (newest) first. */}
+            <div className="border-b border-border mb-8 -mx-1 overflow-x-auto">
+              <div role="tablist" aria-label="Car shows" className="flex gap-1 min-w-max px-1">
+                {shows.map((show) => {
+                  const isActive = activeShow?.event.slug === show.event.slug;
+                  return (
+                    <button
+                      key={show.event.slug}
+                      role="tab"
+                      aria-selected={isActive}
+                      onClick={() => setActiveSlug(show.event.slug)}
+                      className={`group relative flex items-center gap-2 rounded-t-lg px-4 py-3 text-sm font-medium whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${
+                        isActive ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
+                      }`}
+                    >
+                      <CalendarDays className={`h-4 w-4 ${isActive ? 'text-primary' : 'text-muted-foreground/70'}`} />
+                      <span className="flex flex-col items-start leading-tight">
+                        <span>{show.event.title}</span>
+                        <span className="text-[11px] font-normal text-muted-foreground">
+                          {showDate(show.event.date)}
+                        </span>
+                      </span>
+                      <span
+                        className={`ml-1 inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] font-semibold ${
+                          show.event.registration_open
+                            ? 'border-green-200 bg-green-100 text-green-800'
+                            : 'border-border bg-muted text-muted-foreground'
+                        }`}
+                      >
+                        {show.event.registration_open ? 'Open' : 'Archived'} · {show.totals.count}
+                      </span>
+                      <span
+                        aria-hidden="true"
+                        className={`absolute inset-x-2 -bottom-px h-0.5 rounded-full ${isActive ? 'bg-primary' : 'bg-transparent'}`}
+                      />
+                    </button>
+                  );
+                })}
+              </div>
             </div>
-            {/* Sponsor package discount: $30 per COMPLETED registration through
-                this sponsor's link, applied to their sponsorship total only if
-                the sponsor requests it. Settled manually off-platform — this is
-                a tally, not an automatic Stripe credit. */}
-            {sourceFilter !== 'direct' && sourceFilter !== 'comp' && (
-              <p className="mt-4 border-t border-primary/15 pt-3 text-sm text-muted-foreground">
-                Sponsorship discount earned (if requested):{' '}
-                <span className="font-heading font-bold text-foreground">{dollars(summary.paidCount * 3000)}</span>
-                <span className="text-xs"> — $30 × {summary.paidCount} completed {summary.paidCount === 1 ? 'registration' : 'registrations'}, applied to this sponsor&apos;s event package, settled manually.</span>
+
+            {decisionMessage && (
+              <p role="status" className="mb-4 rounded-xl border border-border bg-muted/50 px-4 py-3 text-sm text-muted-foreground">
+                {decisionMessage}
               </p>
             )}
-          </div>
-        )}
 
-        {decisionMessage && (
-          <p role="status" className="mb-4 rounded-xl border border-border bg-muted/50 px-4 py-3 text-sm text-muted-foreground">
-            {decisionMessage}
-          </p>
-        )}
-
-        <div className="bg-card border border-border rounded-xl shadow-sm overflow-hidden">
-          {filtered.length === 0 ? (
-            <p className="text-muted-foreground text-sm text-center py-12">
-              {sourceFilter === 'all' ? 'No registrations yet.' : 'No registrations for this source yet.'}
-            </p>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-border bg-muted/50 text-left">
-                    <th className="font-medium text-muted-foreground px-4 py-3 whitespace-nowrap">Name</th>
-                    <th className="font-medium text-muted-foreground px-4 py-3 whitespace-nowrap">Email</th>
-                    <th className="font-medium text-muted-foreground px-4 py-3 whitespace-nowrap">Car</th>
-                    <th className="font-medium text-muted-foreground px-4 py-3 whitespace-nowrap">Class</th>
-                    <th className="font-medium text-muted-foreground px-4 py-3 whitespace-nowrap">Source</th>
-                    <th className="font-medium text-muted-foreground px-4 py-3 whitespace-nowrap">Status</th>
-                    <th className="font-medium text-muted-foreground px-4 py-3 whitespace-nowrap">Registered</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filtered.map((r) => (
-                    <tr key={r.id} className="border-b border-border last:border-b-0">
-                      <td className="px-4 py-3 font-medium text-foreground whitespace-nowrap">{r.name}</td>
-                      <td className="px-4 py-3 text-muted-foreground whitespace-nowrap">{r.email}</td>
-                      <td className="px-4 py-3 text-foreground whitespace-nowrap">
-                        {[r.car_year, r.car_make, r.car_model].filter(Boolean).join(' ')}
-                      </td>
-                      <td className="px-4 py-3 text-muted-foreground capitalize whitespace-nowrap">{r.car_class}</td>
-                      <td className="px-4 py-3 whitespace-nowrap"><SourceBadge registration={r} /></td>
-                      <td className="px-4 py-3 whitespace-nowrap">
-                        {r.events?.slug === 'exotics-car-show-2026' ? (
-                          <select
-                            aria-label={`Application status for ${r.name}`}
-                            value={r.status}
-                            disabled={decisionMutation.isPending}
-                            onChange={(event) => decisionMutation.mutate({ id: r.id, status: event.target.value })}
-                            className="rounded-lg border border-border bg-background px-2.5 py-1.5 text-xs font-medium text-foreground"
-                          >
-                            <option value="pending">Pending</option>
-                            <option value="approved">Approved</option>
-                            <option value="waitlisted">Waitlisted</option>
-                            <option value="declined">Declined</option>
-                            <option value="checked_in">Checked in</option>
-                          </select>
-                        ) : (
-                          <StatusBadge status={r.status} />
-                        )}
-                      </td>
-                      <td className="px-4 py-3 text-muted-foreground whitespace-nowrap">
-                        {r.created_at ? format(new Date(r.created_at), 'MMM d, yyyy h:mm a') : '—'}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            {/* Per-show stat tiles. Approved / waitlisted only appear for a
+                curated-application show (exotics-style) that actually uses them. */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+              <StatTile label="Paid registrations" value={totals.paid} />
+              <StatTile label={isExotics ? 'Applications' : 'Pending'} value={totals.pending} />
+              {(isExotics || totals.approved > 0) && <StatTile label="Approved" value={totals.approved} />}
+              {(isExotics || totals.waitlisted > 0) && <StatTile label="Waitlisted" value={totals.waitlisted} />}
+              <StatTile label="Gross" value={dollars(totals.gross_cents)} />
+              <StatTile label="St. Jude donations" value={dollars(totals.donation_cents)} />
             </div>
-          )}
-        </div>
+
+            <ShowTable rows={activeShow.rows} isExotics={isExotics} decisionMutation={decisionMutation} />
+          </>
+        )}
       </div>
     </div>
   );

@@ -143,6 +143,14 @@ export default async function handler(req, res) {
       .order('created_at', { ascending: false });
     if (error) throw error;
 
+    // The full show list — returned so the admin can render a tab per show,
+    // including the current show while it still has zero registrations.
+    const { data: events, error: eventsError } = await supabaseAdmin
+      .from('events')
+      .select('id, title, slug, date, status, registration_open, entry_price_cents, capacity')
+      .order('date', { ascending: false });
+    if (eventsError) throw eventsError;
+
     const totals = { paid: 0, pending: 0, approved: 0, waitlisted: 0, gross_cents: 0, donation_cents: 0 };
     for (const row of registrations) {
       if (row.status === 'paid') {
@@ -158,7 +166,7 @@ export default async function handler(req, res) {
       }
     }
 
-    return res.status(200).json({ registrations, totals });
+    return res.status(200).json({ registrations, events, totals });
   } catch (err) {
     console.error('registrations error:', err);
     return res.status(500).json({ error: 'Failed to load registrations' });
